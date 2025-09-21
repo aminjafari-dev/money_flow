@@ -6,7 +6,6 @@ import 'package:money_flow/features/transactions/presentation/bloc/add_transacti
 import 'package:money_flow/features/transactions/presentation/bloc/add_transaction_event.dart';
 import 'package:money_flow/features/transactions/presentation/bloc/add_transaction_state.dart';
 import 'package:money_flow/features/transactions/presentation/widgets/amount_display_widget.dart';
-import 'package:money_flow/features/transactions/presentation/widgets/amount_input_dialog_widget.dart';
 import 'package:money_flow/features/transactions/presentation/widgets/category_selector_widget.dart';
 import 'package:money_flow/features/transactions/presentation/widgets/transaction_action_buttons_widget.dart';
 import 'package:money_flow/features/transactions/presentation/widgets/transaction_form_field_widget.dart';
@@ -170,7 +169,11 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
   Widget _buildAmountDisplay(AddTransactionMainState state) {
     return AmountDisplayWidget(
       amount: state.amount,
-      onAmountTapped: () => _showAmountInputDialog(context, state),
+      onAmountChanged: (newAmount) {
+        getIt<AddTransactionBloc>().add(
+          AddTransactionEvent.updateAmount(amount: newAmount),
+        );
+      },
     );
   }
 
@@ -302,22 +305,6 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
         backgroundColor: Colors.red,
         behavior: SnackBarBehavior.floating,
       ),
-    );
-  }
-
-  /// Shows amount input dialog.
-  void _showAmountInputDialog(
-    BuildContext context,
-    AddTransactionMainState state,
-  ) {
-    AmountInputDialogWidget.show(
-      context: context,
-      initialAmount: state.amount,
-      onAmountConfirmed: (amount) {
-        getIt<AddTransactionBloc>().add(
-          AddTransactionEvent.updateAmount(amount: amount),
-        );
-      },
     );
   }
 
