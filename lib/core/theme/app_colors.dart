@@ -189,6 +189,87 @@ class AppColors {
   /// Dark shadow color for strong elevations
   static const Color shadowDark = Color(0x33000000);
 
+  // ==================== MATERIAL DESIGN 3 COLORS ====================
+
+  /// Surface variant color for Material Design 3
+  static const Color surfaceVariant = Color(0xFFF1F3F4);
+
+  /// On surface variant color for Material Design 3
+  static const Color onSurfaceVariant = Color(0xFF5F6368);
+
+  /// Primary container color for Material Design 3
+  static const Color primaryContainer = Color(0xFFE3F2FD);
+
+  /// On primary container color for Material Design 3
+  static const Color onPrimaryContainer = Color(0xFF0D47A1);
+
+  /// Secondary container color for Material Design 3
+  static const Color secondaryContainer = Color(0xFFE8F5E8);
+
+  /// On secondary container color for Material Design 3
+  static const Color onSecondaryContainer = Color(0xFF1B5E20);
+
+  /// Error container color for Material Design 3
+  static const Color errorContainer = Color(0xFFFFEBEE);
+
+  /// On error container color for Material Design 3
+  static const Color onErrorContainer = Color(0xFFB71C1C);
+
+  /// Success container color for Material Design 3
+  static const Color successContainer = Color(0xFFE8F5E8);
+
+  /// On success container color for Material Design 3
+  static const Color onSuccessContainer = Color(0xFF1B5E20);
+
+  /// On surface color for Material Design 3
+  static const Color onSurface = Color(0xFF1C1B1F);
+
+  /// On primary color for Material Design 3
+  static const Color onPrimary = Color(0xFFFFFFFF);
+
+  /// On secondary color for Material Design 3
+  static const Color onSecondary = Color(0xFFFFFFFF);
+
+  /// On error color for Material Design 3
+  static const Color onError = Color(0xFFFFFFFF);
+
+  /// On success color for Material Design 3
+  static const Color onSuccess = Color(0xFFFFFFFF);
+
+  /// Outline color for Material Design 3
+  static const Color outline = Color(0xFF79747E);
+
+  /// Secondary color for Material Design 3
+  static const Color secondary = Color(0xFF4CAF50);
+
+  /// Error color for Material Design 3 (alias for danger)
+  static const Color error = danger;
+
+  /// Color scheme for Material Design 3
+  static ColorScheme get colorScheme => ColorScheme.fromSeed(
+    seedColor: primary,
+    brightness: Brightness.light,
+    primary: primary,
+    secondary: secondary,
+    error: error,
+    surface: surface,
+    background: background,
+    onPrimary: onPrimary,
+    onSecondary: onSecondary,
+    onError: onError,
+    onSurface: onSurface,
+    onBackground: onSurface,
+    surfaceVariant: surfaceVariant,
+    onSurfaceVariant: onSurfaceVariant,
+    primaryContainer: primaryContainer,
+    onPrimaryContainer: onPrimaryContainer,
+    secondaryContainer: secondaryContainer,
+    onSecondaryContainer: onSecondaryContainer,
+    errorContainer: errorContainer,
+    onErrorContainer: onErrorContainer,
+    outline: outline,
+  );
+
   // ==================== GRADIENT COLORS ====================
 
   /// Primary gradient colors for special elements

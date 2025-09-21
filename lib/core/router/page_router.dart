@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:money_flow/core/router/page_name.dart';
 import 'package:money_flow/features/dashboard/presentation/pages/dashboard_page.dart';
+import 'package:money_flow/features/transactions/presentation/pages/add_transaction_page.dart';
 
 /// Global page router for the application.
 /// This class manages all route mappings and page navigation.
@@ -15,11 +16,13 @@ class PageRouter {
     // Dashboard routes
     PageName.dashboard: (context) => const DashboardPage(userId: 'user123'),
 
+    // Transaction routes
+    PageName.addTransaction: (context) => const AddTransactionPage(),
+
     // TODO: Add other routes as features are implemented
     // PageName.transactions: (context) => const TransactionsPage(),
     // PageName.analytics: (context) => const AnalyticsPage(),
     // PageName.settings: (context) => const SettingsPage(),
-    // PageName.addTransaction: (context) => const AddTransactionPage(),
     // PageName.editTransaction: (context) => const EditTransactionPage(),
     // PageName.login: (context) => const LoginPage(),
     // PageName.splash: (context) => const SplashPage(),

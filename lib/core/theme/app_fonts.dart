@@ -146,6 +146,28 @@ class AppFonts {
     letterSpacing: letterSpacingNormal,
   );
 
+  /// Extra small heading style for very small section titles
+  /// Used for: Very small section headings, micro headers
+  /// Size: 14pt, Weight: Semi-bold, Line Height: Normal
+  static const TextStyle headlineSmall = TextStyle(
+    fontFamily: fontFamily,
+    fontSize: sizeMD,
+    fontWeight: semiBold,
+    height: lineHeightNormal,
+    letterSpacing: letterSpacingNormal,
+  );
+
+  /// Large headline style for large headings
+  /// Used for: Large headings, main titles
+  /// Size: 24pt, Weight: Bold, Line Height: Tight
+  static const TextStyle headlineLarge = TextStyle(
+    fontFamily: fontFamily,
+    fontSize: size3XL,
+    fontWeight: bold,
+    height: lineHeightTight,
+    letterSpacing: letterSpacingTight,
+  );
+
   // ==================== BODY TEXT STYLES ====================
 
   /// Large body text style for main content
@@ -260,6 +282,41 @@ class AppFonts {
     fontWeight: medium,
     height: lineHeightNormal,
     letterSpacing: letterSpacingWide,
+  );
+
+  // ==================== TITLE STYLES ====================
+
+  /// Large title style for main titles
+  /// Used for: Main page titles, dialog titles
+  /// Size: 22pt, Weight: Semi-bold, Line Height: Normal
+  static const TextStyle titleLarge = TextStyle(
+    fontFamily: fontFamily,
+    fontSize: 22.0,
+    fontWeight: semiBold,
+    height: lineHeightNormal,
+    letterSpacing: letterSpacingNormal,
+  );
+
+  /// Medium title style for section titles
+  /// Used for: Section titles, card titles
+  /// Size: 18pt, Weight: Semi-bold, Line Height: Normal
+  static const TextStyle titleMedium = TextStyle(
+    fontFamily: fontFamily,
+    fontSize: sizeXL,
+    fontWeight: semiBold,
+    height: lineHeightNormal,
+    letterSpacing: letterSpacingNormal,
+  );
+
+  /// Small title style for small titles
+  /// Used for: Small titles, subsection titles
+  /// Size: 16pt, Weight: Medium, Line Height: Normal
+  static const TextStyle titleSmall = TextStyle(
+    fontFamily: fontFamily,
+    fontSize: sizeLG,
+    fontWeight: medium,
+    height: lineHeightNormal,
+    letterSpacing: letterSpacingNormal,
   );
 
   // ==================== BUTTON STYLES ====================

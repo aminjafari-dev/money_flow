@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:money_flow/core/di/locator.dart';
 import 'package:money_flow/core/widgets/widgets.dart';
 import 'package:money_flow/core/theme/app_colors.dart';
+import 'package:money_flow/core/router/page_name.dart';
 import 'package:money_flow/features/dashboard/presentation/bloc/dashboard_bloc.dart';
 import 'package:money_flow/features/dashboard/presentation/bloc/dashboard_event.dart';
 import 'package:money_flow/features/dashboard/presentation/bloc/dashboard_state.dart';
@@ -107,10 +108,8 @@ class _DashboardPageState extends State<DashboardPage> {
   /// Handles add transaction button tap.
   /// This method navigates to the add transaction page.
   void _onAddTransactionTap() {
-    // TODO: Navigate to add transaction page
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: GText('Add transaction coming soon!')),
-    );
+    // Navigate to the Add Transaction page using named routes
+    Navigator.of(context).pushNamed(PageName.addTransaction);
   }
 }
 
