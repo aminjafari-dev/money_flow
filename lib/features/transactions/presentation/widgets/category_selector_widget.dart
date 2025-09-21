@@ -55,22 +55,16 @@ class CategorySelectorWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         // Section header
-        Row(
-          children: [
-            Icon(Icons.category_outlined, color: AppColors.primary, size: 20.0),
-            GGap.small(),
-            GText(
-              'CATEGORY',
-              style: AppFonts.labelLarge.copyWith(
-                color: AppColors.primary,
-                fontWeight: FontWeight.w600,
-                letterSpacing: 0.5,
-              ),
-            ),
-          ],
+        GText(
+          'Category',
+          style: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.w500,
+            color: Colors.black87,
+          ),
         ),
 
-        GGap.medium(),
+        const SizedBox(height: 12),
 
         // Category selection area
         if (isLoading)
@@ -165,13 +159,17 @@ class CategorySelectorWidget extends StatelessWidget {
       );
     }
 
-    return Wrap(
-      spacing: 8.0,
-      runSpacing: 8.0,
-      children: categories.map((category) {
-        final isSelected = category == selectedCategory;
-        return _buildCategoryChip(category, isSelected);
-      }).toList(),
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Row(
+        children: categories.map((category) {
+          final isSelected = category == selectedCategory;
+          return Padding(
+            padding: const EdgeInsets.only(right: 12.0),
+            child: _buildCategoryChip(category, isSelected),
+          );
+        }).toList(),
+      ),
     );
   }
 
@@ -189,76 +187,21 @@ class CategorySelectorWidget extends StatelessWidget {
       onTap: enabled ? () => onCategorySelected(category) : null,
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
-        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
+        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
         decoration: BoxDecoration(
-          color: isSelected ? AppColors.primary : AppColors.surfaceVariant,
-          borderRadius: BorderRadius.circular(24.0),
-          border: Border.all(
-            color: isSelected ? AppColors.primary : AppColors.outline,
-            width: isSelected ? 2.0 : 1.0,
-          ),
-          boxShadow: isSelected
-              ? [
-                  BoxShadow(
-                    color: AppColors.primary.withOpacity(0.2),
-                    blurRadius: 4.0,
-                    offset: const Offset(0, 2),
-                  ),
-                ]
-              : null,
+          color: isSelected ? Colors.blue.shade100 : Colors.grey.shade200,
+          borderRadius: BorderRadius.circular(20.0),
         ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            // Category icon
-            Icon(
-              _getCategoryIcon(category),
-              size: 18.0,
-              color: isSelected
-                  ? AppColors.onPrimary
-                  : AppColors.onSurfaceVariant,
-            ),
-            GGap.small(),
-
-            // Category name
-            GText(
-              category,
-              style: AppFonts.labelMedium.copyWith(
-                color: isSelected
-                    ? AppColors.onPrimary
-                    : AppColors.onSurfaceVariant,
-                fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
-              ),
-            ),
-          ],
+        child: GText(
+          category,
+          style: TextStyle(
+            color: isSelected ? Colors.blue.shade700 : Colors.grey.shade700,
+            fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
+            fontSize: 14,
+          ),
         ),
       ),
     );
-  }
-
-  /// Gets the appropriate icon for a category.
-  /// This method returns an icon that represents the category visually.
-  ///
-  /// Parameters:
-  /// - [category]: The category name
-  ///
-  /// Returns:
-  /// - [IconData]: The icon for the category
-  IconData _getCategoryIcon(String category) {
-    switch (category.toLowerCase()) {
-      case 'food':
-        return Icons.restaurant_outlined;
-      case 'transportation':
-        return Icons.directions_car_outlined;
-      case 'entertainment':
-        return Icons.movie_outlined;
-      case 'utilities':
-        return Icons.electrical_services_outlined;
-      case 'other':
-        return Icons.category_outlined;
-      default:
-        return Icons.label_outline;
-    }
   }
 }
 
@@ -313,26 +256,16 @@ class SubcategorySelectorWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         // Section header
-        Row(
-          children: [
-            Icon(
-              Icons.subdirectory_arrow_right,
-              color: AppColors.primary,
-              size: 20.0,
-            ),
-            GGap.small(),
-            GText(
-              'SUBCATEGORY',
-              style: AppFonts.labelLarge.copyWith(
-                color: AppColors.primary,
-                fontWeight: FontWeight.w600,
-                letterSpacing: 0.5,
-              ),
-            ),
-          ],
+        GText(
+          'Subcategory',
+          style: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.w500,
+            color: Colors.black87,
+          ),
         ),
 
-        GGap.medium(),
+        const SizedBox(height: 12),
 
         // Subcategory selection area
         if (isLoading)
@@ -427,13 +360,17 @@ class SubcategorySelectorWidget extends StatelessWidget {
       );
     }
 
-    return Wrap(
-      spacing: 8.0,
-      runSpacing: 8.0,
-      children: subcategories.map((subcategory) {
-        final isSelected = subcategory == selectedSubcategory;
-        return _buildSubcategoryChip(subcategory, isSelected);
-      }).toList(),
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Row(
+        children: subcategories.map((subcategory) {
+          final isSelected = subcategory == selectedSubcategory;
+          return Padding(
+            padding: const EdgeInsets.only(right: 12.0),
+            child: _buildSubcategoryChip(subcategory, isSelected),
+          );
+        }).toList(),
+      ),
     );
   }
 
@@ -451,22 +388,17 @@ class SubcategorySelectorWidget extends StatelessWidget {
       onTap: enabled ? () => onSubcategorySelected(subcategory) : null,
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
-        padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
+        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
         decoration: BoxDecoration(
-          color: isSelected ? AppColors.secondary : AppColors.surfaceVariant,
+          color: isSelected ? Colors.blue.shade100 : Colors.grey.shade200,
           borderRadius: BorderRadius.circular(20.0),
-          border: Border.all(
-            color: isSelected ? AppColors.secondary : AppColors.outline,
-            width: isSelected ? 2.0 : 1.0,
-          ),
         ),
         child: GText(
           subcategory,
-          style: AppFonts.labelSmall.copyWith(
-            color: isSelected
-                ? AppColors.onSecondary
-                : AppColors.onSurfaceVariant,
-            fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
+          style: TextStyle(
+            color: isSelected ? Colors.blue.shade700 : Colors.grey.shade700,
+            fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
+            fontSize: 14,
           ),
         ),
       ),

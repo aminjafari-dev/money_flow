@@ -128,10 +128,12 @@ class AddTransactionBloc
       if (!emit.isDone) {
         result.fold(
           (failure) {
+            // Provide default categories based on transaction type
+            final defaultCategories = _getDefaultCategories(state.type);
             emit(
               state.copyWith(
-                loadCategories: LoadCategoriesState.error(
-                  failure.message ?? 'Failed to load categories',
+                loadCategories: LoadCategoriesState.completed(
+                  defaultCategories,
                 ),
               ),
             );
@@ -147,11 +149,11 @@ class AddTransactionBloc
       }
     } catch (e) {
       if (!emit.isDone) {
+        // Provide default categories even on error
+        final defaultCategories = _getDefaultCategories(state.type);
         emit(
           state.copyWith(
-            loadCategories: LoadCategoriesState.error(
-              'Failed to load categories: $e',
-            ),
+            loadCategories: LoadCategoriesState.completed(defaultCategories),
           ),
         );
       }
@@ -164,6 +166,44 @@ class AddTransactionBloc
     AddTransactionEvent event,
     Emitter<AddTransactionMainState> emit,
   ) async {
+    // Extract category from event using pattern matching
+    final category = event.when(
+      initialize: () => '',
+      loadCategories: () => '',
+      loadSubcategories: (category) => category,
+      suggestCategory: (amount, description, merchant) => '',
+      validateTransaction:
+          (
+            amount,
+            category,
+            subcategory,
+            description,
+            dateTime,
+            type,
+            merchant,
+          ) => '',
+      addTransaction:
+          (
+            amount,
+            category,
+            subcategory,
+            description,
+            dateTime,
+            type,
+            merchant,
+            isFromSms,
+          ) => '',
+      updateCategory: (category) => '',
+      updateSubcategory: (subcategory) => '',
+      updateAmount: (amount) => '',
+      updateDescription: (description) => '',
+      updateDateTime: (dateTime) => '',
+      updateType: (type) => '',
+      updateMerchant: (merchant) => '',
+      clearForm: () => '',
+      resetForm: () => '',
+    );
+
     try {
       // Check if emit is still active
       if (!emit.isDone) {
@@ -174,44 +214,6 @@ class AddTransactionBloc
         );
       }
 
-      // Extract category from event using pattern matching
-      final category = event.when(
-        initialize: () => '',
-        loadCategories: () => '',
-        loadSubcategories: (category) => category,
-        suggestCategory: (amount, description, merchant) => '',
-        validateTransaction:
-            (
-              amount,
-              category,
-              subcategory,
-              description,
-              dateTime,
-              type,
-              merchant,
-            ) => '',
-        addTransaction:
-            (
-              amount,
-              category,
-              subcategory,
-              description,
-              dateTime,
-              type,
-              merchant,
-              isFromSms,
-            ) => '',
-        updateCategory: (category) => '',
-        updateSubcategory: (subcategory) => '',
-        updateAmount: (amount) => '',
-        updateDescription: (description) => '',
-        updateDateTime: (dateTime) => '',
-        updateType: (type) => '',
-        updateMerchant: (merchant) => '',
-        clearForm: () => '',
-        resetForm: () => '',
-      );
-
       // Load subcategories
       final result = await getSubcategoriesUseCase.call(
         GetSubcategoriesParams(category: category),
@@ -220,10 +222,12 @@ class AddTransactionBloc
       if (!emit.isDone) {
         result.fold(
           (failure) {
+            // Provide default subcategories if loading fails
+            final defaultSubcategories = _getDefaultSubcategories(category);
             emit(
               state.copyWith(
-                loadSubcategories: LoadSubcategoriesState.error(
-                  failure.message ?? 'Failed to load subcategories',
+                loadSubcategories: LoadSubcategoriesState.completed(
+                  defaultSubcategories,
                 ),
               ),
             );
@@ -241,10 +245,12 @@ class AddTransactionBloc
       }
     } catch (e) {
       if (!emit.isDone) {
+        // Provide default subcategories even on error
+        final defaultSubcategories = _getDefaultSubcategories(category);
         emit(
           state.copyWith(
-            loadSubcategories: LoadSubcategoriesState.error(
-              'Failed to load subcategories: $e',
+            loadSubcategories: LoadSubcategoriesState.completed(
+              defaultSubcategories,
             ),
           ),
         );
@@ -1085,7 +1091,20 @@ class AddTransactionBloc
       );
 
       if (!emit.isDone) {
-        emit(state.copyWith(type: type, hasUnsavedChanges: true));
+        emit(
+          state.copyWith(
+            type: type,
+            hasUnsavedChanges: true,
+            // Clear selected category and subcategory when type changes
+            selectedCategory: '',
+            selectedSubcategory: '',
+            // Reset subcategories state
+            loadSubcategories: const LoadSubcategoriesState.initial(),
+          ),
+        );
+
+        // Reload categories for the new transaction type
+        add(const AddTransactionEvent.loadCategories());
       }
     } catch (e) {
       // Handle update error
@@ -1227,6 +1246,106 @@ class AddTransactionBloc
           ),
         );
       }
+    }
+  }
+
+  /// Gets default categories based on transaction type.
+  /// This method provides fallback categories when the repository fails to load them.
+  ///
+  /// Parameters:
+  /// - [type]: The transaction type (expense or income)
+  ///
+  /// Returns:
+  /// - [List<String>]: List of default category names
+  List<String> _getDefaultCategories(TransactionType type) {
+    switch (type) {
+      case TransactionType.expense:
+        return [
+          'Food & Dining',
+          'Transportation',
+          'Shopping',
+          'Entertainment',
+          'Bills & Utilities',
+          'Healthcare',
+          'Education',
+          'Travel',
+          'Other Expenses',
+        ];
+      case TransactionType.income:
+        return [
+          'Salary',
+          'Freelance',
+          'Business',
+          'Investment',
+          'Gift',
+          'Bonus',
+          'Rental',
+          'Refund',
+          'Other Income',
+        ];
+    }
+  }
+
+  /// Gets default subcategories for a given category.
+  /// This method provides fallback subcategories when the repository fails to load them.
+  ///
+  /// Parameters:
+  /// - [category]: The selected category name
+  ///
+  /// Returns:
+  /// - [List<String>]: List of default subcategory names
+  List<String> _getDefaultSubcategories(String category) {
+    switch (category.toLowerCase()) {
+      // Expense subcategories
+      case 'food & dining':
+        return ['Restaurant', 'Groceries', 'Fast Food', 'Coffee', 'Other'];
+      case 'transportation':
+        return [
+          'Gas',
+          'Public Transport',
+          'Taxi/Uber',
+          'Parking',
+          'Maintenance',
+        ];
+      case 'shopping':
+        return ['Clothing', 'Electronics', 'Home & Garden', 'Books', 'Other'];
+      case 'entertainment':
+        return ['Movies', 'Games', 'Sports', 'Music', 'Other'];
+      case 'bills & utilities':
+        return ['Electricity', 'Water', 'Internet', 'Phone', 'Insurance'];
+      case 'healthcare':
+        return ['Doctor', 'Pharmacy', 'Dental', 'Vision', 'Other'];
+      case 'education':
+        return ['Tuition', 'Books', 'Supplies', 'Courses', 'Other'];
+      case 'travel':
+        return ['Flights', 'Hotels', 'Food', 'Activities', 'Other'];
+
+      // Income subcategories
+      case 'salary':
+        return ['Base Salary', 'Overtime', 'Commission', 'Tips', 'Other'];
+      case 'freelance':
+        return ['Consulting', 'Design', 'Writing', 'Programming', 'Other'];
+      case 'business':
+        return ['Sales', 'Services', 'Products', 'Partnerships', 'Other'];
+      case 'investment':
+        return ['Stocks', 'Bonds', 'Real Estate', 'Crypto', 'Other'];
+      case 'gift':
+        return ['Birthday', 'Holiday', 'Wedding', 'Anniversary', 'Other'];
+      case 'bonus':
+        return ['Performance', 'Holiday', 'Signing', 'Retention', 'Other'];
+      case 'rental':
+        return ['Property', 'Car', 'Equipment', 'Storage', 'Other'];
+      case 'refund':
+        return [
+          'Tax Refund',
+          'Purchase Return',
+          'Insurance',
+          'Overpayment',
+          'Other',
+        ];
+
+      default:
+        return ['General', 'Miscellaneous', 'Other'];
     }
   }
 }
