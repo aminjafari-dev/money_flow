@@ -1,0 +1,299 @@
+---
+description: If you want to write a feature from scratch you have to see this rule, Comprehensive rules for Clean Architecture implementation with step-by-step development approach, dependency management, and controlled file generation strategy.
+alwaysApply: false
+---
+# Clean Architecture Implementation Rules
+
+## Core Development Strategy
+
+### CRITICAL: Step-by-Step Implementation Approach
+When user says "write this feature step by step", follow this EXACT process:
+
+1. **IMPLEMENT ONLY CURRENT PHASE** - Generate files for the current phase only
+2. **WAIT FOR USER CONFIRMATION** - After completing each phase, STOP and wait for user to say "write" or "continue"
+3. **NEVER SKIP PHASES** - Always follow the mandatory phase order
+4. **MAXIMUM 3-4 FILES** per phase to avoid overwhelming generation
+
+## Mandatory Implementation Phases
+
+### Phase 1: Foundation Layer (START HERE)
+**Files to generate (3-4 files max):**
+- `domain/entities/[feature]_entity.dart`
+- `domain/repositories/[feature]_repository.dart` (interface)
+- `data/models/[feature]_model.dart`
+- `data/models/[feature]_request.dart` (if API calls needed)
+
+**Dependencies:** None (these are foundation files)
+**After Phase 1:** STOP and wait for user confirmation
+
+### Phase 2: Data Implementation Layer
+**Files to generate (3-4 files max):**
+- `data/datasources/remote/[feature]_remote_datasource.dart`
+- `data/datasources/local/[feature]_local_datasource.dart`
+- `data/repositories/[feature]_repository_impl.dart`
+
+**Dependencies:** Must have Phase 1 files completed
+**After Phase 2:** STOP and wait for user confirmation
+
+### Phase 3: Business Logic Layer
+**Files to generate (2-3 files max):**
+- `domain/usecases/[feature]_usecase.dart`
+- `domain/usecases/[feature]_usecase_impl.dart` (if separate implementation)
+
+**Dependencies:** Must have Phase 2 files completed
+**After Phase 3:** STOP and wait for user confirmation
+
+### Phase 4: State Management Layer
+**Files to generate (3 files max):**
+- `presentation/bloc/[feature]_event.dart`
+- `presentation/bloc/[feature]_state.dart`
+- `presentation/bloc/[feature]_bloc.dart`
+
+**Dependencies:** Must have Phase 3 files completed
+**After Phase 4:** STOP and wait for user confirmation
+
+### Phase 5: Presentation Layer
+**Files to generate (2-3 files max):**
+- `presentation/widgets/[feature]_widget.dart`
+- `presentation/pages/[feature]_page.dart`
+
+**Dependencies:** Must have Phase 4 files completed
+**After Phase 5:** STOP and wait for user confirmation
+
+### Phase 6: Integration Layer
+**Files to generate (2-3 files max):**
+- Add routes to `core/router/page_router.dart`
+- Add DI registration to `[feature]_di.dart`
+- Update main `locator.dart`
+
+**Dependencies:** Must have Phase 5 files completed
+**After Phase 6:** COMPLETE - Feature is fully implemented
+
+## Datasource Folder Structure Rules
+
+### Remote Datasources
+- **Location:** `data/datasources/remote/`
+- **Purpose:** API calls, HTTP requests, external service integrations
+- **Files:** `[feature]_remote_datasource.dart`
+- **Dependencies:** HTTP client, API endpoints, network configuration
+
+### Local Datasources
+- **Location:** `data/datasources/local/`
+- **Purpose:** Local storage, caching, SharedPreferences, SQLite, Hive
+- **Files:** `[feature]_local_datasource.dart`
+- **Dependencies:** Local storage packages, cache configuration
+
+### Complete Datasource Structure:
+```
+data/
+├── datasources/
+│   ├── remote/
+│   │   ├── [feature]_remote_datasource.dart
+│   │   └── [other_feature]_remote_datasource.dart
+│   ├── local/
+│   │   ├── [feature]_local_datasource.dart
+│   │   └── [other_feature]_local_datasource.dart
+│   └── [feature]_datasource.dart (if shared interface needed)
+├── models/
+├── repositories/
+└── ...
+```
+
+## File Relationship Rules
+
+### Entity ↔ Model Relationship
+- **Entity** (Domain): Pure business object, no external dependencies
+- **Model** (Data): Contains `toDomain()` method to convert to Entity
+- **Model** contains JSON serialization/deserialization
+
+### Repository ↔ RepositoryImpl Relationship
+- **Repository** (Domain): Abstract interface defining contracts
+- **RepositoryImpl** (Data): Concrete implementation using remote and local data sources
+- **RepositoryImpl** implements Repository interface
+
+### RepositoryImpl → Datasources Relationship
+- **RepositoryImpl** depends on both Remote and Local datasources
+- **Remote Datasource**: Handles API calls and network operations
+- **Local Datasource**: Handles caching and offline storage
+- **RepositoryImpl** decides which datasource to use based on network availability
+
+### UseCase → Repository Relationship
+- **UseCase** depends on Repository interface (not implementation)
+- **UseCase** contains pure business logic
+- **UseCase** returns Either<Failure, Success> pattern
+
+### BLoC → UseCase Relationship
+- **BLoC** depends on UseCase instances
+- **BLoC** handles events and emits states
+- **BLoC** uses async/await with safety checks
+
+### Page → BLoC Relationship
+- **Page** uses BlocProvider for BLoC injection
+- **Page** contains UI logic and navigation
+- **Page** listens to BLoC state changes
+
+## Implementation Request Format
+
+### For Step-by-Step Implementation:
+```
+User: "Write [Feature Name] feature step by step"
+AI: Implements Phase 1 only, then stops and waits
+User: "Write" or "Continue"
+AI: Implements Phase 2 only, then stops and waits
+[Continue until Phase 6 complete]
+```
+
+### For Specific Phase Request:
+```
+User: "Implement [Feature Name] - Phase [X]: [Description]"
+AI: Implements only the requested phase files
+```
+
+### For Complete Feature (NOT RECOMMENDED):
+```
+User: "Write complete [Feature Name] feature"
+AI: Warns user about file generation count and suggests step-by-step approach
+```
+
+## Safety Rules
+
+### File Generation Limits
+- **NEVER** generate more than 4 files in a single response
+- **ALWAYS** mention which phase you're implementing
+- **ALWAYS** list prerequisites that must exist first
+
+### Dependency Validation
+- Before generating any file, verify its dependencies exist
+- If dependencies missing, inform user which phase to complete first
+- Never generate files that would create dependency conflicts
+
+### Error Prevention
+- Use proper async/await patterns in BLoCs
+- Add emit.isDone safety checks
+- Include proper error handling in all layers
+- Follow Clean Architecture dependency rules strictly
+
+## User Command Interpretation
+
+### "Write [Feature] step by step"
+- Start with Phase 1
+- Implement only current phase files
+- Stop and wait for confirmation
+- Continue to next phase when user says "write" or "continue"
+
+### "Write" or "Continue"
+- Continue to next phase in sequence
+- Implement only current phase files
+- Stop and wait for confirmation
+
+### "Write complete [Feature]"
+- Warn user about file generation count
+- Suggest step-by-step approach instead
+- If user insists, implement all phases but mention the risk
+
+## Example Implementation Flow
+
+```
+User: "Write dashboard feature step by step"
+AI: [Implements Phase 1: dashboard_entity.dart, dashboard_repository.dart, dashboard_model.dart]
+     "Phase 1 complete. Generated foundation layer files. Say 'write' or 'continue' for Phase 2."
+
+User: "write"
+AI: [Implements Phase 2: dashboard_remote_datasource.dart, dashboard_local_datasource.dart, dashboard_repository_impl.dart]
+     "Phase 2 complete. Generated data implementation layer with remote and local datasources. Say 'write' or 'continue' for Phase 3."
+
+User: "continue"
+AI: [Implements Phase 3: dashboard_usecase.dart]
+     "Phase 3 complete. Generated business logic layer. Say 'write' or 'continue' for Phase 4."
+
+[Continue until all 6 phases complete]
+```
+
+## Datasource Implementation Guidelines
+
+### Remote Datasource Structure:
+```dart
+// data/datasources/remote/dashboard_remote_datasource.dart
+class DashboardRemoteDataSource {
+  final Dio client;
+  
+  Future<DashboardModel> getDashboardData(String userId) async {
+    // API call implementation
+  }
+  
+  Future<DashboardModel> updateDashboardData(DashboardRequest request) async {
+    // API call implementation
+  }
+}
+```
+
+### Local Datasource Structure:
+```dart
+// data/datasources/local/dashboard_local_datasource.dart
+class DashboardLocalDataSource {
+  final SharedPreferences sharedPreferences;
+  final HiveInterface hive;
+  
+  Future<DashboardModel?> getCachedDashboardData() async {
+    // Local storage implementation
+  }
+  
+  Future<void> cacheDashboardData(DashboardModel data) async {
+    // Cache implementation
+  }
+}
+```
+
+### Repository Implementation with Both Datasources:
+```dart
+// data/repositories/dashboard_repository_impl.dart
+class DashboardRepositoryImpl implements DashboardRepository {
+  final DashboardRemoteDataSource remoteDataSource;
+  final DashboardLocalDataSource localDataSource;
+  final NetworkInfo networkInfo;
+  
+  @override
+  Future<Either<Failure, DashboardEntity>> getDashboardData(String userId) async {
+    if (await networkInfo.isConnected) {
+      try {
+        final remoteData = await remoteDataSource.getDashboardData(userId);
+        await localDataSource.cacheDashboardData(remoteData);
+        return Right(remoteData.toDomain());
+      } catch (e) {
+        return Left(ServerFailure());
+      }
+    } else {
+      try {
+        final localData = await localDataSource.getCachedDashboardData();
+        if (localData != null) {
+          return Right(localData.toDomain());
+        }
+        return Left(CacheFailure());
+      } catch (e) {
+        return Left(CacheFailure());
+      }
+    }
+  }
+}
+```
+
+## Additional Clean Architecture Rules
+
+### State Management
+- Use Bloc with freezed for immutable state classes
+- Include proper async handling with emit.isDone checks
+- Follow the BLoC pattern requirements from existing rules
+
+### Dependency Injection
+- Register dependencies in feature-specific DI files
+- Use registerLazySingleton for services/repositories
+- Use registerSingleton for BLoCs
+- Follow modular DI approach by feature
+
+### Code Quality
+- Add comprehensive comments throughout
+- Use proper naming conventions
+- Follow SOLID principles
+- Include examples in documentation
+- Use theme classes instead of direct colors
+- Implement proper localization support

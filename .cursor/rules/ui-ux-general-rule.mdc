@@ -1,0 +1,123 @@
+---
+alwaysApply: false
+---
+### General UI/UX Design Rules for the Finance App
+
+Based on the provided screenshots, the app's design is clean, intuitive, and user-friendly, emphasizing simplicity, readability, and quick access to financial data. It effectively uses visual hierarchy, color coding, and minimalism to make budgeting and tracking feel effortless and non-overwhelming. Here are the key general rules distilled from the overall design:
+
+1. **Color Scheme and Theming**:
+   - Primary background: White or light gray (#FFFFFF or #F5F5F5) for a clean, modern look.
+   - Accent color: Blue (#007BFF or similar) for interactive elements like buttons (e.g., "Save", "Add Category") and navigation highlights.
+   - Semantic colors: Green (#28A745) for positive values (income, success indicators); Red/Orange (#DC3545 or #FD7E14) for negative values (expenses, warnings); Yellow (#FFC107) for alerts or progress.
+   - Neutral grays (#6C757D) for secondary text and borders.
+   - Support dark mode toggle, inverting colors for accessibility (e.g., dark background #121212, light text).
+
+2. **Typography**:
+   - Headings: Bold sans-serif font (e.g., SF Pro or Roboto Bold) at 18-24pt for page titles (e.g., "Add Transaction", "Analytics").
+   - Body text: Regular sans-serif at 14-16pt for labels and descriptions.
+   - Values: Larger bold font (20-32pt) for key figures like amounts (e.g., "$2,500").
+   - Consistency: Limit to 2-3 font weights; ensure high contrast (AA/AAA accessibility standards).
+
+3. **Layout and Structure**:
+   - Mobile-first: Vertical scrolling with fixed bottom navigation bar (icons: Home, Transactions, Analytics, Settings/Categories).
+   - Cards and Sections: Rounded corners (8-12px radius) with subtle shadows or borders for separation (e.g., transaction items, category lists).
+   - White Space: Generous padding (16-24px) around elements to avoid clutter; use dividers or spacing for grouping (e.g., categories, trends).
+   - Progress Bars: Horizontal bars with percentage labels, color-coded to match semantics (e.g., green for on-track budgets).
+   - Forms: Stacked inputs with rounded fields; toggle buttons for categories/subcategories.
+
+4. **Icons and Visuals**:
+   - Use simple, outline-style icons (e.g., from Material Icons or custom set) for categories (fork/knife for Food, car for Transportation).
+   - Consistent size: 24-32px, colored to match category or semantic (e.g., blue for neutral, green/red for values).
+   - Charts/Graphs: Simple bar and line charts with smooth curves; no overcrowding—focus on 4-6 data points max per view.
+
+5. **Interaction and UX Principles**:
+   - Navigation: Bottom tab bar for quick switching; top back arrows for hierarchy.
+   - Feedback: Immediate visual cues (e.g., checkmarks for success, warnings for over-budget).
+   - Accessibility: Tap targets ≥48px; alt text for icons; scalable text.
+   - Simplicity: Limit options per screen (e.g., 5-7 categories); use dropdowns/filters for time periods (Weekly/Monthly/Yearly).
+   - Error Handling: Subtle red highlights for issues (e.g., low charity progress).
+   - Responsiveness: Adapt to screen sizes, ensuring no horizontal scrolling.
+
+6. **Overall Philosophy**:
+   - Minimalist and Empowering: Focus on glanceable insights (e.g., dashboards with summaries) to encourage positive financial habits without overwhelming users.
+   - Consistency Across Pages: Reuse components (e.g., transaction list items appear in home, transactions, analytics).
+   - User-Centric: Prioritize common actions (add transaction via floating + button); provide insights and suggestions subtly.
+
+These rules ensure the app feels polished, accessible, and efficient, aligning with modern finance apps like Mint or YNAB.
+
+### JSON Prompting for UI/UX Design
+
+This JSON structure can be used as a prompt template for tools like AI design generators (e.g., Figma plugins, UI code generators) or to define a design system. It captures the essence of the app's style in a structured, reusable format. You can feed this into a system to regenerate or extend similar screens.
+
+```json
+{
+  "appName": "Finance Tracker App",
+  "designSystem": {
+    "colors": {
+      "primary": "#007BFF",
+      "secondary": "#6C757D",
+      "success": "#28A745",
+      "danger": "#DC3545",
+      "warning": "#FFC107",
+      "background": "#FFFFFF",
+      "textPrimary": "#212529",
+      "textSecondary": "#6C757D"
+    },
+    "typography": {
+      "fontFamily": "Sans-serif (e.g., Roboto or SF Pro)",
+      "headings": {
+        "size": "18-24pt",
+        "weight": "bold"
+      },
+      "body": {
+        "size": "14-16pt",
+        "weight": "regular"
+      },
+      "values": {
+        "size": "20-32pt",
+        "weight": "bold"
+      }
+    },
+    "spacing": {
+      "small": "8px",
+      "medium": "16px",
+      "large": "24px"
+    },
+    "borderRadius": "8-12px",
+    "shadow": " subtle (e.g., 0 1px 3px rgba(0,0,0,0.1))"
+  },
+  "components": {
+    "button": {
+      "style": "Rounded, blue background, white text, padding: 12px 24px",
+      "variants": ["primary (blue)", "secondary (gray)", "cancel (light gray)"]
+    },
+    "card": {
+      "style": "White background, rounded corners, padding: medium, optional icon and progress bar"
+    },
+    "progressBar": {
+      "style": "Horizontal, filled with semantic color, percentage label on right"
+    },
+    "listItem": {
+      "style": "Horizontal layout: icon (left), title/date (center), amount (right, colored green/red)"
+    },
+    "navigation": {
+      "position": "bottom",
+      "items": ["Home (house icon)", "Transactions (list icon)", "Analytics (chart icon)", "Settings (gear icon)"],
+      "style": "Fixed bar, icon-only with labels below"
+    },
+    "chart": {
+      "types": ["bar (category distribution)", "line (trends)"],
+      "style": "Simple lines/bars, 4-6 colors, labels on axes"
+    }
+  },
+  "pages": {
+    "generalRules": "Minimalist layout, vertical scroll, white space emphasis, semantic color coding, bottom nav, floating add button where applicable",
+    "promptExample": "Generate a mobile UI screen for [page name] following the design system: clean, intuitive finance tracking with summaries, lists, and insights. Use light theme unless specified."
+  },
+  "uxGuidelines": {
+    "accessibility": "High contrast, large tap targets, screen reader friendly",
+    "interactions": "Tap to edit/add, swipe to delete if applicable, immediate feedback",
+    "philosophy": "Empower users with glanceable financial overviews, encourage budgeting via progress indicators and insights"
+  }
+}
+```

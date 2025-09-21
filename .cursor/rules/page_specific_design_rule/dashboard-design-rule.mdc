@@ -1,0 +1,130 @@
+---
+alwaysApply: false
+---
+### UI/UX Design Rules for the Dashboard Page
+
+This Dashboard page serves as the app's home screen, providing a high-level overview of the user's financial status at a glance. It prioritizes scannability, motivational visuals, and quick navigation to encourage regular engagement. The design adheres to the app's overall minimalist philosophy but focuses on summary cards and a compact transaction feed. Below are the exact, detailed rules derived from the page's structure, ensuring consistency, accessibility, and usability.
+
+#### 1. **Overall Layout and Structure**
+   - **Page Orientation**: Vertical scrolling layout optimized for mobile portrait mode (e.g., iPhone/Android standard widths ~375-414px).
+   - **Header**: Fixed or sticky top bar with the title "Dashboard" centered or left-aligned in bold sans-serif font (18-24pt, #212529 color). Include a gear icon (24px, #6C757D) on the right for quick access to settings.
+   - **Content Flow**: Stacked sections from top to bottom:
+     1. Financial Summary Cards (Income, Expenses, Charity, Investments).
+     2. Recent Transactions list.
+   - **Spacing**: Medium padding (16px) between sections; small padding (8px) within cards. Use generous white space (24px vertical gaps) to separate summaries from transactions for visual breathing room.
+   - **Background**: Solid white (#FFFFFF) with no gradients or patterns to maintain cleanliness.
+   - **Scroll Behavior**: Smooth vertical scroll; no horizontal elements. Ensure the page fits key summaries above the fold (visible without scrolling on standard screens).
+
+#### 2. **Color Scheme**
+   - **Neutral Base**: White background (#FFFFFF) for cards and page; light beige/peach (#FFE5D9 or similar) for card backgrounds in summary sections to add subtle warmth and differentiation.
+   - **Text Colors**: Primary text (#212529) for labels and values; secondary gray (#6C757D) for subtitles (e.g., "Received this month").
+   - **Accent Colors**: Blue (#007BFF) for interactive elements like the floating "+" button. No semantic colors (green/red) in summaries to keep neutral; reserve for transactions (green #28A745 for positive, red #DC3545 for negative amounts).
+   - **Icon Backgrounds**: Pastel rounded squares (e.g., green #D4EDDA for money bag, orange #FFE5D9 for credit card, pink #F8D7DA for heart, beige #FFF3CD for chart).
+   - **Contrast**: All text meets WCAG AA standards (ratio >4.5:1); e.g., dark text on light backgrounds.
+
+#### 3. **Typography**
+   - **Title**: "Dashboard" – Bold, 20-24pt sans-serif (e.g., Roboto Bold or SF Pro Bold).
+   - **Section Headings**: E.g., "Recent Transactions" – Bold, 16-18pt, #212529.
+   - **Key Values**: E.g., "$2,500" – Extra bold, 24-32pt, #212529 for emphasis.
+   - **Labels**: E.g., "Income" – Regular, 14-16pt, #6C757D (secondary).
+   - **Subtitles**: E.g., "Received this month" – Regular, 12-14pt, #6C757D.
+   - **Transaction Details**: Vendor names (14pt bold), categories (12pt regular, #6C757D), amounts (14pt bold, colored green/red).
+   - **Consistency**: Limit to one font family; left-align all text except amounts (right-aligned in lists).
+
+#### 4. **Components and Elements**
+   - **Summary Cards**:
+     - Structure: Horizontal layout within rounded cards (12px radius, subtle shadow: 0 1px 3px rgba(0,0,0,0.1)).
+     - Left: Text stack (label, value, subtitle).
+     - Right: Thematic image (e.g., money bag for Income) in a rounded square (48-64px, photographic or illustrative style).
+     - Examples:
+       - Income: Label "Income", value "$2,500", subtitle "Received this month", image: Green money bag.
+       - Expenses: Label "Expenses", value "$1,200", subtitle "Spent this month", image: Credit card.
+       - Charity: Label "Charity", value "$100", subtitle "Donated this month", image: Heart organ.
+       - Investments: Label "Investments", value "$5,000", subtitle "Current value", image: Upward chart.
+     - No progress bars here (unlike other pages); focus on static summaries.
+   - **Recent Transactions Section**:
+     - Heading: "Recent Transactions" – Bold, 16pt, left-aligned.
+     - List Items: Stacked cards (8px radius, white background, no shadow).
+       - Layout: Icon (24px, colored circle: blue for groceries, green for salary, etc.) left; Vendor and category center (stacked); Amount right (bold, green/red).
+       - Examples:
+         - Icon: Shopping cart (blue circle), "Fresh Foods Market" (bold), "Groceries" (gray), "-$85.50" (red).
+         - Icon: Dollar sign (blue circle), "Tech Solutions Inc." (bold), "Salary" (gray), "+$2,500" (green).
+         - Icon: Fork/knife (blue circle), "The Italian Place" (bold), "Dining" (gray), "-$45.75" (red).
+         - Icon: Heart (blue circle), "Local Animal Shelter" (bold), "Donation" (gray), amount (red, if expense).
+       - Limit to 4-5 items visible; imply scrolling or "more" if needed.
+     - Floating Action Button: Blue circle "+" (48px diameter, bottom-right aligned over list) for adding transactions.
+   - **Bottom Navigation Bar**:
+     - Fixed at bottom: Four icons (24px, #6C757D) with labels below (12pt gray).
+     - Items: Home (house, selected/highlighted), Transactions (list), Analytics (bar chart), Settings (gear).
+     - Style: White background, centered icons, no dividers.
+
+#### 5. **Icons and Visuals**
+   - **Style**: Flat, outline or filled icons (e.g., from Material Design or custom): shopping cart for groceries, dollar for salary, fork/knife for dining, heart for donation.
+   - **Size**: 24px within 40px colored circles (pastel backgrounds matching category).
+   - **Images**: Realistic stock photos (e.g., money bag) in summary cards; rounded squares (64px), right-aligned.
+   - **No Animations Specified**: Assume subtle fade-ins on load; no heavy effects to keep performance light.
+
+#### 6. **Interaction and UX Principles**
+   - **Glanceability**: Key metrics (income/expenses) prominent at top; users should grasp net position in <5 seconds.
+   - **Tap Targets**: Minimum 48x48px for icons/buttons (e.g., "+", gear, nav items).
+   - **Navigation**: Tapping summaries could expand details (e.g., to full category view); tapping transactions opens edit mode.
+   - **Feedback**: No visible errors here; if data is outdated, add a subtle refresh icon.
+   - **Accessibility**: Alt text for images (e.g., "Money bag icon for income"); voice-over support for screen readers (e.g., "Income: two thousand five hundred dollars received this month").
+   - **Edge Cases**: Handle zero values gracefully (e.g., "$0" grayed out); scale for larger screens by centering content.
+   - **User Flow**: Entry point for the app; encourages scrolling to transactions, then navigating via bottom bar.
+
+#### 7. **Consistency with App-Wide Rules**
+   - Aligns with general app design: Minimalist, blue accents, rounded elements, semantic colors in transactions.
+   - Differs by using photographic images in summaries for visual appeal, not present in other pages like Add Transaction.
+
+These rules can be used to replicate or iterate on the Dashboard page precisely, ensuring it remains intuitive and visually engaging.
+
+### JSON Prompting for Dashboard Page UI/UX Design
+
+Use this JSON as a prompt for design tools or code generators to recreate or extend the Dashboard page.
+
+```json
+{
+  "pageName": "Dashboard",
+  "designSystemReference": "Inherit from app-wide design system (colors, typography, spacing)",
+  "layout": {
+    "orientation": "vertical scroll",
+    "header": {
+      "title": "Dashboard",
+      "style": "bold 20-24pt, left/center align, gear icon right"
+    },
+    "sections": [
+      {
+        "type": "financialSummaries",
+        "items": [
+          {"label": "Income", "value": "$2,500", "subtitle": "Received this month", "image": "money bag in green rounded square"},
+          {"label": "Expenses", "value": "$1,200", "subtitle": "Spent this month", "image": "credit card in orange rounded square"},
+          {"label": "Charity", "value": "$100", "subtitle": "Donated this month", "image": "heart in pink rounded square"},
+          {"label": "Investments", "value": "$5,000", "subtitle": "Current value", "image": "upward chart in beige rounded square"}
+        ],
+        "cardStyle": "horizontal: text left, image right; rounded 12px, subtle shadow, pastel backgrounds"
+      },
+      {
+        "type": "recentTransactions",
+        "heading": "Recent Transactions",
+        "itemsExample": [
+          {"icon": "shopping cart blue", "vendor": "Fresh Foods Market", "category": "Groceries", "amount": "-$85.50 red"},
+          {"icon": "dollar green", "vendor": "Tech Solutions Inc.", "category": "Salary", "amount": "+$2,500 green"},
+          {"icon": "fork/knife blue", "vendor": "The Italian Place", "category": "Dining", "amount": "-$45.75 red"},
+          {"icon": "heart blue", "vendor": "Local Animal Shelter", "category": "Donation", "amount": "red if expense"}
+        ],
+        "style": "stacked list items: icon left, text center, amount right; floating blue + button bottom-right"
+      }
+    ],
+    "bottomNav": {
+      "items": ["Home (house, selected)", "Transactions (list)", "Analytics (chart)", "Settings (gear)"],
+      "style": "fixed bottom bar, icon with label, gray #6C757D"
+    }
+  },
+  "uxGuidelines": {
+    "focus": "Glanceable overviews, tap to expand/details",
+    "accessibility": "Alt text for images, large tap targets, high contrast",
+    "promptExample": "Generate mobile UI for Dashboard: minimalist finance overview with summary cards (income/expenses/charity/investments) using photos, recent transactions list with icons, bottom nav. Light theme, vertical scroll."
+  }
+}
+```
