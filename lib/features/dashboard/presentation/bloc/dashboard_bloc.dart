@@ -7,6 +7,7 @@ import 'package:money_flow/features/dashboard/domain/usecases/update_dashboard_d
 import 'package:money_flow/features/dashboard/presentation/bloc/dashboard_event.dart';
 import 'package:money_flow/features/dashboard/presentation/bloc/dashboard_state.dart';
 import 'package:money_flow/features/dashboard/presentation/widgets/time_period_selector.dart';
+import 'package:money_flow/features/transactions/domain/entities/transaction_entity.dart';
 
 /// BLoC for managing dashboard-related operations.
 /// This BLoC handles all dashboard-related events and state management.
@@ -390,18 +391,45 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
               ?.map(
                 (transaction) => TransactionEntity(
                   id: transaction['id']?.toString() ?? '',
-                  title: transaction['title']?.toString() ?? '',
                   amount: (transaction['amount'] as num?)?.toDouble() ?? 0.0,
                   category: transaction['category']?.toString() ?? '',
-                  date:
+                  subcategory: transaction['subcategory']?.toString() ?? '',
+                  description: transaction['description']?.toString(),
+                  dateTime:
                       DateTime.tryParse(
-                        transaction['date']?.toString() ?? '',
+                        transaction['dateTime']?.toString() ??
+                            transaction['date']?.toString() ??
+                            '',
                       ) ??
                       DateTime.now(),
+                  type: _parseTransactionType(
+                    transaction['type']?.toString() ?? 'expense',
+                  ),
+                  isFromSms: transaction['isFromSms'] as bool? ?? false,
+                  merchant: transaction['merchant']?.toString(),
                 ),
               )
               .toList() ??
           [],
     );
+  }
+
+  /// Parses transaction type string to TransactionType enum.
+  /// This helper method converts string values to the appropriate enum type.
+  ///
+  /// Parameters:
+  /// - [typeString]: String representation of transaction type
+  ///
+  /// Returns:
+  /// - [TransactionType]: Parsed transaction type enum
+  TransactionType _parseTransactionType(String typeString) {
+    switch (typeString.toLowerCase()) {
+      case 'expense':
+        return TransactionType.expense;
+      case 'income':
+        return TransactionType.income;
+      default:
+        return TransactionType.expense; // Default to expense if unknown
+    }
   }
 }

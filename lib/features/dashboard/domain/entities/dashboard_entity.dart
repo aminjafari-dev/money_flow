@@ -1,3 +1,5 @@
+import 'package:money_flow/features/transactions/domain/entities/transaction_entity.dart';
+
 /// Dashboard entity representing the financial overview data.
 /// This is a pure business object with no external dependencies.
 ///
@@ -11,10 +13,11 @@
 ///   recentTransactions: [
 ///     TransactionEntity(
 ///       id: '1',
-///       title: 'Fresh Foods Market',
 ///       amount: -85.50,
-///       category: 'Groceries',
-///       date: DateTime.now(),
+///       category: 'Food',
+///       subcategory: 'Groceries',
+///       dateTime: DateTime.now(),
+///       type: TransactionType.expense,
 ///     ),
 ///   ],
 /// );
@@ -78,79 +81,5 @@ class DashboardEntity {
   @override
   String toString() {
     return 'DashboardEntity{totalIncome: $totalIncome, totalExpenses: $totalExpenses, totalCharity: $totalCharity, totalInvestments: $totalInvestments, recentTransactions: ${recentTransactions.length} items}';
-  }
-}
-
-/// Transaction entity representing a single financial transaction.
-/// This is used within the dashboard to show recent activity.
-///
-/// Usage Example:
-/// ```dart
-/// final transaction = TransactionEntity(
-///   id: '1',
-///   title: 'Fresh Foods Market',
-///   amount: -85.50, // Negative for expenses, positive for income
-///   category: 'Groceries',
-///   date: DateTime.now(),
-/// );
-/// ```
-class TransactionEntity {
-  /// Unique identifier for the transaction
-  final String id;
-
-  /// Display title/description of the transaction
-  final String title;
-
-  /// Transaction amount (negative for expenses, positive for income)
-  final double amount;
-
-  /// Category of the transaction (e.g., 'Groceries', 'Salary')
-  final String category;
-
-  /// Date when the transaction occurred
-  final DateTime date;
-
-  const TransactionEntity({
-    required this.id,
-    required this.title,
-    required this.amount,
-    required this.category,
-    required this.date,
-  });
-
-  /// Check if this is an income transaction
-  /// This is useful for UI styling and categorization
-  bool get isIncome => amount > 0;
-
-  /// Check if this is an expense transaction
-  /// This helps with expense tracking and budgeting
-  bool get isExpense => amount < 0;
-
-  /// Get absolute amount for display purposes
-  /// This removes the sign for cleaner UI presentation
-  double get absoluteAmount => amount.abs();
-
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is TransactionEntity &&
-          runtimeType == other.runtimeType &&
-          id == other.id &&
-          title == other.title &&
-          amount == other.amount &&
-          category == other.category &&
-          date == other.date;
-
-  @override
-  int get hashCode =>
-      id.hashCode ^
-      title.hashCode ^
-      amount.hashCode ^
-      category.hashCode ^
-      date.hashCode;
-
-  @override
-  String toString() {
-    return 'TransactionEntity{id: $id, title: $title, amount: $amount, category: $category, date: $date}';
   }
 }

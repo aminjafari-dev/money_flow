@@ -204,3 +204,44 @@ class BusinessFailure extends Failure {
   /// - [message]: Optional message describing the business rule violation
   const BusinessFailure([super.message]);
 }
+
+/// Failure type for unknown or unexpected errors.
+///
+/// This failure is used when an error occurs that doesn't fit into
+/// any specific category or when the exact cause is unknown.
+///
+/// Usage Example:
+/// ```dart
+/// try {
+///   // Some operation
+/// } catch (e) {
+///   return Left(UnknownFailure('An unexpected error occurred: ${e.toString()}'));
+/// }
+/// ```
+class UnknownFailure extends Failure {
+  /// Constructor for unknown failure
+  ///
+  /// Parameters:
+  /// - [message]: Optional message describing the unknown error
+  const UnknownFailure([super.message]);
+}
+
+/// Failure type for resource not found errors.
+///
+/// This failure is used when a requested resource (like a transaction,
+/// user, or data record) cannot be found in the system.
+///
+/// Usage Example:
+/// ```dart
+/// final transaction = await getTransaction(id);
+/// if (transaction == null) {
+///   return Left(NotFoundFailure('Transaction with ID $id not found'));
+/// }
+/// ```
+class NotFoundFailure extends Failure {
+  /// Constructor for not found failure
+  ///
+  /// Parameters:
+  /// - [message]: Optional message describing what was not found
+  const NotFoundFailure([super.message]);
+}

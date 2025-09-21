@@ -6,6 +6,8 @@ import 'package:money_flow/features/dashboard/data/models/dashboard_model.dart';
 import 'package:money_flow/features/dashboard/domain/entities/dashboard_entity.dart';
 import 'package:money_flow/features/dashboard/domain/repositories/dashboard_repository.dart';
 
+import '../../../../shared/models/transaction_model.dart';
+
 /// Repository implementation for dashboard data operations.
 /// This class handles all dashboard-related data operations using local storage only.
 ///

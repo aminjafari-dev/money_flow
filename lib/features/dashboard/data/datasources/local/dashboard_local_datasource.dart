@@ -1,6 +1,7 @@
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:money_flow/core/error/exceptions.dart';
 import 'package:money_flow/features/dashboard/data/models/dashboard_model.dart';
+import 'package:money_flow/shared/models/transaction_model.dart';
 
 /// Local data source for dashboard data using Hive database.
 /// This handles all local storage operations for dashboard information.
@@ -291,7 +292,7 @@ class DashboardLocalDataSource {
       // Cache each transaction with user-specific key
       for (final transaction in transactions) {
         final key =
-            '${userId}_${transaction.id}_${transaction.date.millisecondsSinceEpoch}';
+            '${userId}_${transaction.id}_${DateTime.parse(transaction.dateTime).millisecondsSinceEpoch}';
         await _transactionBox!.put(key, transaction);
       }
     } catch (e) {

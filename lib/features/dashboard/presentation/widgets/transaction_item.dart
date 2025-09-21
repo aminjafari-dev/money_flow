@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:money_flow/core/widgets/widgets.dart';
 import 'package:money_flow/core/theme/app_colors.dart';
-import 'package:money_flow/features/dashboard/domain/entities/dashboard_entity.dart';
+import 'package:money_flow/features/transactions/domain/entities/transaction_entity.dart';
 
 /// Widget for displaying individual transaction items in the recent transactions list.
 /// This widget shows transaction details in a clean list item format.
@@ -48,7 +48,9 @@ class TransactionItem extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 GText(
-                  transaction.title,
+                  transaction.merchant ??
+                      transaction.description ??
+                      'Transaction',
                   style: GTextStyle.bodyMedium,
                   fontWeight: FontWeight.w500,
                   fontSize: 16,
