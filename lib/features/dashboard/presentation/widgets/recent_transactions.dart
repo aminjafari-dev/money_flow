@@ -34,7 +34,7 @@ class RecentTransactions extends StatelessWidget {
             fontSize: 18,
           ),
         ),
-        GGap.medium(),
+        const SizedBox(height: 16),
         // Transactions List
         if (transactions.isEmpty)
           _buildEmptyState()
@@ -85,16 +85,8 @@ class RecentTransactions extends StatelessWidget {
   /// - [Widget]: Transactions list widget
   Widget _buildTransactionsList() {
     return Column(
-      children: transactions.asMap().entries.map((entry) {
-        final index = entry.key;
-        final transaction = entry.value;
-        return Column(
-          children: [
-            TransactionItem(transaction: transaction),
-            // Add proper spacing between transactions (except for the last one)
-            if (index < transactions.length - 1) GGap.small(),
-          ],
-        );
+      children: transactions.map((transaction) {
+        return TransactionItem(transaction: transaction);
       }).toList(),
     );
   }

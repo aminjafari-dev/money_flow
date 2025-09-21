@@ -21,25 +21,27 @@ class TransactionItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 16),
-      padding: const EdgeInsets.all(12),
+      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       child: Row(
         children: [
-          // Left side - Icon
+          // Left side - Icon with light blue background
           Container(
-            width: 40,
-            height: 40,
+            width: 48,
+            height: 48,
             decoration: BoxDecoration(
-              color: AppColors.withOpacity(AppColors.primary, 0.1),
-              borderRadius: BorderRadius.circular(20),
+              color: const Color(
+                0xFFE3F2FD,
+              ), // Light blue background like in the image
+              borderRadius: BorderRadius.circular(24),
             ),
             child: Icon(
               _getIconForCategory(transaction.category),
-              color: AppColors.primary,
-              size: 20,
+              color: const Color(0xFF1976D2), // Blue color like in the image
+              size: 24,
             ),
           ),
-          GGap.medium(),
+          const SizedBox(width: 16),
           // Center - Transaction details
           Expanded(
             child: Column(
@@ -49,15 +51,15 @@ class TransactionItem extends StatelessWidget {
                   transaction.title,
                   style: GTextStyle.bodyMedium,
                   fontWeight: FontWeight.w500,
-                  fontSize: 14,
+                  fontSize: 16,
                   color: AppColors.textPrimary,
                 ),
-                GGap.small(),
+                const SizedBox(height: 4),
                 GText(
                   transaction.category,
                   style: GTextStyle.bodySmall,
                   color: AppColors.textSecondary,
-                  fontSize: 12,
+                  fontSize: 14,
                 ),
               ],
             ),
@@ -70,7 +72,7 @@ class TransactionItem extends StatelessWidget {
             color: transaction.isIncome
                 ? AppColors.success
                 : AppColors.textPrimary,
-            fontSize: 14,
+            fontSize: 16,
           ),
         ],
       ),

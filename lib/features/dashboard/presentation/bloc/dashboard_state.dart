@@ -1,5 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:money_flow/features/dashboard/domain/entities/dashboard_entity.dart';
+import 'package:money_flow/features/dashboard/presentation/widgets/time_period_selector.dart';
 
 part 'dashboard_state.freezed.dart';
 
@@ -170,6 +171,7 @@ class DashboardState with _$DashboardState {
   /// - [refreshDashboardData]: State for refresh dashboard data operation
   /// - [getCachedDashboardData]: State for get cached dashboard data operation
   /// - [updateDashboardData]: State for update dashboard data operation
+  /// - [selectedTimePeriod]: Currently selected time period for dashboard data
   ///
   /// Usage Example:
   /// ```dart
@@ -178,6 +180,7 @@ class DashboardState with _$DashboardState {
   ///   refreshDashboardData: RefreshDashboardDataState.initial(),
   ///   getCachedDashboardData: GetCachedDashboardDataState.initial(),
   ///   updateDashboardData: UpdateDashboardDataState.initial(),
+  ///   selectedTimePeriod: TimePeriod.monthly,
   /// );
   /// ```
   const factory DashboardState({
@@ -185,5 +188,6 @@ class DashboardState with _$DashboardState {
     required RefreshDashboardDataState refreshDashboardData,
     required GetCachedDashboardDataState getCachedDashboardData,
     required UpdateDashboardDataState updateDashboardData,
+    @Default(TimePeriod.monthly) TimePeriod selectedTimePeriod,
   }) = _DashboardState;
 }

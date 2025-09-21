@@ -6,6 +6,7 @@ import 'package:money_flow/features/dashboard/domain/usecases/refresh_dashboard_
 import 'package:money_flow/features/dashboard/domain/usecases/update_dashboard_data_usecase.dart';
 import 'package:money_flow/features/dashboard/presentation/bloc/dashboard_event.dart';
 import 'package:money_flow/features/dashboard/presentation/bloc/dashboard_state.dart';
+import 'package:money_flow/features/dashboard/presentation/widgets/time_period_selector.dart';
 
 /// BLoC for managing dashboard-related operations.
 /// This BLoC handles all dashboard-related events and state management.
@@ -63,17 +64,22 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
            refreshDashboardData: RefreshDashboardDataState.initial(),
            getCachedDashboardData: GetCachedDashboardDataState.initial(),
            updateDashboardData: UpdateDashboardDataState.initial(),
+           selectedTimePeriod: TimePeriod.monthly,
          ),
        ) {
     // Register event handlers
     on<DashboardEvent>((event, emit) async {
       await event.when(
-        getDashboardData: (userId) => _onGetDashboardData(userId, emit),
-        refreshDashboardData: (userId) => _onRefreshDashboardData(userId, emit),
+        getDashboardData: (userId, timePeriod) =>
+            _onGetDashboardData(userId, timePeriod, emit),
+        refreshDashboardData: (userId, timePeriod) =>
+            _onRefreshDashboardData(userId, timePeriod, emit),
         getCachedDashboardData: (userId) =>
             _onGetCachedDashboardData(userId, emit),
         updateDashboardData: (userId, dashboard) =>
             _onUpdateDashboardData(userId, dashboard, emit),
+        changeTimePeriod: (userId, timePeriod) =>
+            _onChangeTimePeriod(userId, timePeriod, emit),
       );
     });
   }
@@ -83,14 +89,16 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
   ///
   /// Parameters:
   /// - [userId]: Unique identifier for the user
+  /// - [timePeriod]: Time period for the data
   /// - [emit]: State emitter for updating the state
   ///
   /// Usage Example:
   /// ```dart
-  /// await _onGetDashboardData('user123', emit);
+  /// await _onGetDashboardData('user123', TimePeriod.monthly, emit);
   /// ```
   Future<void> _onGetDashboardData(
     String userId,
+    TimePeriod timePeriod,
     Emitter<DashboardState> emit,
   ) async {
     // Check if emit is still valid
@@ -141,14 +149,16 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
   ///
   /// Parameters:
   /// - [userId]: Unique identifier for the user
+  /// - [timePeriod]: Time period for the data
   /// - [emit]: State emitter for updating the state
   ///
   /// Usage Example:
   /// ```dart
-  /// await _onRefreshDashboardData('user123', emit);
+  /// await _onRefreshDashboardData('user123', TimePeriod.weekly, emit);
   /// ```
   Future<void> _onRefreshDashboardData(
     String userId,
+    TimePeriod timePeriod,
     Emitter<DashboardState> emit,
   ) async {
     // Check if emit is still valid
@@ -325,6 +335,33 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
           ),
         );
       }
+    }
+  }
+
+  /// Handles the change time period event.
+  /// This method processes the change time period event and refreshes dashboard data.
+  ///
+  /// Parameters:
+  /// - [userId]: Unique identifier for the user
+  /// - [timePeriod]: New time period to display data for
+  /// - [emit]: State emitter for updating the state
+  ///
+  /// Usage Example:
+  /// ```dart
+  /// await _onChangeTimePeriod('user123', TimePeriod.yearly, emit);
+  /// ```
+  Future<void> _onChangeTimePeriod(
+    String userId,
+    TimePeriod timePeriod,
+    Emitter<DashboardState> emit,
+  ) async {
+    // Check if emit is still valid
+    if (!emit.isDone) {
+      // Update the selected time period
+      emit(state.copyWith(selectedTimePeriod: timePeriod));
+
+      // Refresh dashboard data with new time period
+      await _onGetDashboardData(userId, timePeriod, emit);
     }
   }
 

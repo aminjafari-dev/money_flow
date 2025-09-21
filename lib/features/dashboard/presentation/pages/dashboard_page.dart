@@ -8,6 +8,7 @@ import 'package:money_flow/features/dashboard/presentation/bloc/dashboard_event.
 import 'package:money_flow/features/dashboard/presentation/bloc/dashboard_state.dart';
 import 'package:money_flow/features/dashboard/presentation/widgets/dashboard_summary.dart';
 import 'package:money_flow/features/dashboard/presentation/widgets/recent_transactions.dart';
+import 'package:money_flow/features/dashboard/presentation/widgets/time_period_selector.dart';
 import 'package:money_flow/features/dashboard/domain/entities/dashboard_entity.dart';
 
 /// Main dashboard page for displaying financial overview.
@@ -60,11 +61,25 @@ class _DashboardPageState extends State<DashboardPage> {
             return state.getDashboardData.when(
               initial: () => const _InitialWidget(),
               loading: () => const _LoadingWidget(),
-              completed: (dashboard) => _DashboardContent(dashboard: dashboard),
+              completed: (dashboard) => _DashboardContent(
+                dashboard: dashboard,
+                selectedTimePeriod: state.selectedTimePeriod,
+                onTimePeriodChanged: (timePeriod) {
+                  _dashboardBloc.add(
+                    DashboardEvent.changeTimePeriod(
+                      userId: widget.userId,
+                      timePeriod: timePeriod,
+                    ),
+                  );
+                },
+              ),
               error: (message) => _ErrorWidget(
                 message: message,
                 onRetry: () => _dashboardBloc.add(
-                  DashboardEvent.getDashboardData(userId: widget.userId),
+                  DashboardEvent.getDashboardData(
+                    userId: widget.userId,
+                    timePeriod: state.selectedTimePeriod,
+                  ),
                 ),
               ),
             );
@@ -162,15 +177,29 @@ class _DashboardContent extends StatelessWidget {
   /// Dashboard data to display
   final DashboardEntity dashboard;
 
-  const _DashboardContent({required this.dashboard});
+  /// Currently selected time period
+  final TimePeriod selectedTimePeriod;
+
+  /// Callback function called when time period changes
+  final ValueChanged<TimePeriod> onTimePeriodChanged;
+
+  const _DashboardContent({
+    required this.dashboard,
+    required this.selectedTimePeriod,
+    required this.onTimePeriodChanged,
+  });
 
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Column(
         children: [
-          // Financial Summary Cards
-          DashboardSummary(dashboard: dashboard),
+          // Financial Summary Cards with Time Period Selector
+          DashboardSummary(
+            dashboard: dashboard,
+            selectedTimePeriod: selectedTimePeriod,
+            onTimePeriodChanged: onTimePeriodChanged,
+          ),
           const SizedBox(height: 24),
           // Recent Transactions
           RecentTransactions(transactions: dashboard.recentTransactions),

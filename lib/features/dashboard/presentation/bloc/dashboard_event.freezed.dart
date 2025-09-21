@@ -19,29 +19,37 @@ mixin _$DashboardEvent {
   String get userId => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(String userId) getDashboardData,
-    required TResult Function(String userId) refreshDashboardData,
+    required TResult Function(String userId, TimePeriod timePeriod)
+        getDashboardData,
+    required TResult Function(String userId, TimePeriod timePeriod)
+        refreshDashboardData,
     required TResult Function(String userId) getCachedDashboardData,
     required TResult Function(String userId, Map<String, dynamic> dashboard)
         updateDashboardData,
+    required TResult Function(String userId, TimePeriod timePeriod)
+        changeTimePeriod,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(String userId)? getDashboardData,
-    TResult? Function(String userId)? refreshDashboardData,
+    TResult? Function(String userId, TimePeriod timePeriod)? getDashboardData,
+    TResult? Function(String userId, TimePeriod timePeriod)?
+        refreshDashboardData,
     TResult? Function(String userId)? getCachedDashboardData,
     TResult? Function(String userId, Map<String, dynamic> dashboard)?
         updateDashboardData,
+    TResult? Function(String userId, TimePeriod timePeriod)? changeTimePeriod,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String userId)? getDashboardData,
-    TResult Function(String userId)? refreshDashboardData,
+    TResult Function(String userId, TimePeriod timePeriod)? getDashboardData,
+    TResult Function(String userId, TimePeriod timePeriod)?
+        refreshDashboardData,
     TResult Function(String userId)? getCachedDashboardData,
     TResult Function(String userId, Map<String, dynamic> dashboard)?
         updateDashboardData,
+    TResult Function(String userId, TimePeriod timePeriod)? changeTimePeriod,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -52,6 +60,7 @@ mixin _$DashboardEvent {
     required TResult Function(GetCachedDashboardData value)
         getCachedDashboardData,
     required TResult Function(UpdateDashboardData value) updateDashboardData,
+    required TResult Function(ChangeTimePeriod value) changeTimePeriod,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -60,6 +69,7 @@ mixin _$DashboardEvent {
     TResult? Function(RefreshDashboardData value)? refreshDashboardData,
     TResult? Function(GetCachedDashboardData value)? getCachedDashboardData,
     TResult? Function(UpdateDashboardData value)? updateDashboardData,
+    TResult? Function(ChangeTimePeriod value)? changeTimePeriod,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -68,6 +78,7 @@ mixin _$DashboardEvent {
     TResult Function(RefreshDashboardData value)? refreshDashboardData,
     TResult Function(GetCachedDashboardData value)? getCachedDashboardData,
     TResult Function(UpdateDashboardData value)? updateDashboardData,
+    TResult Function(ChangeTimePeriod value)? changeTimePeriod,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -122,7 +133,7 @@ abstract class _$$GetDashboardDataImplCopyWith<$Res>
       __$$GetDashboardDataImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String userId});
+  $Res call({String userId, TimePeriod timePeriod});
 }
 
 /// @nodoc
@@ -139,12 +150,17 @@ class __$$GetDashboardDataImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? userId = null,
+    Object? timePeriod = null,
   }) {
     return _then(_$GetDashboardDataImpl(
       userId: null == userId
           ? _value.userId
           : userId // ignore: cast_nullable_to_non_nullable
               as String,
+      timePeriod: null == timePeriod
+          ? _value.timePeriod
+          : timePeriod // ignore: cast_nullable_to_non_nullable
+              as TimePeriod,
     ));
   }
 }
@@ -152,14 +168,18 @@ class __$$GetDashboardDataImplCopyWithImpl<$Res>
 /// @nodoc
 
 class _$GetDashboardDataImpl implements GetDashboardData {
-  const _$GetDashboardDataImpl({required this.userId});
+  const _$GetDashboardDataImpl(
+      {required this.userId, this.timePeriod = TimePeriod.monthly});
 
   @override
   final String userId;
+  @override
+  @JsonKey()
+  final TimePeriod timePeriod;
 
   @override
   String toString() {
-    return 'DashboardEvent.getDashboardData(userId: $userId)';
+    return 'DashboardEvent.getDashboardData(userId: $userId, timePeriod: $timePeriod)';
   }
 
   @override
@@ -167,11 +187,13 @@ class _$GetDashboardDataImpl implements GetDashboardData {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$GetDashboardDataImpl &&
-            (identical(other.userId, userId) || other.userId == userId));
+            (identical(other.userId, userId) || other.userId == userId) &&
+            (identical(other.timePeriod, timePeriod) ||
+                other.timePeriod == timePeriod));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, userId);
+  int get hashCode => Object.hash(runtimeType, userId, timePeriod);
 
   /// Create a copy of DashboardEvent
   /// with the given fields replaced by the non-null parameter values.
@@ -185,39 +207,47 @@ class _$GetDashboardDataImpl implements GetDashboardData {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(String userId) getDashboardData,
-    required TResult Function(String userId) refreshDashboardData,
+    required TResult Function(String userId, TimePeriod timePeriod)
+        getDashboardData,
+    required TResult Function(String userId, TimePeriod timePeriod)
+        refreshDashboardData,
     required TResult Function(String userId) getCachedDashboardData,
     required TResult Function(String userId, Map<String, dynamic> dashboard)
         updateDashboardData,
+    required TResult Function(String userId, TimePeriod timePeriod)
+        changeTimePeriod,
   }) {
-    return getDashboardData(userId);
+    return getDashboardData(userId, timePeriod);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(String userId)? getDashboardData,
-    TResult? Function(String userId)? refreshDashboardData,
+    TResult? Function(String userId, TimePeriod timePeriod)? getDashboardData,
+    TResult? Function(String userId, TimePeriod timePeriod)?
+        refreshDashboardData,
     TResult? Function(String userId)? getCachedDashboardData,
     TResult? Function(String userId, Map<String, dynamic> dashboard)?
         updateDashboardData,
+    TResult? Function(String userId, TimePeriod timePeriod)? changeTimePeriod,
   }) {
-    return getDashboardData?.call(userId);
+    return getDashboardData?.call(userId, timePeriod);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String userId)? getDashboardData,
-    TResult Function(String userId)? refreshDashboardData,
+    TResult Function(String userId, TimePeriod timePeriod)? getDashboardData,
+    TResult Function(String userId, TimePeriod timePeriod)?
+        refreshDashboardData,
     TResult Function(String userId)? getCachedDashboardData,
     TResult Function(String userId, Map<String, dynamic> dashboard)?
         updateDashboardData,
+    TResult Function(String userId, TimePeriod timePeriod)? changeTimePeriod,
     required TResult orElse(),
   }) {
     if (getDashboardData != null) {
-      return getDashboardData(userId);
+      return getDashboardData(userId, timePeriod);
     }
     return orElse();
   }
@@ -230,6 +260,7 @@ class _$GetDashboardDataImpl implements GetDashboardData {
     required TResult Function(GetCachedDashboardData value)
         getCachedDashboardData,
     required TResult Function(UpdateDashboardData value) updateDashboardData,
+    required TResult Function(ChangeTimePeriod value) changeTimePeriod,
   }) {
     return getDashboardData(this);
   }
@@ -241,6 +272,7 @@ class _$GetDashboardDataImpl implements GetDashboardData {
     TResult? Function(RefreshDashboardData value)? refreshDashboardData,
     TResult? Function(GetCachedDashboardData value)? getCachedDashboardData,
     TResult? Function(UpdateDashboardData value)? updateDashboardData,
+    TResult? Function(ChangeTimePeriod value)? changeTimePeriod,
   }) {
     return getDashboardData?.call(this);
   }
@@ -252,6 +284,7 @@ class _$GetDashboardDataImpl implements GetDashboardData {
     TResult Function(RefreshDashboardData value)? refreshDashboardData,
     TResult Function(GetCachedDashboardData value)? getCachedDashboardData,
     TResult Function(UpdateDashboardData value)? updateDashboardData,
+    TResult Function(ChangeTimePeriod value)? changeTimePeriod,
     required TResult orElse(),
   }) {
     if (getDashboardData != null) {
@@ -262,11 +295,13 @@ class _$GetDashboardDataImpl implements GetDashboardData {
 }
 
 abstract class GetDashboardData implements DashboardEvent {
-  const factory GetDashboardData({required final String userId}) =
-      _$GetDashboardDataImpl;
+  const factory GetDashboardData(
+      {required final String userId,
+      final TimePeriod timePeriod}) = _$GetDashboardDataImpl;
 
   @override
   String get userId;
+  TimePeriod get timePeriod;
 
   /// Create a copy of DashboardEvent
   /// with the given fields replaced by the non-null parameter values.
@@ -284,7 +319,7 @@ abstract class _$$RefreshDashboardDataImplCopyWith<$Res>
       __$$RefreshDashboardDataImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String userId});
+  $Res call({String userId, TimePeriod timePeriod});
 }
 
 /// @nodoc
@@ -301,12 +336,17 @@ class __$$RefreshDashboardDataImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? userId = null,
+    Object? timePeriod = null,
   }) {
     return _then(_$RefreshDashboardDataImpl(
       userId: null == userId
           ? _value.userId
           : userId // ignore: cast_nullable_to_non_nullable
               as String,
+      timePeriod: null == timePeriod
+          ? _value.timePeriod
+          : timePeriod // ignore: cast_nullable_to_non_nullable
+              as TimePeriod,
     ));
   }
 }
@@ -314,14 +354,18 @@ class __$$RefreshDashboardDataImplCopyWithImpl<$Res>
 /// @nodoc
 
 class _$RefreshDashboardDataImpl implements RefreshDashboardData {
-  const _$RefreshDashboardDataImpl({required this.userId});
+  const _$RefreshDashboardDataImpl(
+      {required this.userId, this.timePeriod = TimePeriod.monthly});
 
   @override
   final String userId;
+  @override
+  @JsonKey()
+  final TimePeriod timePeriod;
 
   @override
   String toString() {
-    return 'DashboardEvent.refreshDashboardData(userId: $userId)';
+    return 'DashboardEvent.refreshDashboardData(userId: $userId, timePeriod: $timePeriod)';
   }
 
   @override
@@ -329,11 +373,13 @@ class _$RefreshDashboardDataImpl implements RefreshDashboardData {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$RefreshDashboardDataImpl &&
-            (identical(other.userId, userId) || other.userId == userId));
+            (identical(other.userId, userId) || other.userId == userId) &&
+            (identical(other.timePeriod, timePeriod) ||
+                other.timePeriod == timePeriod));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, userId);
+  int get hashCode => Object.hash(runtimeType, userId, timePeriod);
 
   /// Create a copy of DashboardEvent
   /// with the given fields replaced by the non-null parameter values.
@@ -348,39 +394,47 @@ class _$RefreshDashboardDataImpl implements RefreshDashboardData {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(String userId) getDashboardData,
-    required TResult Function(String userId) refreshDashboardData,
+    required TResult Function(String userId, TimePeriod timePeriod)
+        getDashboardData,
+    required TResult Function(String userId, TimePeriod timePeriod)
+        refreshDashboardData,
     required TResult Function(String userId) getCachedDashboardData,
     required TResult Function(String userId, Map<String, dynamic> dashboard)
         updateDashboardData,
+    required TResult Function(String userId, TimePeriod timePeriod)
+        changeTimePeriod,
   }) {
-    return refreshDashboardData(userId);
+    return refreshDashboardData(userId, timePeriod);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(String userId)? getDashboardData,
-    TResult? Function(String userId)? refreshDashboardData,
+    TResult? Function(String userId, TimePeriod timePeriod)? getDashboardData,
+    TResult? Function(String userId, TimePeriod timePeriod)?
+        refreshDashboardData,
     TResult? Function(String userId)? getCachedDashboardData,
     TResult? Function(String userId, Map<String, dynamic> dashboard)?
         updateDashboardData,
+    TResult? Function(String userId, TimePeriod timePeriod)? changeTimePeriod,
   }) {
-    return refreshDashboardData?.call(userId);
+    return refreshDashboardData?.call(userId, timePeriod);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String userId)? getDashboardData,
-    TResult Function(String userId)? refreshDashboardData,
+    TResult Function(String userId, TimePeriod timePeriod)? getDashboardData,
+    TResult Function(String userId, TimePeriod timePeriod)?
+        refreshDashboardData,
     TResult Function(String userId)? getCachedDashboardData,
     TResult Function(String userId, Map<String, dynamic> dashboard)?
         updateDashboardData,
+    TResult Function(String userId, TimePeriod timePeriod)? changeTimePeriod,
     required TResult orElse(),
   }) {
     if (refreshDashboardData != null) {
-      return refreshDashboardData(userId);
+      return refreshDashboardData(userId, timePeriod);
     }
     return orElse();
   }
@@ -393,6 +447,7 @@ class _$RefreshDashboardDataImpl implements RefreshDashboardData {
     required TResult Function(GetCachedDashboardData value)
         getCachedDashboardData,
     required TResult Function(UpdateDashboardData value) updateDashboardData,
+    required TResult Function(ChangeTimePeriod value) changeTimePeriod,
   }) {
     return refreshDashboardData(this);
   }
@@ -404,6 +459,7 @@ class _$RefreshDashboardDataImpl implements RefreshDashboardData {
     TResult? Function(RefreshDashboardData value)? refreshDashboardData,
     TResult? Function(GetCachedDashboardData value)? getCachedDashboardData,
     TResult? Function(UpdateDashboardData value)? updateDashboardData,
+    TResult? Function(ChangeTimePeriod value)? changeTimePeriod,
   }) {
     return refreshDashboardData?.call(this);
   }
@@ -415,6 +471,7 @@ class _$RefreshDashboardDataImpl implements RefreshDashboardData {
     TResult Function(RefreshDashboardData value)? refreshDashboardData,
     TResult Function(GetCachedDashboardData value)? getCachedDashboardData,
     TResult Function(UpdateDashboardData value)? updateDashboardData,
+    TResult Function(ChangeTimePeriod value)? changeTimePeriod,
     required TResult orElse(),
   }) {
     if (refreshDashboardData != null) {
@@ -425,11 +482,13 @@ class _$RefreshDashboardDataImpl implements RefreshDashboardData {
 }
 
 abstract class RefreshDashboardData implements DashboardEvent {
-  const factory RefreshDashboardData({required final String userId}) =
-      _$RefreshDashboardDataImpl;
+  const factory RefreshDashboardData(
+      {required final String userId,
+      final TimePeriod timePeriod}) = _$RefreshDashboardDataImpl;
 
   @override
   String get userId;
+  TimePeriod get timePeriod;
 
   /// Create a copy of DashboardEvent
   /// with the given fields replaced by the non-null parameter values.
@@ -512,11 +571,15 @@ class _$GetCachedDashboardDataImpl implements GetCachedDashboardData {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(String userId) getDashboardData,
-    required TResult Function(String userId) refreshDashboardData,
+    required TResult Function(String userId, TimePeriod timePeriod)
+        getDashboardData,
+    required TResult Function(String userId, TimePeriod timePeriod)
+        refreshDashboardData,
     required TResult Function(String userId) getCachedDashboardData,
     required TResult Function(String userId, Map<String, dynamic> dashboard)
         updateDashboardData,
+    required TResult Function(String userId, TimePeriod timePeriod)
+        changeTimePeriod,
   }) {
     return getCachedDashboardData(userId);
   }
@@ -524,11 +587,13 @@ class _$GetCachedDashboardDataImpl implements GetCachedDashboardData {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(String userId)? getDashboardData,
-    TResult? Function(String userId)? refreshDashboardData,
+    TResult? Function(String userId, TimePeriod timePeriod)? getDashboardData,
+    TResult? Function(String userId, TimePeriod timePeriod)?
+        refreshDashboardData,
     TResult? Function(String userId)? getCachedDashboardData,
     TResult? Function(String userId, Map<String, dynamic> dashboard)?
         updateDashboardData,
+    TResult? Function(String userId, TimePeriod timePeriod)? changeTimePeriod,
   }) {
     return getCachedDashboardData?.call(userId);
   }
@@ -536,11 +601,13 @@ class _$GetCachedDashboardDataImpl implements GetCachedDashboardData {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String userId)? getDashboardData,
-    TResult Function(String userId)? refreshDashboardData,
+    TResult Function(String userId, TimePeriod timePeriod)? getDashboardData,
+    TResult Function(String userId, TimePeriod timePeriod)?
+        refreshDashboardData,
     TResult Function(String userId)? getCachedDashboardData,
     TResult Function(String userId, Map<String, dynamic> dashboard)?
         updateDashboardData,
+    TResult Function(String userId, TimePeriod timePeriod)? changeTimePeriod,
     required TResult orElse(),
   }) {
     if (getCachedDashboardData != null) {
@@ -557,6 +624,7 @@ class _$GetCachedDashboardDataImpl implements GetCachedDashboardData {
     required TResult Function(GetCachedDashboardData value)
         getCachedDashboardData,
     required TResult Function(UpdateDashboardData value) updateDashboardData,
+    required TResult Function(ChangeTimePeriod value) changeTimePeriod,
   }) {
     return getCachedDashboardData(this);
   }
@@ -568,6 +636,7 @@ class _$GetCachedDashboardDataImpl implements GetCachedDashboardData {
     TResult? Function(RefreshDashboardData value)? refreshDashboardData,
     TResult? Function(GetCachedDashboardData value)? getCachedDashboardData,
     TResult? Function(UpdateDashboardData value)? updateDashboardData,
+    TResult? Function(ChangeTimePeriod value)? changeTimePeriod,
   }) {
     return getCachedDashboardData?.call(this);
   }
@@ -579,6 +648,7 @@ class _$GetCachedDashboardDataImpl implements GetCachedDashboardData {
     TResult Function(RefreshDashboardData value)? refreshDashboardData,
     TResult Function(GetCachedDashboardData value)? getCachedDashboardData,
     TResult Function(UpdateDashboardData value)? updateDashboardData,
+    TResult Function(ChangeTimePeriod value)? changeTimePeriod,
     required TResult orElse(),
   }) {
     if (getCachedDashboardData != null) {
@@ -691,11 +761,15 @@ class _$UpdateDashboardDataImpl implements UpdateDashboardData {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(String userId) getDashboardData,
-    required TResult Function(String userId) refreshDashboardData,
+    required TResult Function(String userId, TimePeriod timePeriod)
+        getDashboardData,
+    required TResult Function(String userId, TimePeriod timePeriod)
+        refreshDashboardData,
     required TResult Function(String userId) getCachedDashboardData,
     required TResult Function(String userId, Map<String, dynamic> dashboard)
         updateDashboardData,
+    required TResult Function(String userId, TimePeriod timePeriod)
+        changeTimePeriod,
   }) {
     return updateDashboardData(userId, dashboard);
   }
@@ -703,11 +777,13 @@ class _$UpdateDashboardDataImpl implements UpdateDashboardData {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(String userId)? getDashboardData,
-    TResult? Function(String userId)? refreshDashboardData,
+    TResult? Function(String userId, TimePeriod timePeriod)? getDashboardData,
+    TResult? Function(String userId, TimePeriod timePeriod)?
+        refreshDashboardData,
     TResult? Function(String userId)? getCachedDashboardData,
     TResult? Function(String userId, Map<String, dynamic> dashboard)?
         updateDashboardData,
+    TResult? Function(String userId, TimePeriod timePeriod)? changeTimePeriod,
   }) {
     return updateDashboardData?.call(userId, dashboard);
   }
@@ -715,11 +791,13 @@ class _$UpdateDashboardDataImpl implements UpdateDashboardData {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String userId)? getDashboardData,
-    TResult Function(String userId)? refreshDashboardData,
+    TResult Function(String userId, TimePeriod timePeriod)? getDashboardData,
+    TResult Function(String userId, TimePeriod timePeriod)?
+        refreshDashboardData,
     TResult Function(String userId)? getCachedDashboardData,
     TResult Function(String userId, Map<String, dynamic> dashboard)?
         updateDashboardData,
+    TResult Function(String userId, TimePeriod timePeriod)? changeTimePeriod,
     required TResult orElse(),
   }) {
     if (updateDashboardData != null) {
@@ -736,6 +814,7 @@ class _$UpdateDashboardDataImpl implements UpdateDashboardData {
     required TResult Function(GetCachedDashboardData value)
         getCachedDashboardData,
     required TResult Function(UpdateDashboardData value) updateDashboardData,
+    required TResult Function(ChangeTimePeriod value) changeTimePeriod,
   }) {
     return updateDashboardData(this);
   }
@@ -747,6 +826,7 @@ class _$UpdateDashboardDataImpl implements UpdateDashboardData {
     TResult? Function(RefreshDashboardData value)? refreshDashboardData,
     TResult? Function(GetCachedDashboardData value)? getCachedDashboardData,
     TResult? Function(UpdateDashboardData value)? updateDashboardData,
+    TResult? Function(ChangeTimePeriod value)? changeTimePeriod,
   }) {
     return updateDashboardData?.call(this);
   }
@@ -758,6 +838,7 @@ class _$UpdateDashboardDataImpl implements UpdateDashboardData {
     TResult Function(RefreshDashboardData value)? refreshDashboardData,
     TResult Function(GetCachedDashboardData value)? getCachedDashboardData,
     TResult Function(UpdateDashboardData value)? updateDashboardData,
+    TResult Function(ChangeTimePeriod value)? changeTimePeriod,
     required TResult orElse(),
   }) {
     if (updateDashboardData != null) {
@@ -782,5 +863,190 @@ abstract class UpdateDashboardData implements DashboardEvent {
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$UpdateDashboardDataImplCopyWith<_$UpdateDashboardDataImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$ChangeTimePeriodImplCopyWith<$Res>
+    implements $DashboardEventCopyWith<$Res> {
+  factory _$$ChangeTimePeriodImplCopyWith(_$ChangeTimePeriodImpl value,
+          $Res Function(_$ChangeTimePeriodImpl) then) =
+      __$$ChangeTimePeriodImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call({String userId, TimePeriod timePeriod});
+}
+
+/// @nodoc
+class __$$ChangeTimePeriodImplCopyWithImpl<$Res>
+    extends _$DashboardEventCopyWithImpl<$Res, _$ChangeTimePeriodImpl>
+    implements _$$ChangeTimePeriodImplCopyWith<$Res> {
+  __$$ChangeTimePeriodImplCopyWithImpl(_$ChangeTimePeriodImpl _value,
+      $Res Function(_$ChangeTimePeriodImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of DashboardEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? userId = null,
+    Object? timePeriod = null,
+  }) {
+    return _then(_$ChangeTimePeriodImpl(
+      userId: null == userId
+          ? _value.userId
+          : userId // ignore: cast_nullable_to_non_nullable
+              as String,
+      timePeriod: null == timePeriod
+          ? _value.timePeriod
+          : timePeriod // ignore: cast_nullable_to_non_nullable
+              as TimePeriod,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$ChangeTimePeriodImpl implements ChangeTimePeriod {
+  const _$ChangeTimePeriodImpl(
+      {required this.userId, required this.timePeriod});
+
+  @override
+  final String userId;
+  @override
+  final TimePeriod timePeriod;
+
+  @override
+  String toString() {
+    return 'DashboardEvent.changeTimePeriod(userId: $userId, timePeriod: $timePeriod)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$ChangeTimePeriodImpl &&
+            (identical(other.userId, userId) || other.userId == userId) &&
+            (identical(other.timePeriod, timePeriod) ||
+                other.timePeriod == timePeriod));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, userId, timePeriod);
+
+  /// Create a copy of DashboardEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$ChangeTimePeriodImplCopyWith<_$ChangeTimePeriodImpl> get copyWith =>
+      __$$ChangeTimePeriodImplCopyWithImpl<_$ChangeTimePeriodImpl>(
+          this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(String userId, TimePeriod timePeriod)
+        getDashboardData,
+    required TResult Function(String userId, TimePeriod timePeriod)
+        refreshDashboardData,
+    required TResult Function(String userId) getCachedDashboardData,
+    required TResult Function(String userId, Map<String, dynamic> dashboard)
+        updateDashboardData,
+    required TResult Function(String userId, TimePeriod timePeriod)
+        changeTimePeriod,
+  }) {
+    return changeTimePeriod(userId, timePeriod);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(String userId, TimePeriod timePeriod)? getDashboardData,
+    TResult? Function(String userId, TimePeriod timePeriod)?
+        refreshDashboardData,
+    TResult? Function(String userId)? getCachedDashboardData,
+    TResult? Function(String userId, Map<String, dynamic> dashboard)?
+        updateDashboardData,
+    TResult? Function(String userId, TimePeriod timePeriod)? changeTimePeriod,
+  }) {
+    return changeTimePeriod?.call(userId, timePeriod);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(String userId, TimePeriod timePeriod)? getDashboardData,
+    TResult Function(String userId, TimePeriod timePeriod)?
+        refreshDashboardData,
+    TResult Function(String userId)? getCachedDashboardData,
+    TResult Function(String userId, Map<String, dynamic> dashboard)?
+        updateDashboardData,
+    TResult Function(String userId, TimePeriod timePeriod)? changeTimePeriod,
+    required TResult orElse(),
+  }) {
+    if (changeTimePeriod != null) {
+      return changeTimePeriod(userId, timePeriod);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(GetDashboardData value) getDashboardData,
+    required TResult Function(RefreshDashboardData value) refreshDashboardData,
+    required TResult Function(GetCachedDashboardData value)
+        getCachedDashboardData,
+    required TResult Function(UpdateDashboardData value) updateDashboardData,
+    required TResult Function(ChangeTimePeriod value) changeTimePeriod,
+  }) {
+    return changeTimePeriod(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(GetDashboardData value)? getDashboardData,
+    TResult? Function(RefreshDashboardData value)? refreshDashboardData,
+    TResult? Function(GetCachedDashboardData value)? getCachedDashboardData,
+    TResult? Function(UpdateDashboardData value)? updateDashboardData,
+    TResult? Function(ChangeTimePeriod value)? changeTimePeriod,
+  }) {
+    return changeTimePeriod?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(GetDashboardData value)? getDashboardData,
+    TResult Function(RefreshDashboardData value)? refreshDashboardData,
+    TResult Function(GetCachedDashboardData value)? getCachedDashboardData,
+    TResult Function(UpdateDashboardData value)? updateDashboardData,
+    TResult Function(ChangeTimePeriod value)? changeTimePeriod,
+    required TResult orElse(),
+  }) {
+    if (changeTimePeriod != null) {
+      return changeTimePeriod(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class ChangeTimePeriod implements DashboardEvent {
+  const factory ChangeTimePeriod(
+      {required final String userId,
+      required final TimePeriod timePeriod}) = _$ChangeTimePeriodImpl;
+
+  @override
+  String get userId;
+  TimePeriod get timePeriod;
+
+  /// Create a copy of DashboardEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$ChangeTimePeriodImplCopyWith<_$ChangeTimePeriodImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

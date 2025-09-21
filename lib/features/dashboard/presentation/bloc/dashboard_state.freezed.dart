@@ -2542,6 +2542,7 @@ mixin _$DashboardState {
       throw _privateConstructorUsedError;
   UpdateDashboardDataState get updateDashboardData =>
       throw _privateConstructorUsedError;
+  TimePeriod get selectedTimePeriod => throw _privateConstructorUsedError;
 
   /// Create a copy of DashboardState
   /// with the given fields replaced by the non-null parameter values.
@@ -2560,7 +2561,8 @@ abstract class $DashboardStateCopyWith<$Res> {
       {GetDashboardDataState getDashboardData,
       RefreshDashboardDataState refreshDashboardData,
       GetCachedDashboardDataState getCachedDashboardData,
-      UpdateDashboardDataState updateDashboardData});
+      UpdateDashboardDataState updateDashboardData,
+      TimePeriod selectedTimePeriod});
 
   $GetDashboardDataStateCopyWith<$Res> get getDashboardData;
   $RefreshDashboardDataStateCopyWith<$Res> get refreshDashboardData;
@@ -2587,6 +2589,7 @@ class _$DashboardStateCopyWithImpl<$Res, $Val extends DashboardState>
     Object? refreshDashboardData = null,
     Object? getCachedDashboardData = null,
     Object? updateDashboardData = null,
+    Object? selectedTimePeriod = null,
   }) {
     return _then(_value.copyWith(
       getDashboardData: null == getDashboardData
@@ -2605,6 +2608,10 @@ class _$DashboardStateCopyWithImpl<$Res, $Val extends DashboardState>
           ? _value.updateDashboardData
           : updateDashboardData // ignore: cast_nullable_to_non_nullable
               as UpdateDashboardDataState,
+      selectedTimePeriod: null == selectedTimePeriod
+          ? _value.selectedTimePeriod
+          : selectedTimePeriod // ignore: cast_nullable_to_non_nullable
+              as TimePeriod,
     ) as $Val);
   }
 
@@ -2665,7 +2672,8 @@ abstract class _$$DashboardStateImplCopyWith<$Res>
       {GetDashboardDataState getDashboardData,
       RefreshDashboardDataState refreshDashboardData,
       GetCachedDashboardDataState getCachedDashboardData,
-      UpdateDashboardDataState updateDashboardData});
+      UpdateDashboardDataState updateDashboardData,
+      TimePeriod selectedTimePeriod});
 
   @override
   $GetDashboardDataStateCopyWith<$Res> get getDashboardData;
@@ -2694,6 +2702,7 @@ class __$$DashboardStateImplCopyWithImpl<$Res>
     Object? refreshDashboardData = null,
     Object? getCachedDashboardData = null,
     Object? updateDashboardData = null,
+    Object? selectedTimePeriod = null,
   }) {
     return _then(_$DashboardStateImpl(
       getDashboardData: null == getDashboardData
@@ -2712,6 +2721,10 @@ class __$$DashboardStateImplCopyWithImpl<$Res>
           ? _value.updateDashboardData
           : updateDashboardData // ignore: cast_nullable_to_non_nullable
               as UpdateDashboardDataState,
+      selectedTimePeriod: null == selectedTimePeriod
+          ? _value.selectedTimePeriod
+          : selectedTimePeriod // ignore: cast_nullable_to_non_nullable
+              as TimePeriod,
     ));
   }
 }
@@ -2723,7 +2736,8 @@ class _$DashboardStateImpl implements _DashboardState {
       {required this.getDashboardData,
       required this.refreshDashboardData,
       required this.getCachedDashboardData,
-      required this.updateDashboardData});
+      required this.updateDashboardData,
+      this.selectedTimePeriod = TimePeriod.monthly});
 
   @override
   final GetDashboardDataState getDashboardData;
@@ -2733,10 +2747,13 @@ class _$DashboardStateImpl implements _DashboardState {
   final GetCachedDashboardDataState getCachedDashboardData;
   @override
   final UpdateDashboardDataState updateDashboardData;
+  @override
+  @JsonKey()
+  final TimePeriod selectedTimePeriod;
 
   @override
   String toString() {
-    return 'DashboardState(getDashboardData: $getDashboardData, refreshDashboardData: $refreshDashboardData, getCachedDashboardData: $getCachedDashboardData, updateDashboardData: $updateDashboardData)';
+    return 'DashboardState(getDashboardData: $getDashboardData, refreshDashboardData: $refreshDashboardData, getCachedDashboardData: $getCachedDashboardData, updateDashboardData: $updateDashboardData, selectedTimePeriod: $selectedTimePeriod)';
   }
 
   @override
@@ -2751,12 +2768,19 @@ class _$DashboardStateImpl implements _DashboardState {
             (identical(other.getCachedDashboardData, getCachedDashboardData) ||
                 other.getCachedDashboardData == getCachedDashboardData) &&
             (identical(other.updateDashboardData, updateDashboardData) ||
-                other.updateDashboardData == updateDashboardData));
+                other.updateDashboardData == updateDashboardData) &&
+            (identical(other.selectedTimePeriod, selectedTimePeriod) ||
+                other.selectedTimePeriod == selectedTimePeriod));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, getDashboardData,
-      refreshDashboardData, getCachedDashboardData, updateDashboardData);
+  int get hashCode => Object.hash(
+      runtimeType,
+      getDashboardData,
+      refreshDashboardData,
+      getCachedDashboardData,
+      updateDashboardData,
+      selectedTimePeriod);
 
   /// Create a copy of DashboardState
   /// with the given fields replaced by the non-null parameter values.
@@ -2770,11 +2794,11 @@ class _$DashboardStateImpl implements _DashboardState {
 
 abstract class _DashboardState implements DashboardState {
   const factory _DashboardState(
-          {required final GetDashboardDataState getDashboardData,
-          required final RefreshDashboardDataState refreshDashboardData,
-          required final GetCachedDashboardDataState getCachedDashboardData,
-          required final UpdateDashboardDataState updateDashboardData}) =
-      _$DashboardStateImpl;
+      {required final GetDashboardDataState getDashboardData,
+      required final RefreshDashboardDataState refreshDashboardData,
+      required final GetCachedDashboardDataState getCachedDashboardData,
+      required final UpdateDashboardDataState updateDashboardData,
+      final TimePeriod selectedTimePeriod}) = _$DashboardStateImpl;
 
   @override
   GetDashboardDataState get getDashboardData;
@@ -2784,6 +2808,8 @@ abstract class _DashboardState implements DashboardState {
   GetCachedDashboardDataState get getCachedDashboardData;
   @override
   UpdateDashboardDataState get updateDashboardData;
+  @override
+  TimePeriod get selectedTimePeriod;
 
   /// Create a copy of DashboardState
   /// with the given fields replaced by the non-null parameter values.
