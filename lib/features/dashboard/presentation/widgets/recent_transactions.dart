@@ -79,21 +79,23 @@ class RecentTransactions extends StatelessWidget {
   }
 
   /// Builds the list of transactions.
-  /// This method creates a scrollable list of transaction items.
+  /// This method creates a scrollable list of transaction items with proper spacing.
   ///
   /// Returns:
   /// - [Widget]: Transactions list widget
   Widget _buildTransactionsList() {
-    return ListView.separated(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      itemCount: transactions.length,
-      separatorBuilder: (context, index) =>
-          Divider(height: 1, color: AppColors.border, indent: 68),
-      itemBuilder: (context, index) {
-        final transaction = transactions[index];
-        return TransactionItem(transaction: transaction);
-      },
+    return Column(
+      children: transactions.asMap().entries.map((entry) {
+        final index = entry.key;
+        final transaction = entry.value;
+        return Column(
+          children: [
+            TransactionItem(transaction: transaction),
+            // Add proper spacing between transactions (except for the last one)
+            if (index < transactions.length - 1) GGap.small(),
+          ],
+        );
+      }).toList(),
     );
   }
 }

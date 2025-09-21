@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:money_flow/core/widgets/widgets.dart';
 import 'package:money_flow/core/theme/app_colors.dart';
+import 'package:money_flow/core/constants/image_path.dart';
 
 /// Widget for displaying individual dashboard financial cards.
 /// This widget shows financial information in a clean card format.
@@ -11,7 +12,7 @@ import 'package:money_flow/core/theme/app_colors.dart';
 ///   title: 'Income',
 ///   amount: 2500.0,
 ///   description: 'Received this month',
-///   icon: Icons.account_balance_wallet,
+///   imagePath: ImagePath.incomeImage,
 ///   color: Colors.green,
 /// ),
 /// ```
@@ -25,10 +26,10 @@ class DashboardCard extends StatelessWidget {
   /// Description text below the amount
   final String description;
 
-  /// Icon to display on the right side
-  final IconData icon;
+  /// Image path to display on the right side
+  final String imagePath;
 
-  /// Color for the icon background
+  /// Color for the image background
   final Color color;
 
   const DashboardCard({
@@ -36,7 +37,7 @@ class DashboardCard extends StatelessWidget {
     required this.title,
     required this.amount,
     required this.description,
-    required this.icon,
+    required this.imagePath,
     required this.color,
   });
 
@@ -88,7 +89,7 @@ class DashboardCard extends StatelessWidget {
               ],
             ),
           ),
-          // Right side - Icon
+          // Right side - Image
           Container(
             width: 48,
             height: 48,
@@ -96,7 +97,15 @@ class DashboardCard extends StatelessWidget {
               color: AppColors.withOpacity(color, 0.1),
               borderRadius: BorderRadius.circular(12),
             ),
-            child: Icon(icon, color: color, size: 24),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(12),
+              child: Image.asset(
+                imagePath,
+                width: 48,
+                height: 48,
+                fit: BoxFit.cover,
+              ),
+            ),
           ),
         ],
       ),

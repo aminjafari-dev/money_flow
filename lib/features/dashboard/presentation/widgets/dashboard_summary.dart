@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:money_flow/core/widgets/widgets.dart';
 import 'package:money_flow/core/theme/app_colors.dart';
+import 'package:money_flow/core/constants/image_path.dart';
 import 'package:money_flow/features/dashboard/domain/entities/dashboard_entity.dart';
 import 'package:money_flow/features/dashboard/presentation/widgets/dashboard_card.dart';
 
@@ -37,9 +38,6 @@ class DashboardSummary extends StatelessWidget {
         GGap.medium(),
         // Financial Cards Grid
         _buildFinancialCards(),
-        GGap.medium(),
-        // Net Worth Card
-        _buildNetWorthCard(),
       ],
     );
   }
@@ -57,7 +55,7 @@ class DashboardSummary extends StatelessWidget {
           title: 'Income',
           amount: dashboard.totalIncome,
           description: 'Received this month',
-          icon: Icons.account_balance_wallet,
+          imagePath: ImagePath.incomeImage,
           color: AppColors.success,
         ),
         GGap.small(),
@@ -66,7 +64,7 @@ class DashboardSummary extends StatelessWidget {
           title: 'Expenses',
           amount: dashboard.totalExpenses,
           description: 'Spent this month',
-          icon: Icons.credit_card,
+          imagePath: ImagePath.expenseImage,
           color: AppColors.danger,
         ),
         GGap.small(),
@@ -75,7 +73,7 @@ class DashboardSummary extends StatelessWidget {
           title: 'Charity',
           amount: dashboard.totalCharity,
           description: 'Donated this month',
-          icon: Icons.favorite,
+          imagePath: ImagePath.charityImage,
           color: AppColors.categoryPink,
         ),
         GGap.small(),
@@ -84,95 +82,10 @@ class DashboardSummary extends StatelessWidget {
           title: 'Investments',
           amount: dashboard.totalInvestments,
           description: 'Current value',
-          icon: Icons.bar_chart,
+          imagePath: ImagePath.investImage,
           color: AppColors.categoryPurple,
         ),
       ],
-    );
-  }
-
-  /// Builds the net worth card showing overall financial health.
-  /// This method creates a special card that displays the calculated net worth.
-  ///
-  /// Returns:
-  /// - [Widget]: Net worth card
-  Widget _buildNetWorthCard() {
-    final netWorth = dashboard.netWorth;
-    final isPositive = netWorth >= 0;
-
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 16),
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: isPositive
-              ? AppColors.successGradient
-              : AppColors.dangerGradient,
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: AppColors.withOpacity(
-              isPositive ? AppColors.success : AppColors.danger,
-              0.3,
-            ),
-            spreadRadius: 2,
-            blurRadius: 8,
-            offset: const Offset(0, 4),
-          ),
-        ],
-      ),
-      child: Row(
-        children: [
-          // Left side - Net Worth info
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                GText(
-                  'Net Worth',
-                  style: GTextStyle.bodyMedium,
-                  color: AppColors.textWhite.withValues(alpha: 0.9),
-                  fontSize: 14,
-                ),
-                GGap.small(),
-                GText(
-                  '\$${netWorth.abs().toStringAsFixed(0)}',
-                  style: GTextStyle.headlineLarge,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 28,
-                  color: AppColors.textWhite,
-                ),
-                GGap.small(),
-                GText(
-                  isPositive
-                      ? 'You\'re doing great!'
-                      : 'Consider reducing expenses',
-                  style: GTextStyle.bodySmall,
-                  color: AppColors.textWhite.withValues(alpha: 0.8),
-                  fontSize: 12,
-                ),
-              ],
-            ),
-          ),
-          // Right side - Icon
-          Container(
-            width: 56,
-            height: 56,
-            decoration: BoxDecoration(
-              color: AppColors.textWhite.withValues(alpha: 0.2),
-              borderRadius: BorderRadius.circular(16),
-            ),
-            child: Icon(
-              isPositive ? Icons.trending_up : Icons.trending_down,
-              color: AppColors.textWhite,
-              size: 28,
-            ),
-          ),
-        ],
-      ),
     );
   }
 }
