@@ -1,7 +1,7 @@
 import 'package:hive/hive.dart';
 import 'package:money_flow/features/dashboard/domain/entities/dashboard_entity.dart';
 // ignore: unused_import
-import 'package:money_flow/features/transactions/domain/entities/transaction_entity.dart';
+import 'package:money_flow/features/add_transaction/domain/entities/transaction_entity.dart';
 import 'package:money_flow/shared/models/transaction_model.dart';
 
 part 'dashboard_model.g.dart';

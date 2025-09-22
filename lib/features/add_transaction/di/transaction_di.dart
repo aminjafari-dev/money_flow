@@ -1,12 +1,12 @@
 import 'package:get_it/get_it.dart';
-import 'package:money_flow/features/transactions/data/datasources/local/transaction_local_datasource.dart';
-import 'package:money_flow/features/transactions/data/repositories/transaction_repository_impl.dart';
-import 'package:money_flow/features/transactions/domain/repositories/transaction_repository.dart';
-import 'package:money_flow/features/transactions/domain/usecases/add_transaction_usecase.dart';
-import 'package:money_flow/features/transactions/domain/usecases/get_categories_usecase.dart';
-import 'package:money_flow/features/transactions/domain/usecases/suggest_category_usecase.dart';
-import 'package:money_flow/features/transactions/domain/usecases/validate_transaction_usecase.dart';
-import 'package:money_flow/features/transactions/presentation/bloc/add_transaction_bloc.dart';
+import 'package:money_flow/features/add_transaction/data/datasources/local/transaction_local_datasource.dart';
+import 'package:money_flow/features/add_transaction/data/repositories/transaction_repository_impl.dart';
+import 'package:money_flow/features/add_transaction/domain/repositories/transaction_repository.dart';
+import 'package:money_flow/features/add_transaction/domain/usecases/add_transaction_usecase.dart';
+import 'package:money_flow/features/add_transaction/domain/usecases/get_categories_usecase.dart';
+import 'package:money_flow/features/add_transaction/domain/usecases/suggest_category_usecase.dart';
+import 'package:money_flow/features/add_transaction/domain/usecases/validate_transaction_usecase.dart';
+import 'package:money_flow/features/add_transaction/presentation/bloc/add_transaction_bloc.dart';
 
 /// Sets up all dependencies for the transactions feature.
 /// This function initializes all transaction-related dependencies.
@@ -53,13 +53,13 @@ Future<void> setupTransactionLocator(GetIt getIt) async {
   );
 
   // BLoCs
-  getIt.registerFactory<AddTransactionBloc>(
-    () => AddTransactionBloc(
+  getIt.registerSingleton<AddTransactionBloc>(
+    AddTransactionBloc(
       addTransactionUseCase: getIt<AddTransactionUseCase>(),
       getCategoriesUseCase: getIt<GetCategoriesUseCase>(),
       getSubcategoriesUseCase: getIt<GetSubcategoriesUseCase>(),
       suggestCategoryUseCase: getIt<SuggestCategoryUseCase>(),
-      validateTransactionUseCase: getIt<ValidateTransactionUseCase>(),
+      // validateTransactionUseCase: getIt<ValidateTransactionUseCase>(),
     ),
   );
 }

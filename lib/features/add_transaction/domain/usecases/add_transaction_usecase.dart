@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:money_flow/core/error/failures.dart';
-import 'package:money_flow/features/transactions/domain/entities/transaction_entity.dart';
-import 'package:money_flow/features/transactions/domain/repositories/transaction_repository.dart';
+import 'package:money_flow/features/add_transaction/domain/entities/transaction_entity.dart';
+import 'package:money_flow/features/add_transaction/domain/repositories/transaction_repository.dart';
 
 /// Use case for adding a new transaction to the system.
 /// This use case handles the business logic for creating transactions,

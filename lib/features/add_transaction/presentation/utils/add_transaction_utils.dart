@@ -1,5 +1,5 @@
-import 'package:money_flow/features/transactions/domain/entities/transaction_entity.dart';
-import 'package:money_flow/features/transactions/presentation/bloc/add_transaction_state.dart';
+import 'package:money_flow/features/add_transaction/domain/entities/transaction_entity.dart';
+import 'package:money_flow/features/add_transaction/presentation/bloc/add_transaction_state.dart';
 
 /// Utility class for add transaction form operations.
 /// This class provides helper methods for form validation and data formatting.
@@ -22,7 +22,10 @@ class AddTransactionUtils {
   /// This method validates that all required fields are filled.
   ///
   /// Parameters:
-  /// - [state]: The current add transaction state
+  /// - [amount]: The transaction amount
+  /// - [category]: The selected category
+  /// - [subcategory]: The selected subcategory
+  /// - [dateTime]: The transaction date and time
   ///
   /// Returns:
   /// - [bool]: True if the form is valid, false otherwise
@@ -32,11 +35,13 @@ class AddTransactionUtils {
   /// - Category is selected
   /// - Subcategory is selected
   /// - Date and time is set
-  bool isFormValid(AddTransactionMainState state) {
-    return state.amount != 0 &&
-        state.selectedCategory.isNotEmpty &&
-        state.selectedSubcategory.isNotEmpty &&
-        state.dateTime != null;
+  bool isFormValid({
+    required double amount,
+    required String category,
+    required String subcategory,
+    required DateTime dateTime,
+  }) {
+    return amount != 0 && category.isNotEmpty && subcategory.isNotEmpty;
   }
 
   /// Gets the formatted amount string for display.
@@ -77,39 +82,72 @@ class AddTransactionUtils {
   /// This method determines if the user has started entering data.
   ///
   /// Parameters:
-  /// - [state]: The current add transaction state
+  /// - [amount]: The transaction amount
+  /// - [category]: The selected category
+  /// - [subcategory]: The selected subcategory
+  /// - [description]: The transaction description
+  /// - [dateTime]: The transaction date and time
+  /// - [merchant]: The merchant name
   ///
   /// Returns:
   /// - [bool]: True if the form has data, false otherwise
-  bool hasFormData(AddTransactionMainState state) {
-    return state.amount != 0 ||
-        state.selectedCategory.isNotEmpty ||
-        state.selectedSubcategory.isNotEmpty ||
-        (state.description?.isNotEmpty ?? false) ||
-        state.dateTime != null ||
-        (state.merchant?.isNotEmpty ?? false);
+  bool hasFormData({
+    required double amount,
+    required String category,
+    required String subcategory,
+    String? description,
+    required DateTime dateTime,
+    String? merchant,
+  }) {
+    return amount != 0 ||
+        category.isNotEmpty ||
+        subcategory.isNotEmpty ||
+        (description?.isNotEmpty ?? false) ||
+        (merchant?.isNotEmpty ?? false);
   }
 
   /// Gets the current transaction entity based on form data.
-  /// This method creates a transaction entity from the current form state.
+  /// This method creates a transaction entity from the current form data.
   ///
   /// Parameters:
-  /// - [state]: The current add transaction state
+  /// - [amount]: The transaction amount
+  /// - [category]: The selected category
+  /// - [subcategory]: The selected subcategory
+  /// - [description]: The transaction description
+  /// - [dateTime]: The transaction date and time
+  /// - [type]: The transaction type
+  /// - [merchant]: The merchant name
+  /// - [id]: Optional transaction ID (for edit mode)
   ///
   /// Returns:
   /// - [TransactionEntity?]: Transaction entity or null if form is not valid
-  TransactionEntity? getCurrentTransaction(AddTransactionMainState state) {
-    if (!isFormValid(state)) return null;
+  TransactionEntity? getCurrentTransaction({
+    required double amount,
+    required String category,
+    required String subcategory,
+    String? description,
+    required DateTime dateTime,
+    required TransactionType type,
+    String? merchant,
+    String? id,
+  }) {
+    if (!isFormValid(
+      amount: amount,
+      category: category,
+      subcategory: subcategory,
+      dateTime: dateTime,
+    ))
+      return null;
 
     return TransactionEntity(
-      id: state.editingTransactionId ?? '',
-      amount: state.amount,
-      category: state.selectedCategory,
-      subcategory: state.selectedSubcategory,
-      description: state.description,
-      dateTime: state.dateTime!,
-      type: state.type,
-      merchant: state.merchant,
+      id: id ?? '',
+      amount: amount,
+      category: category,
+      subcategory: subcategory,
+      description: description,
+      dateTime: dateTime,
+      type: type,
+      merchant: merchant,
     );
   }
 
@@ -204,27 +242,37 @@ class AddTransactionUtils {
     return null;
   }
 
-  /// Gets all validation errors for the current form state.
+  /// Gets all validation errors for the current form data.
   /// This method collects all validation errors into a single list.
   ///
   /// Parameters:
-  /// - [state]: The current add transaction state
+  /// - [amount]: The transaction amount
+  /// - [category]: The selected category
+  /// - [subcategory]: The selected subcategory
+  /// - [dateTime]: The transaction date and time
+  /// - [type]: The transaction type
   ///
   /// Returns:
   /// - [List<String>]: List of validation error messages
-  List<String> getValidationErrors(AddTransactionMainState state) {
+  List<String> getValidationErrors({
+    required double amount,
+    required String category,
+    required String subcategory,
+    required DateTime dateTime,
+    required TransactionType type,
+  }) {
     final errors = <String>[];
 
-    final amountError = validateAmount(state.amount, state.type);
+    final amountError = validateAmount(amount, type);
     if (amountError != null) errors.add(amountError);
 
-    final categoryError = validateCategory(state.selectedCategory);
+    final categoryError = validateCategory(category);
     if (categoryError != null) errors.add(categoryError);
 
-    final subcategoryError = validateSubcategory(state.selectedSubcategory);
+    final subcategoryError = validateSubcategory(subcategory);
     if (subcategoryError != null) errors.add(subcategoryError);
 
-    final dateError = validateDate(state.dateTime);
+    final dateError = validateDate(dateTime);
     if (dateError != null) errors.add(dateError);
 
     return errors;
@@ -234,44 +282,64 @@ class AddTransactionUtils {
   /// This method determines if the form is ready for submission.
   ///
   /// Parameters:
-  /// - [state]: The current add transaction state
+  /// - [amount]: The transaction amount
+  /// - [category]: The selected category
+  /// - [subcategory]: The selected subcategory
+  /// - [dateTime]: The transaction date and time
+  /// - [type]: The transaction type
+  /// - [isLoading]: Whether the form is currently loading
   ///
   /// Returns:
   /// - [bool]: True if the form can be submitted, false otherwise
-  bool canSubmitForm(AddTransactionMainState state) {
-    return isFormValid(state) &&
-        getValidationErrors(state).isEmpty &&
-        !state.addTransaction.maybeWhen(
-          loading: () => true,
-          orElse: () => false,
-        );
+  bool canSubmitForm({
+    required double amount,
+    required String category,
+    required String subcategory,
+    required DateTime dateTime,
+    required TransactionType type,
+    required bool isLoading,
+  }) {
+    return isFormValid(
+          amount: amount,
+          category: category,
+          subcategory: subcategory,
+          dateTime: dateTime,
+        ) &&
+        getValidationErrors(
+          amount: amount,
+          category: category,
+          subcategory: subcategory,
+          dateTime: dateTime,
+          type: type,
+        ).isEmpty &&
+        !isLoading;
   }
 
-  /// Gets the submit button text based on the current state.
+  /// Gets the submit button text based on the edit mode.
   /// This method returns appropriate text for the submit button.
   ///
   /// Parameters:
-  /// - [state]: The current add transaction state
+  /// - [isEditMode]: Whether the form is in edit mode
   ///
   /// Returns:
   /// - [String]: Submit button text
-  String getSubmitButtonText(AddTransactionMainState state) {
-    if (state.isEditMode) {
+  String getSubmitButtonText(bool isEditMode) {
+    if (isEditMode) {
       return 'Update Transaction';
     }
     return 'Add Transaction';
   }
 
-  /// Gets the page title based on the current state.
+  /// Gets the page title based on the edit mode.
   /// This method returns appropriate title for the page.
   ///
   /// Parameters:
-  /// - [state]: The current add transaction state
+  /// - [isEditMode]: Whether the form is in edit mode
   ///
   /// Returns:
   /// - [String]: Page title
-  String getPageTitle(AddTransactionMainState state) {
-    if (state.isEditMode) {
+  String getPageTitle(bool isEditMode) {
+    if (isEditMode) {
       return 'Edit Transaction';
     }
     return 'Add Transaction';

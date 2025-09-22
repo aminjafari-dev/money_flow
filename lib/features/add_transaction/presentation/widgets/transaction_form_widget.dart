@@ -3,13 +3,13 @@ import 'package:money_flow/core/theme/app_colors.dart';
 import 'package:money_flow/core/theme/app_fonts.dart';
 import 'package:money_flow/core/widgets/g_button.dart';
 import 'package:money_flow/core/widgets/g_text.dart';
-import 'package:money_flow/features/transactions/domain/entities/transaction_entity.dart';
-import 'package:money_flow/features/transactions/presentation/bloc/add_transaction_bloc.dart';
-import 'package:money_flow/features/transactions/presentation/bloc/add_transaction_event.dart';
-import 'package:money_flow/features/transactions/presentation/bloc/add_transaction_state.dart';
-import 'package:money_flow/features/transactions/presentation/utils/add_transaction_utils.dart';
-import 'package:money_flow/features/transactions/presentation/widgets/amount_input_widget.dart';
-import 'package:money_flow/features/transactions/presentation/widgets/category_selector_widget.dart';
+import 'package:money_flow/features/add_transaction/domain/entities/transaction_entity.dart';
+import 'package:money_flow/features/add_transaction/presentation/bloc/add_transaction_bloc.dart';
+import 'package:money_flow/features/add_transaction/presentation/bloc/add_transaction_event.dart';
+import 'package:money_flow/features/add_transaction/presentation/bloc/add_transaction_state.dart';
+import 'package:money_flow/features/add_transaction/presentation/utils/add_transaction_utils.dart';
+import 'package:money_flow/features/add_transaction/presentation/widgets/amount_input_widget.dart';
+import 'package:money_flow/features/add_transaction/presentation/widgets/category_selector_widget.dart';
 import 'package:money_flow/core/widgets/g_gap.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -57,6 +57,13 @@ class _TransactionFormWidgetState extends State<TransactionFormWidget> {
   final _merchantController = TextEditingController();
   final _utils = AddTransactionUtils();
 
+  // Local form state management
+  String selectedCategory = '';
+  String selectedSubcategory = '';
+  double amount = 0.0;
+  DateTime dateTime = DateTime.now();
+  TransactionType type = TransactionType.expense;
+
   @override
   void initState() {
     super.initState();
@@ -75,6 +82,11 @@ class _TransactionFormWidgetState extends State<TransactionFormWidget> {
   void _initializeForm() {
     if (widget.isEditMode && widget.transactionToEdit != null) {
       final transaction = widget.transactionToEdit!;
+      selectedCategory = transaction.category;
+      selectedSubcategory = transaction.subcategory;
+      amount = transaction.amount;
+      dateTime = transaction.dateTime;
+      type = transaction.type;
       _descriptionController.text = transaction.description ?? '';
       _merchantController.text = transaction.merchant ?? '';
     }
@@ -167,13 +179,13 @@ class _TransactionFormWidgetState extends State<TransactionFormWidget> {
 
         // Amount input widget
         AmountInputWidget(
-          amount: state.amount,
-          onAmountChanged: (amount) {
-            context.read<AddTransactionBloc>().add(
-              AddTransactionEvent.updateAmount(amount: amount),
-            );
+          amount: amount,
+          onAmountChanged: (newAmount) {
+            setState(() {
+              amount = newAmount;
+            });
           },
-          transactionType: state.type,
+          transactionType: type,
           enabled: !state.addTransaction.maybeWhen(
             loading: () => true,
             orElse: () => false,
@@ -203,16 +215,15 @@ class _TransactionFormWidgetState extends State<TransactionFormWidget> {
         GGap.small(),
         ToggleButtons(
           isSelected: [
-            state.type == TransactionType.expense,
-            state.type == TransactionType.income,
+            type == TransactionType.expense,
+            type == TransactionType.income,
           ],
           onPressed: (index) {
-            final newType = index == 0
-                ? TransactionType.expense
-                : TransactionType.income;
-            context.read<AddTransactionBloc>().add(
-              AddTransactionEvent.updateType(type: newType),
-            );
+            setState(() {
+              type = index == 0
+                  ? TransactionType.expense
+                  : TransactionType.income;
+            });
           },
           borderRadius: BorderRadius.circular(8.0),
           selectedColor: AppColors.onPrimary,
@@ -232,16 +243,21 @@ class _TransactionFormWidgetState extends State<TransactionFormWidget> {
       initial: () => const SizedBox(),
       loading: () => CategorySelectorWidget(
         categories: const [],
-        selectedCategory: state.selectedCategory,
+        selectedCategory: selectedCategory,
         onCategorySelected: (_) {},
         isLoading: true,
       ),
       completed: (categories) => CategorySelectorWidget(
         categories: categories,
-        selectedCategory: state.selectedCategory,
+        selectedCategory: selectedCategory,
         onCategorySelected: (category) {
+          setState(() {
+            selectedCategory = category;
+            selectedSubcategory = ''; // Clear subcategory when category changes
+          });
+          // Load subcategories for the new category
           context.read<AddTransactionBloc>().add(
-            AddTransactionEvent.updateCategory(category: category),
+            AddTransactionEvent.loadSubcategories(category: category),
           );
         },
         enabled: !state.addTransaction.maybeWhen(
@@ -251,7 +267,7 @@ class _TransactionFormWidgetState extends State<TransactionFormWidget> {
       ),
       error: (message) => CategorySelectorWidget(
         categories: const [],
-        selectedCategory: state.selectedCategory,
+        selectedCategory: selectedCategory,
         onCategorySelected: (_) {},
         errorMessage: message,
       ),
@@ -261,21 +277,25 @@ class _TransactionFormWidgetState extends State<TransactionFormWidget> {
   /// Builds the subcategory selection section.
   /// This method creates the subcategory selector widget.
   Widget _buildSubcategorySection(AddTransactionMainState state) {
+    if (selectedCategory.isEmpty) {
+      return const SizedBox();
+    }
+
     return state.loadSubcategories.when(
       initial: () => const SizedBox(),
       loading: () => SubcategorySelectorWidget(
         subcategories: const [],
-        selectedSubcategory: state.selectedSubcategory,
+        selectedSubcategory: selectedSubcategory,
         onSubcategorySelected: (_) {},
         isLoading: true,
       ),
       completed: (subcategories) => SubcategorySelectorWidget(
         subcategories: subcategories,
-        selectedSubcategory: state.selectedSubcategory,
+        selectedSubcategory: selectedSubcategory,
         onSubcategorySelected: (subcategory) {
-          context.read<AddTransactionBloc>().add(
-            AddTransactionEvent.updateSubcategory(subcategory: subcategory),
-          );
+          setState(() {
+            selectedSubcategory = subcategory;
+          });
         },
         enabled: !state.addTransaction.maybeWhen(
           loading: () => true,
@@ -284,7 +304,7 @@ class _TransactionFormWidgetState extends State<TransactionFormWidget> {
       ),
       error: (message) => SubcategorySelectorWidget(
         subcategories: const [],
-        selectedSubcategory: state.selectedSubcategory,
+        selectedSubcategory: selectedSubcategory,
         onSubcategorySelected: (_) {},
         errorMessage: message,
       ),
@@ -348,11 +368,8 @@ class _TransactionFormWidgetState extends State<TransactionFormWidget> {
           ),
           style: AppFonts.bodyMedium,
           onChanged: (value) {
-            context.read<AddTransactionBloc>().add(
-              AddTransactionEvent.updateDescription(
-                description: value.isEmpty ? null : value,
-              ),
-            );
+            // Description is managed by the TextEditingController
+            // No need to update BLoC state
           },
         ),
       ],
@@ -407,13 +424,9 @@ class _TransactionFormWidgetState extends State<TransactionFormWidget> {
                 GGap.small(),
                 Expanded(
                   child: GText(
-                    state.dateTime != null
-                        ? _utils.formatDate(state.dateTime)
-                        : 'Select date and time',
+                    _utils.formatDate(dateTime),
                     style: AppFonts.bodyMedium.copyWith(
-                      color: state.dateTime != null
-                          ? AppColors.onSurface
-                          : AppColors.onSurfaceVariant,
+                      color: AppColors.onSurface,
                     ),
                   ),
                 ),
@@ -478,11 +491,8 @@ class _TransactionFormWidgetState extends State<TransactionFormWidget> {
           ),
           style: AppFonts.bodyMedium,
           onChanged: (value) {
-            context.read<AddTransactionBloc>().add(
-              AddTransactionEvent.updateMerchant(
-                merchant: value.isEmpty ? null : value,
-              ),
-            );
+            // Merchant is managed by the TextEditingController
+            // No need to update BLoC state
           },
         ),
       ],
@@ -497,7 +507,7 @@ class _TransactionFormWidgetState extends State<TransactionFormWidget> {
       orElse: () => false,
     );
 
-    final canSubmit = _utils.canSubmitForm(state);
+    final canSubmit = _canSubmitForm();
 
     return Row(
       children: [
@@ -519,7 +529,7 @@ class _TransactionFormWidgetState extends State<TransactionFormWidget> {
         // Save button
         Expanded(
           child: GButton(
-            text: _utils.getSubmitButtonText(state),
+            text: widget.isEditMode ? 'Update Transaction' : 'Add Transaction',
             onPressed: canSubmit ? () => _submitForm(state) : null,
             isLoading: isLoading,
             variant: GButtonVariant.filled,
@@ -558,12 +568,10 @@ class _TransactionFormWidgetState extends State<TransactionFormWidget> {
     BuildContext context,
     AddTransactionMainState state,
   ) async {
-    final currentDate = state.dateTime ?? DateTime.now();
-
     // Select date
     final selectedDate = await showDatePicker(
       context: context,
-      initialDate: currentDate,
+      initialDate: dateTime,
       firstDate: DateTime.now().subtract(const Duration(days: 365)),
       lastDate: DateTime.now().add(const Duration(days: 1)),
       builder: (context, child) {
@@ -578,7 +586,7 @@ class _TransactionFormWidgetState extends State<TransactionFormWidget> {
       // Select time
       final selectedTime = await showTimePicker(
         context: context,
-        initialTime: TimeOfDay.fromDateTime(currentDate),
+        initialTime: TimeOfDay.fromDateTime(dateTime),
         builder: (context, child) {
           return Theme(
             data: Theme.of(
@@ -590,17 +598,15 @@ class _TransactionFormWidgetState extends State<TransactionFormWidget> {
       );
 
       if (selectedTime != null && mounted) {
-        final newDateTime = DateTime(
-          selectedDate.year,
-          selectedDate.month,
-          selectedDate.day,
-          selectedTime.hour,
-          selectedTime.minute,
-        );
-
-        context.read<AddTransactionBloc>().add(
-          AddTransactionEvent.updateDateTime(dateTime: newDateTime),
-        );
+        setState(() {
+          dateTime = DateTime(
+            selectedDate.year,
+            selectedDate.month,
+            selectedDate.day,
+            selectedTime.hour,
+            selectedTime.minute,
+          );
+        });
       }
     }
   }
@@ -616,7 +622,7 @@ class _TransactionFormWidgetState extends State<TransactionFormWidget> {
     }
 
     // Validate form data
-    final validationErrors = _utils.getValidationErrors(state);
+    final validationErrors = _getValidationErrors();
     if (validationErrors.isNotEmpty) {
       _showErrorSnackBar(validationErrors.first);
       return;
@@ -625,14 +631,46 @@ class _TransactionFormWidgetState extends State<TransactionFormWidget> {
     // Submit transaction
     context.read<AddTransactionBloc>().add(
       AddTransactionEvent.addTransaction(
-        amount: state.amount,
-        category: state.selectedCategory,
-        subcategory: state.selectedSubcategory,
-        description: state.description,
-        dateTime: state.dateTime!,
-        type: state.type,
-        merchant: state.merchant,
+        amount: amount,
+        category: selectedCategory,
+        subcategory: selectedSubcategory,
+        description: _descriptionController.text.isEmpty
+            ? null
+            : _descriptionController.text,
+        dateTime: dateTime,
+        type: type,
+        merchant: _merchantController.text.isEmpty
+            ? null
+            : _merchantController.text,
       ),
     );
+  }
+
+  /// Checks if the form can be submitted.
+  /// This method determines if the form is ready for submission.
+  bool _canSubmitForm() {
+    return amount != 0 &&
+        selectedCategory.isNotEmpty &&
+        selectedSubcategory.isNotEmpty;
+  }
+
+  /// Gets all validation errors for the current form state.
+  /// This method collects all validation errors into a single list.
+  List<String> _getValidationErrors() {
+    final errors = <String>[];
+
+    if (amount == 0) {
+      errors.add('Amount cannot be zero');
+    }
+
+    if (selectedCategory.isEmpty) {
+      errors.add('Please select a category');
+    }
+
+    if (selectedSubcategory.isEmpty) {
+      errors.add('Please select a subcategory');
+    }
+
+    return errors;
   }
 }

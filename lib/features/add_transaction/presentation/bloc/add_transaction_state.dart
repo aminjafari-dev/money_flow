@@ -1,6 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:money_flow/features/transactions/domain/entities/transaction_entity.dart';
-import 'package:money_flow/features/transactions/domain/repositories/transaction_repository.dart';
+import 'package:money_flow/features/add_transaction/domain/entities/transaction_entity.dart';
+import 'package:money_flow/features/add_transaction/domain/repositories/transaction_repository.dart';
 
 part 'add_transaction_state.freezed.dart';
 
@@ -98,7 +98,8 @@ class AddTransactionState with _$AddTransactionState {
 }
 
 /// Main state combining all operation states for the add transaction feature.
-/// This state manages the overall state of the add transaction form and operations.
+/// This state manages only the business operations, not form state.
+/// Form state should be managed in the UI layer using StatefulWidget or other state management.
 ///
 /// Usage Example:
 /// ```dart
@@ -127,44 +128,10 @@ class AddTransactionMainState with _$AddTransactionMainState {
     @Default(SuggestCategoryState.initial())
     SuggestCategoryState suggestCategory,
 
-    /// State for transaction validation operation
-    @Default(ValidateTransactionState.initial())
-    ValidateTransactionState validateTransaction,
-
     /// State for adding transaction operation
     @Default(AddTransactionState.initial()) AddTransactionState addTransaction,
 
-    /// Currently selected category
-    @Default('') String selectedCategory,
-
-    /// Currently selected subcategory
-    @Default('') String selectedSubcategory,
-
-    /// Current transaction amount
-    @Default(0.0) double amount,
-
-    /// Current transaction description
-    String? description,
-
-    /// Current transaction date and time
-    DateTime? dateTime,
-
-    /// Current transaction type
-    @Default(TransactionType.expense) TransactionType type,
-
-    /// Current merchant name
-    String? merchant,
-
-    /// Whether the form has been initialized
+    /// Whether the BLoC has been initialized
     @Default(false) bool isInitialized,
-
-    /// Whether the form has unsaved changes
-    @Default(false) bool hasUnsavedChanges,
-
-    /// Whether the form is in edit mode
-    @Default(false) bool isEditMode,
-
-    /// ID of the transaction being edited (if in edit mode)
-    String? editingTransactionId,
   }) = _AddTransactionMainState;
 }

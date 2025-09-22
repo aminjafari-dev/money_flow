@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:money_flow/core/theme/app_colors.dart';
 import 'package:money_flow/core/theme/app_fonts.dart';
 import 'package:money_flow/core/widgets/g_text.dart';
-import 'package:money_flow/features/transactions/domain/entities/transaction_entity.dart';
+import 'package:money_flow/features/add_transaction/domain/entities/transaction_entity.dart';
 import 'package:money_flow/core/widgets/g_gap.dart';
 
 /// Widget for inputting transaction amount with currency formatting.

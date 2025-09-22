@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:money_flow/core/router/page_name.dart';
 import 'package:money_flow/features/dashboard/presentation/pages/dashboard_page.dart';
-import 'package:money_flow/features/transactions/presentation/pages/add_transaction_page.dart';
+import 'package:money_flow/features/add_transaction/presentation/pages/add_transaction_page.dart';
 
 /// Global page router for the application.
 /// This class manages all route mappings and page navigation.

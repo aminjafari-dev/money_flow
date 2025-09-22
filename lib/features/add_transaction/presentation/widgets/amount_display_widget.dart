@@ -42,6 +42,7 @@ class _AmountDisplayWidgetState extends State<AmountDisplayWidget> {
   late TextEditingController _controller;
   late FocusNode _focusNode;
   bool _isEditing = false;
+  double? _lastEditedAmount;
 
   @override
   void initState() {
@@ -52,7 +53,12 @@ class _AmountDisplayWidgetState extends State<AmountDisplayWidget> {
 
     _focusNode.addListener(() {
       if (!_focusNode.hasFocus && _isEditing) {
-        _finishEditing();
+        // Use a post frame callback to ensure the value is saved
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (mounted && _isEditing) {
+            _finishEditing();
+          }
+        });
       }
     });
   }
@@ -60,7 +66,11 @@ class _AmountDisplayWidgetState extends State<AmountDisplayWidget> {
   @override
   void didUpdateWidget(AmountDisplayWidget oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (oldWidget.amount != widget.amount && !_isEditing) {
+    // Only update controller text if the amount changed from external source
+    // and we're not currently editing, and it's not our own change
+    if (oldWidget.amount != widget.amount &&
+        !_isEditing &&
+        _lastEditedAmount != widget.amount) {
       _updateControllerText();
     }
   }
@@ -73,8 +83,14 @@ class _AmountDisplayWidgetState extends State<AmountDisplayWidget> {
   }
 
   void _updateControllerText() {
-    final displayAmount = widget.amount == 0 ? '' : widget.amount.toString();
-    _controller.text = displayAmount;
+    // Only update controller text if we're not editing to prevent overriding user input
+    if (!_isEditing && mounted) {
+      final displayAmount = widget.amount == 0 ? '' : widget.amount.toString();
+      // Only update if the text actually changed
+      if (_controller.text != displayAmount) {
+        _controller.text = displayAmount;
+      }
+    }
   }
 
   void _startEditing() {
@@ -84,25 +100,37 @@ class _AmountDisplayWidgetState extends State<AmountDisplayWidget> {
       _isEditing = true;
     });
 
-    // Clear the controller and focus
+    // Set the controller text to current amount for editing
     _controller.text = widget.amount == 0 ? '' : widget.amount.toString();
     _focusNode.requestFocus();
+
+    // Select all text when starting to edit
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (_controller.text.isNotEmpty) {
+        _controller.selection = TextSelection(
+          baseOffset: 0,
+          extentOffset: _controller.text.length,
+        );
+      }
+    });
   }
 
   void _finishEditing() {
+    if (!_isEditing) return; // Prevent multiple calls
+
+    final text = _controller.text.trim();
+    final amount = text.isEmpty ? 0.0 : (double.tryParse(text) ?? 0.0);
+
+    // Store the amount we're about to save
+    _lastEditedAmount = amount;
+
+    // Update state first to prevent rebuilds
     setState(() {
       _isEditing = false;
     });
 
-    final text = _controller.text.trim();
-    if (text.isEmpty) {
-      widget.onAmountChanged(0.0);
-    } else {
-      final amount = double.tryParse(text) ?? 0.0;
-      widget.onAmountChanged(amount);
-    }
-
-    _updateControllerText();
+    // Then notify parent of the change
+    widget.onAmountChanged(amount);
   }
 
   void _onSubmitted(String value) {
@@ -140,6 +168,13 @@ class _AmountDisplayWidgetState extends State<AmountDisplayWidget> {
         ),
         decoration: InputDecoration(
           border: InputBorder.none,
+          enabledBorder: InputBorder.none,
+          focusedBorder: InputBorder.none,
+          errorBorder: InputBorder.none,
+          disabledBorder: InputBorder.none,
+          focusedErrorBorder: InputBorder.none,
+          fillColor: Colors.transparent,
+          filled: true,
           hintText: '0.00',
           hintStyle: TextStyle(
             fontSize: 64,
@@ -156,6 +191,7 @@ class _AmountDisplayWidgetState extends State<AmountDisplayWidget> {
               letterSpacing: -1.0,
             ),
           ),
+          contentPadding: EdgeInsets.zero,
         ),
         onSubmitted: _onSubmitted,
         onTapOutside: (event) => _finishEditing(),

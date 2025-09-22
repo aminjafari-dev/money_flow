@@ -3191,45 +3191,11 @@ mixin _$AddTransactionMainState {
   SuggestCategoryState get suggestCategory =>
       throw _privateConstructorUsedError;
 
-  /// State for transaction validation operation
-  ValidateTransactionState get validateTransaction =>
-      throw _privateConstructorUsedError;
-
   /// State for adding transaction operation
   AddTransactionState get addTransaction => throw _privateConstructorUsedError;
 
-  /// Currently selected category
-  String get selectedCategory => throw _privateConstructorUsedError;
-
-  /// Currently selected subcategory
-  String get selectedSubcategory => throw _privateConstructorUsedError;
-
-  /// Current transaction amount
-  double get amount => throw _privateConstructorUsedError;
-
-  /// Current transaction description
-  String? get description => throw _privateConstructorUsedError;
-
-  /// Current transaction date and time
-  DateTime? get dateTime => throw _privateConstructorUsedError;
-
-  /// Current transaction type
-  TransactionType get type => throw _privateConstructorUsedError;
-
-  /// Current merchant name
-  String? get merchant => throw _privateConstructorUsedError;
-
-  /// Whether the form has been initialized
+  /// Whether the BLoC has been initialized
   bool get isInitialized => throw _privateConstructorUsedError;
-
-  /// Whether the form has unsaved changes
-  bool get hasUnsavedChanges => throw _privateConstructorUsedError;
-
-  /// Whether the form is in edit mode
-  bool get isEditMode => throw _privateConstructorUsedError;
-
-  /// ID of the transaction being edited (if in edit mode)
-  String? get editingTransactionId => throw _privateConstructorUsedError;
 
   /// Create a copy of AddTransactionMainState
   /// with the given fields replaced by the non-null parameter values.
@@ -3248,24 +3214,12 @@ abstract class $AddTransactionMainStateCopyWith<$Res> {
       {LoadCategoriesState loadCategories,
       LoadSubcategoriesState loadSubcategories,
       SuggestCategoryState suggestCategory,
-      ValidateTransactionState validateTransaction,
       AddTransactionState addTransaction,
-      String selectedCategory,
-      String selectedSubcategory,
-      double amount,
-      String? description,
-      DateTime? dateTime,
-      TransactionType type,
-      String? merchant,
-      bool isInitialized,
-      bool hasUnsavedChanges,
-      bool isEditMode,
-      String? editingTransactionId});
+      bool isInitialized});
 
   $LoadCategoriesStateCopyWith<$Res> get loadCategories;
   $LoadSubcategoriesStateCopyWith<$Res> get loadSubcategories;
   $SuggestCategoryStateCopyWith<$Res> get suggestCategory;
-  $ValidateTransactionStateCopyWith<$Res> get validateTransaction;
   $AddTransactionStateCopyWith<$Res> get addTransaction;
 }
 
@@ -3288,19 +3242,8 @@ class _$AddTransactionMainStateCopyWithImpl<$Res,
     Object? loadCategories = null,
     Object? loadSubcategories = null,
     Object? suggestCategory = null,
-    Object? validateTransaction = null,
     Object? addTransaction = null,
-    Object? selectedCategory = null,
-    Object? selectedSubcategory = null,
-    Object? amount = null,
-    Object? description = freezed,
-    Object? dateTime = freezed,
-    Object? type = null,
-    Object? merchant = freezed,
     Object? isInitialized = null,
-    Object? hasUnsavedChanges = null,
-    Object? isEditMode = null,
-    Object? editingTransactionId = freezed,
   }) {
     return _then(_value.copyWith(
       loadCategories: null == loadCategories
@@ -3315,58 +3258,14 @@ class _$AddTransactionMainStateCopyWithImpl<$Res,
           ? _value.suggestCategory
           : suggestCategory // ignore: cast_nullable_to_non_nullable
               as SuggestCategoryState,
-      validateTransaction: null == validateTransaction
-          ? _value.validateTransaction
-          : validateTransaction // ignore: cast_nullable_to_non_nullable
-              as ValidateTransactionState,
       addTransaction: null == addTransaction
           ? _value.addTransaction
           : addTransaction // ignore: cast_nullable_to_non_nullable
               as AddTransactionState,
-      selectedCategory: null == selectedCategory
-          ? _value.selectedCategory
-          : selectedCategory // ignore: cast_nullable_to_non_nullable
-              as String,
-      selectedSubcategory: null == selectedSubcategory
-          ? _value.selectedSubcategory
-          : selectedSubcategory // ignore: cast_nullable_to_non_nullable
-              as String,
-      amount: null == amount
-          ? _value.amount
-          : amount // ignore: cast_nullable_to_non_nullable
-              as double,
-      description: freezed == description
-          ? _value.description
-          : description // ignore: cast_nullable_to_non_nullable
-              as String?,
-      dateTime: freezed == dateTime
-          ? _value.dateTime
-          : dateTime // ignore: cast_nullable_to_non_nullable
-              as DateTime?,
-      type: null == type
-          ? _value.type
-          : type // ignore: cast_nullable_to_non_nullable
-              as TransactionType,
-      merchant: freezed == merchant
-          ? _value.merchant
-          : merchant // ignore: cast_nullable_to_non_nullable
-              as String?,
       isInitialized: null == isInitialized
           ? _value.isInitialized
           : isInitialized // ignore: cast_nullable_to_non_nullable
               as bool,
-      hasUnsavedChanges: null == hasUnsavedChanges
-          ? _value.hasUnsavedChanges
-          : hasUnsavedChanges // ignore: cast_nullable_to_non_nullable
-              as bool,
-      isEditMode: null == isEditMode
-          ? _value.isEditMode
-          : isEditMode // ignore: cast_nullable_to_non_nullable
-              as bool,
-      editingTransactionId: freezed == editingTransactionId
-          ? _value.editingTransactionId
-          : editingTransactionId // ignore: cast_nullable_to_non_nullable
-              as String?,
     ) as $Val);
   }
 
@@ -3405,17 +3304,6 @@ class _$AddTransactionMainStateCopyWithImpl<$Res,
   /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
-  $ValidateTransactionStateCopyWith<$Res> get validateTransaction {
-    return $ValidateTransactionStateCopyWith<$Res>(_value.validateTransaction,
-        (value) {
-      return _then(_value.copyWith(validateTransaction: value) as $Val);
-    });
-  }
-
-  /// Create a copy of AddTransactionMainState
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @pragma('vm:prefer-inline')
   $AddTransactionStateCopyWith<$Res> get addTransaction {
     return $AddTransactionStateCopyWith<$Res>(_value.addTransaction, (value) {
       return _then(_value.copyWith(addTransaction: value) as $Val);
@@ -3436,19 +3324,8 @@ abstract class _$$AddTransactionMainStateImplCopyWith<$Res>
       {LoadCategoriesState loadCategories,
       LoadSubcategoriesState loadSubcategories,
       SuggestCategoryState suggestCategory,
-      ValidateTransactionState validateTransaction,
       AddTransactionState addTransaction,
-      String selectedCategory,
-      String selectedSubcategory,
-      double amount,
-      String? description,
-      DateTime? dateTime,
-      TransactionType type,
-      String? merchant,
-      bool isInitialized,
-      bool hasUnsavedChanges,
-      bool isEditMode,
-      String? editingTransactionId});
+      bool isInitialized});
 
   @override
   $LoadCategoriesStateCopyWith<$Res> get loadCategories;
@@ -3456,8 +3333,6 @@ abstract class _$$AddTransactionMainStateImplCopyWith<$Res>
   $LoadSubcategoriesStateCopyWith<$Res> get loadSubcategories;
   @override
   $SuggestCategoryStateCopyWith<$Res> get suggestCategory;
-  @override
-  $ValidateTransactionStateCopyWith<$Res> get validateTransaction;
   @override
   $AddTransactionStateCopyWith<$Res> get addTransaction;
 }
@@ -3480,19 +3355,8 @@ class __$$AddTransactionMainStateImplCopyWithImpl<$Res>
     Object? loadCategories = null,
     Object? loadSubcategories = null,
     Object? suggestCategory = null,
-    Object? validateTransaction = null,
     Object? addTransaction = null,
-    Object? selectedCategory = null,
-    Object? selectedSubcategory = null,
-    Object? amount = null,
-    Object? description = freezed,
-    Object? dateTime = freezed,
-    Object? type = null,
-    Object? merchant = freezed,
     Object? isInitialized = null,
-    Object? hasUnsavedChanges = null,
-    Object? isEditMode = null,
-    Object? editingTransactionId = freezed,
   }) {
     return _then(_$AddTransactionMainStateImpl(
       loadCategories: null == loadCategories
@@ -3507,58 +3371,14 @@ class __$$AddTransactionMainStateImplCopyWithImpl<$Res>
           ? _value.suggestCategory
           : suggestCategory // ignore: cast_nullable_to_non_nullable
               as SuggestCategoryState,
-      validateTransaction: null == validateTransaction
-          ? _value.validateTransaction
-          : validateTransaction // ignore: cast_nullable_to_non_nullable
-              as ValidateTransactionState,
       addTransaction: null == addTransaction
           ? _value.addTransaction
           : addTransaction // ignore: cast_nullable_to_non_nullable
               as AddTransactionState,
-      selectedCategory: null == selectedCategory
-          ? _value.selectedCategory
-          : selectedCategory // ignore: cast_nullable_to_non_nullable
-              as String,
-      selectedSubcategory: null == selectedSubcategory
-          ? _value.selectedSubcategory
-          : selectedSubcategory // ignore: cast_nullable_to_non_nullable
-              as String,
-      amount: null == amount
-          ? _value.amount
-          : amount // ignore: cast_nullable_to_non_nullable
-              as double,
-      description: freezed == description
-          ? _value.description
-          : description // ignore: cast_nullable_to_non_nullable
-              as String?,
-      dateTime: freezed == dateTime
-          ? _value.dateTime
-          : dateTime // ignore: cast_nullable_to_non_nullable
-              as DateTime?,
-      type: null == type
-          ? _value.type
-          : type // ignore: cast_nullable_to_non_nullable
-              as TransactionType,
-      merchant: freezed == merchant
-          ? _value.merchant
-          : merchant // ignore: cast_nullable_to_non_nullable
-              as String?,
       isInitialized: null == isInitialized
           ? _value.isInitialized
           : isInitialized // ignore: cast_nullable_to_non_nullable
               as bool,
-      hasUnsavedChanges: null == hasUnsavedChanges
-          ? _value.hasUnsavedChanges
-          : hasUnsavedChanges // ignore: cast_nullable_to_non_nullable
-              as bool,
-      isEditMode: null == isEditMode
-          ? _value.isEditMode
-          : isEditMode // ignore: cast_nullable_to_non_nullable
-              as bool,
-      editingTransactionId: freezed == editingTransactionId
-          ? _value.editingTransactionId
-          : editingTransactionId // ignore: cast_nullable_to_non_nullable
-              as String?,
     ));
   }
 }
@@ -3570,19 +3390,8 @@ class _$AddTransactionMainStateImpl implements _AddTransactionMainState {
       {this.loadCategories = const LoadCategoriesState.initial(),
       this.loadSubcategories = const LoadSubcategoriesState.initial(),
       this.suggestCategory = const SuggestCategoryState.initial(),
-      this.validateTransaction = const ValidateTransactionState.initial(),
       this.addTransaction = const AddTransactionState.initial(),
-      this.selectedCategory = '',
-      this.selectedSubcategory = '',
-      this.amount = 0.0,
-      this.description,
-      this.dateTime,
-      this.type = TransactionType.expense,
-      this.merchant,
-      this.isInitialized = false,
-      this.hasUnsavedChanges = false,
-      this.isEditMode = false,
-      this.editingTransactionId});
+      this.isInitialized = false});
 
   /// State for loading categories operation
   @override
@@ -3599,70 +3408,19 @@ class _$AddTransactionMainStateImpl implements _AddTransactionMainState {
   @JsonKey()
   final SuggestCategoryState suggestCategory;
 
-  /// State for transaction validation operation
-  @override
-  @JsonKey()
-  final ValidateTransactionState validateTransaction;
-
   /// State for adding transaction operation
   @override
   @JsonKey()
   final AddTransactionState addTransaction;
 
-  /// Currently selected category
-  @override
-  @JsonKey()
-  final String selectedCategory;
-
-  /// Currently selected subcategory
-  @override
-  @JsonKey()
-  final String selectedSubcategory;
-
-  /// Current transaction amount
-  @override
-  @JsonKey()
-  final double amount;
-
-  /// Current transaction description
-  @override
-  final String? description;
-
-  /// Current transaction date and time
-  @override
-  final DateTime? dateTime;
-
-  /// Current transaction type
-  @override
-  @JsonKey()
-  final TransactionType type;
-
-  /// Current merchant name
-  @override
-  final String? merchant;
-
-  /// Whether the form has been initialized
+  /// Whether the BLoC has been initialized
   @override
   @JsonKey()
   final bool isInitialized;
 
-  /// Whether the form has unsaved changes
-  @override
-  @JsonKey()
-  final bool hasUnsavedChanges;
-
-  /// Whether the form is in edit mode
-  @override
-  @JsonKey()
-  final bool isEditMode;
-
-  /// ID of the transaction being edited (if in edit mode)
-  @override
-  final String? editingTransactionId;
-
   @override
   String toString() {
-    return 'AddTransactionMainState(loadCategories: $loadCategories, loadSubcategories: $loadSubcategories, suggestCategory: $suggestCategory, validateTransaction: $validateTransaction, addTransaction: $addTransaction, selectedCategory: $selectedCategory, selectedSubcategory: $selectedSubcategory, amount: $amount, description: $description, dateTime: $dateTime, type: $type, merchant: $merchant, isInitialized: $isInitialized, hasUnsavedChanges: $hasUnsavedChanges, isEditMode: $isEditMode, editingTransactionId: $editingTransactionId)';
+    return 'AddTransactionMainState(loadCategories: $loadCategories, loadSubcategories: $loadSubcategories, suggestCategory: $suggestCategory, addTransaction: $addTransaction, isInitialized: $isInitialized)';
   }
 
   @override
@@ -3676,51 +3434,15 @@ class _$AddTransactionMainStateImpl implements _AddTransactionMainState {
                 other.loadSubcategories == loadSubcategories) &&
             (identical(other.suggestCategory, suggestCategory) ||
                 other.suggestCategory == suggestCategory) &&
-            (identical(other.validateTransaction, validateTransaction) ||
-                other.validateTransaction == validateTransaction) &&
             (identical(other.addTransaction, addTransaction) ||
                 other.addTransaction == addTransaction) &&
-            (identical(other.selectedCategory, selectedCategory) ||
-                other.selectedCategory == selectedCategory) &&
-            (identical(other.selectedSubcategory, selectedSubcategory) ||
-                other.selectedSubcategory == selectedSubcategory) &&
-            (identical(other.amount, amount) || other.amount == amount) &&
-            (identical(other.description, description) ||
-                other.description == description) &&
-            (identical(other.dateTime, dateTime) ||
-                other.dateTime == dateTime) &&
-            (identical(other.type, type) || other.type == type) &&
-            (identical(other.merchant, merchant) ||
-                other.merchant == merchant) &&
             (identical(other.isInitialized, isInitialized) ||
-                other.isInitialized == isInitialized) &&
-            (identical(other.hasUnsavedChanges, hasUnsavedChanges) ||
-                other.hasUnsavedChanges == hasUnsavedChanges) &&
-            (identical(other.isEditMode, isEditMode) ||
-                other.isEditMode == isEditMode) &&
-            (identical(other.editingTransactionId, editingTransactionId) ||
-                other.editingTransactionId == editingTransactionId));
+                other.isInitialized == isInitialized));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      loadCategories,
-      loadSubcategories,
-      suggestCategory,
-      validateTransaction,
-      addTransaction,
-      selectedCategory,
-      selectedSubcategory,
-      amount,
-      description,
-      dateTime,
-      type,
-      merchant,
-      isInitialized,
-      hasUnsavedChanges,
-      isEditMode,
-      editingTransactionId);
+  int get hashCode => Object.hash(runtimeType, loadCategories,
+      loadSubcategories, suggestCategory, addTransaction, isInitialized);
 
   /// Create a copy of AddTransactionMainState
   /// with the given fields replaced by the non-null parameter values.
@@ -3737,19 +3459,8 @@ abstract class _AddTransactionMainState implements AddTransactionMainState {
       {final LoadCategoriesState loadCategories,
       final LoadSubcategoriesState loadSubcategories,
       final SuggestCategoryState suggestCategory,
-      final ValidateTransactionState validateTransaction,
       final AddTransactionState addTransaction,
-      final String selectedCategory,
-      final String selectedSubcategory,
-      final double amount,
-      final String? description,
-      final DateTime? dateTime,
-      final TransactionType type,
-      final String? merchant,
-      final bool isInitialized,
-      final bool hasUnsavedChanges,
-      final bool isEditMode,
-      final String? editingTransactionId}) = _$AddTransactionMainStateImpl;
+      final bool isInitialized}) = _$AddTransactionMainStateImpl;
 
   /// State for loading categories operation
   @override
@@ -3763,57 +3474,13 @@ abstract class _AddTransactionMainState implements AddTransactionMainState {
   @override
   SuggestCategoryState get suggestCategory;
 
-  /// State for transaction validation operation
-  @override
-  ValidateTransactionState get validateTransaction;
-
   /// State for adding transaction operation
   @override
   AddTransactionState get addTransaction;
 
-  /// Currently selected category
-  @override
-  String get selectedCategory;
-
-  /// Currently selected subcategory
-  @override
-  String get selectedSubcategory;
-
-  /// Current transaction amount
-  @override
-  double get amount;
-
-  /// Current transaction description
-  @override
-  String? get description;
-
-  /// Current transaction date and time
-  @override
-  DateTime? get dateTime;
-
-  /// Current transaction type
-  @override
-  TransactionType get type;
-
-  /// Current merchant name
-  @override
-  String? get merchant;
-
-  /// Whether the form has been initialized
+  /// Whether the BLoC has been initialized
   @override
   bool get isInitialized;
-
-  /// Whether the form has unsaved changes
-  @override
-  bool get hasUnsavedChanges;
-
-  /// Whether the form is in edit mode
-  @override
-  bool get isEditMode;
-
-  /// ID of the transaction being edited (if in edit mode)
-  @override
-  String? get editingTransactionId;
 
   /// Create a copy of AddTransactionMainState
   /// with the given fields replaced by the non-null parameter values.

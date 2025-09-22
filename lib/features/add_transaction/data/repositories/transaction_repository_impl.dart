@@ -1,10 +1,10 @@
 import 'package:dartz/dartz.dart';
 import 'package:money_flow/core/error/exceptions.dart';
 import 'package:money_flow/core/error/failures.dart';
-import 'package:money_flow/features/transactions/data/datasources/local/transaction_local_datasource.dart';
+import 'package:money_flow/features/add_transaction/data/datasources/local/transaction_local_datasource.dart';
 import 'package:money_flow/shared/models/transaction_model.dart';
-import 'package:money_flow/features/transactions/domain/entities/transaction_entity.dart';
-import 'package:money_flow/features/transactions/domain/repositories/transaction_repository.dart';
+import 'package:money_flow/features/add_transaction/domain/entities/transaction_entity.dart';
+import 'package:money_flow/features/add_transaction/domain/repositories/transaction_repository.dart';
 
 /// Implementation of TransactionRepository using local data source.
 /// This repository handles all transaction operations using Hive local storage.

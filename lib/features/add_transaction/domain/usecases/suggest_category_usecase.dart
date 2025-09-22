@@ -1,6 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:money_flow/core/error/failures.dart';
-import 'package:money_flow/features/transactions/domain/repositories/transaction_repository.dart';
+import 'package:money_flow/features/add_transaction/domain/repositories/transaction_repository.dart';
 
 /// Use case for suggesting category and subcategory based on transaction details.
 /// This use case uses AI/ML patterns to suggest appropriate categories for transactions.

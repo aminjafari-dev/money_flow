@@ -1,6 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:money_flow/core/error/failures.dart';
-import 'package:money_flow/features/transactions/domain/entities/transaction_entity.dart';
+import 'package:money_flow/features/add_transaction/domain/entities/transaction_entity.dart';
 
 /// Use case for validating transaction data before saving.
 /// This use case ensures that transaction data meets all business rules and requirements.

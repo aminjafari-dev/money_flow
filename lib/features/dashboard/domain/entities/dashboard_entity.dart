@@ -1,4 +1,4 @@
-import 'package:money_flow/features/transactions/domain/entities/transaction_entity.dart';
+import 'package:money_flow/features/add_transaction/domain/entities/transaction_entity.dart';
 
 /// Dashboard entity representing the financial overview data.
 /// This is a pure business object with no external dependencies.

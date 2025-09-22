@@ -7,7 +7,7 @@ import 'package:money_flow/features/dashboard/domain/usecases/update_dashboard_d
 import 'package:money_flow/features/dashboard/presentation/bloc/dashboard_event.dart';
 import 'package:money_flow/features/dashboard/presentation/bloc/dashboard_state.dart';
 import 'package:money_flow/features/dashboard/presentation/widgets/time_period_selector.dart';
-import 'package:money_flow/features/transactions/domain/entities/transaction_entity.dart';
+import 'package:money_flow/features/add_transaction/domain/entities/transaction_entity.dart';
 
 /// BLoC for managing dashboard-related operations.
 /// This BLoC handles all dashboard-related events and state management.

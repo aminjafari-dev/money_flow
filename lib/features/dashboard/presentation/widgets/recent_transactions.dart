@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:money_flow/core/widgets/widgets.dart';
 import 'package:money_flow/core/theme/app_colors.dart';
-import 'package:money_flow/features/transactions/domain/entities/transaction_entity.dart';
+import 'package:money_flow/features/add_transaction/domain/entities/transaction_entity.dart';
 import 'package:money_flow/features/dashboard/presentation/widgets/transaction_item.dart';
 
 /// Widget for displaying the recent transactions section.

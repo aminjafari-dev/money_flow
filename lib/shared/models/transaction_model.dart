@@ -1,5 +1,5 @@
 import 'package:hive/hive.dart';
-import 'package:money_flow/features/transactions/domain/entities/transaction_entity.dart';
+import 'package:money_flow/features/add_transaction/domain/entities/transaction_entity.dart';
 
 part 'transaction_model.g.dart';
 

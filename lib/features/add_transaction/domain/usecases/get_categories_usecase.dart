@@ -1,6 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:money_flow/core/error/failures.dart';
-import 'package:money_flow/features/transactions/domain/repositories/transaction_repository.dart';
+import 'package:money_flow/features/add_transaction/domain/repositories/transaction_repository.dart';
 
 /// Use case for retrieving available categories for transaction categorization.
 /// This use case provides the list of categories that can be used when adding transactions.

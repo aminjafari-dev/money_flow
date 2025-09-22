@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:money_flow/core/di/locator.dart';
 import 'package:money_flow/core/widgets/g_text.dart';
-import 'package:money_flow/features/transactions/domain/entities/transaction_entity.dart';
-import 'package:money_flow/features/transactions/presentation/bloc/add_transaction_bloc.dart';
-import 'package:money_flow/features/transactions/presentation/bloc/add_transaction_event.dart';
-import 'package:money_flow/features/transactions/presentation/bloc/add_transaction_state.dart';
-import 'package:money_flow/features/transactions/presentation/widgets/amount_display_widget.dart';
-import 'package:money_flow/features/transactions/presentation/widgets/category_selector_widget.dart';
-import 'package:money_flow/features/transactions/presentation/widgets/transaction_action_buttons_widget.dart';
-import 'package:money_flow/features/transactions/presentation/widgets/transaction_form_field_widget.dart';
+import 'package:money_flow/features/add_transaction/domain/entities/transaction_entity.dart';
+import 'package:money_flow/features/add_transaction/presentation/bloc/add_transaction_bloc.dart';
+import 'package:money_flow/features/add_transaction/presentation/bloc/add_transaction_event.dart';
+import 'package:money_flow/features/add_transaction/presentation/bloc/add_transaction_state.dart';
+import 'package:money_flow/features/add_transaction/presentation/widgets/amount_display_widget.dart';
+import 'package:money_flow/features/add_transaction/presentation/widgets/category_selector_widget.dart';
+import 'package:money_flow/features/add_transaction/presentation/widgets/transaction_action_buttons_widget.dart';
+import 'package:money_flow/features/add_transaction/presentation/widgets/transaction_form_field_widget.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 /// Main page for adding new transactions.
@@ -45,6 +45,13 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
   final TextEditingController _descriptionController = TextEditingController();
   final TextEditingController _dateTimeController = TextEditingController();
 
+  // Local form state management
+  String selectedCategory = '';
+  String selectedSubcategory = '';
+  double amount = 0.0;
+  DateTime dateTime = DateTime.now();
+  TransactionType type = TransactionType.expense;
+
   @override
   void initState() {
     super.initState();
@@ -71,9 +78,8 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => getIt<AddTransactionBloc>(),
-      child: BlocConsumer<AddTransactionBloc, AddTransactionMainState>(
+    return  BlocConsumer<AddTransactionBloc, AddTransactionMainState>(
+      bloc: getIt<AddTransactionBloc>(),
         listener: (context, state) {
           // Handle transaction addition success
           state.addTransaction.when(
@@ -95,7 +101,7 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
             body: _buildSimpleBody(context, state),
           );
         },
-      ),
+      
     );
   }
 
@@ -168,11 +174,11 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
   /// This shows the current transaction amount in a large, prominent format.
   Widget _buildAmountDisplay(AddTransactionMainState state) {
     return AmountDisplayWidget(
-      amount: state.amount,
+      amount: amount,
       onAmountChanged: (newAmount) {
-        getIt<AddTransactionBloc>().add(
-          AddTransactionEvent.updateAmount(amount: newAmount),
-        );
+        setState(() {
+          amount = newAmount;
+        });
       },
     );
   }
@@ -184,18 +190,18 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
       initial: () => const SizedBox(),
       loading: () => CategorySelectorWidget(
         categories: const [],
-        selectedCategory: '',
+        selectedCategory: selectedCategory,
         onCategorySelected: (_) {},
         isLoading: true,
       ),
       completed: (categories) => CategorySelectorWidget(
         categories: categories,
-        selectedCategory: state.selectedCategory,
+        selectedCategory: selectedCategory,
         onCategorySelected: (category) => _selectCategory(context, category),
       ),
       error: (message) => CategorySelectorWidget(
         categories: const [],
-        selectedCategory: '',
+        selectedCategory: selectedCategory,
         onCategorySelected: (_) {},
         errorMessage: message,
       ),
@@ -205,7 +211,7 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
   /// Builds the subcategory selection section with horizontal chips.
   /// This shows available subcategories for the selected category.
   Widget _buildSubcategorySection(AddTransactionMainState state) {
-    if (state.selectedCategory.isEmpty) {
+    if (selectedCategory.isEmpty) {
       return const SizedBox();
     }
 
@@ -213,19 +219,19 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
       initial: () => const SizedBox(),
       loading: () => SubcategorySelectorWidget(
         subcategories: const [],
-        selectedSubcategory: '',
+        selectedSubcategory: selectedSubcategory,
         onSubcategorySelected: (_) {},
         isLoading: true,
       ),
       completed: (subcategories) => SubcategorySelectorWidget(
         subcategories: subcategories,
-        selectedSubcategory: state.selectedSubcategory,
+        selectedSubcategory: selectedSubcategory,
         onSubcategorySelected: (subcategory) =>
             _selectSubcategory(context, subcategory),
       ),
       error: (message) => SubcategorySelectorWidget(
         subcategories: const [],
-        selectedSubcategory: '',
+        selectedSubcategory: selectedSubcategory,
         onSubcategorySelected: (_) {},
         errorMessage: message,
       ),
@@ -240,11 +246,8 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
       labelText: 'Description',
       hintText: 'Enter description',
       onChanged: (value) {
-        context.read<AddTransactionBloc>().add(
-          AddTransactionEvent.updateDescription(
-            description: value.isEmpty ? null : value,
-          ),
-        );
+        // Description is managed by the TextEditingController
+        // No need to update BLoC state
       },
     );
   }
@@ -274,9 +277,9 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
     );
 
     final canSave =
-        state.selectedCategory.isNotEmpty &&
-        state.selectedSubcategory.isNotEmpty &&
-        state.amount != 0;
+        selectedCategory.isNotEmpty &&
+        selectedSubcategory.isNotEmpty &&
+        amount != 0;
 
     return TransactionActionButtonsWidget(
       onCancel: () => Navigator.of(context).pop(),
@@ -310,16 +313,21 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
 
   /// Selects a category.
   void _selectCategory(BuildContext context, String category) {
+    setState(() {
+      selectedCategory = category;
+      selectedSubcategory = ''; // Clear subcategory when category changes
+    });
+    // Load subcategories for the new category
     context.read<AddTransactionBloc>().add(
-      AddTransactionEvent.updateCategory(category: category),
+      AddTransactionEvent.loadSubcategories(category: category),
     );
   }
 
   /// Selects a subcategory.
   void _selectSubcategory(BuildContext context, String subcategory) {
-    context.read<AddTransactionBloc>().add(
-      AddTransactionEvent.updateSubcategory(subcategory: subcategory),
-    );
+    setState(() {
+      selectedSubcategory = subcategory;
+    });
   }
 
   /// Shows date time picker.
@@ -338,7 +346,7 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
       );
 
       if (time != null && mounted) {
-        final dateTime = DateTime(
+        final newDateTime = DateTime(
           date.year,
           date.month,
           date.day,
@@ -346,10 +354,10 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
           time.minute,
         );
 
-        _dateTimeController.text = _formatDateTime(dateTime);
-        context.read<AddTransactionBloc>().add(
-          AddTransactionEvent.updateDateTime(dateTime: dateTime),
-        );
+        setState(() {
+          dateTime = newDateTime;
+        });
+        _dateTimeController.text = _formatDateTime(newDateTime);
       }
     }
   }
@@ -358,12 +366,14 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
   void _saveTransaction(BuildContext context, AddTransactionMainState state) {
     context.read<AddTransactionBloc>().add(
       AddTransactionEvent.addTransaction(
-        amount: state.amount,
-        category: state.selectedCategory,
-        subcategory: state.selectedSubcategory,
-        description: state.description,
-        dateTime: state.dateTime ?? DateTime.now(),
-        type: TransactionType.expense,
+        amount: amount,
+        category: selectedCategory,
+        subcategory: selectedSubcategory,
+        description: _descriptionController.text.isEmpty
+            ? null
+            : _descriptionController.text,
+        dateTime: dateTime,
+        type: type,
       ),
     );
   }

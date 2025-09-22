@@ -1,6 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:money_flow/core/error/failures.dart';
-import 'package:money_flow/features/transactions/domain/entities/transaction_entity.dart';
+import 'package:money_flow/features/add_transaction/domain/entities/transaction_entity.dart';
 
 /// Abstract repository interface for transaction operations.
 /// This defines the contract that any transaction repository implementation must follow.
