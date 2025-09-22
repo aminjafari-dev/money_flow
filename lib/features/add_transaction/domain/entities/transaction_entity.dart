@@ -22,7 +22,10 @@ class TransactionEntity extends Equatable {
   /// Transaction amount (positive for income, negative for expense)
   final double amount;
 
-  /// Main category of the transaction (e.g., Food, Transportation)
+  /// Main category of the transaction (income, expenses, charity, investments)
+  final String mainCategory;
+
+  /// Category of the transaction (e.g., Food, Transportation)
   final String category;
 
   /// Specific subcategory within the main category (e.g., Groceries, Gas)
@@ -46,6 +49,7 @@ class TransactionEntity extends Equatable {
   const TransactionEntity({
     required this.id,
     required this.amount,
+    required this.mainCategory,
     required this.category,
     required this.subcategory,
     this.description,
@@ -60,6 +64,7 @@ class TransactionEntity extends Equatable {
   TransactionEntity copyWith({
     String? id,
     double? amount,
+    String? mainCategory,
     String? category,
     String? subcategory,
     String? description,
@@ -71,6 +76,7 @@ class TransactionEntity extends Equatable {
     return TransactionEntity(
       id: id ?? this.id,
       amount: amount ?? this.amount,
+      mainCategory: mainCategory ?? this.mainCategory,
       category: category ?? this.category,
       subcategory: subcategory ?? this.subcategory,
       description: description ?? this.description,
@@ -104,6 +110,7 @@ class TransactionEntity extends Equatable {
   List<Object?> get props => [
     id,
     amount,
+    mainCategory,
     category,
     subcategory,
     description,

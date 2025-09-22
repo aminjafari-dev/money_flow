@@ -1,5 +1,4 @@
 import 'package:money_flow/features/add_transaction/domain/entities/transaction_entity.dart';
-import 'package:money_flow/features/add_transaction/presentation/bloc/add_transaction_state.dart';
 
 /// Utility class for add transaction form operations.
 /// This class provides helper methods for form validation and data formatting.
@@ -118,6 +117,7 @@ class AddTransactionUtils {
   /// - [type]: The transaction type
   /// - [merchant]: The merchant name
   /// - [id]: Optional transaction ID (for edit mode)
+  /// - [mainCategory]: Optional main category (defaults based on type)
   ///
   /// Returns:
   /// - [TransactionEntity?]: Transaction entity or null if form is not valid
@@ -130,18 +130,21 @@ class AddTransactionUtils {
     required TransactionType type,
     String? merchant,
     String? id,
+    String? mainCategory,
   }) {
     if (!isFormValid(
       amount: amount,
       category: category,
       subcategory: subcategory,
       dateTime: dateTime,
-    ))
+    )) {
       return null;
+    }
 
     return TransactionEntity(
       id: id ?? '',
       amount: amount,
+      mainCategory: mainCategory ?? _getMainCategoryFromType(type),
       category: category,
       subcategory: subcategory,
       description: description,
@@ -343,5 +346,22 @@ class AddTransactionUtils {
       return 'Edit Transaction';
     }
     return 'Add Transaction';
+  }
+
+  /// Gets the main category based on transaction type.
+  /// This helper method determines the default main category for a transaction type.
+  ///
+  /// Parameters:
+  /// - [type]: The transaction type
+  ///
+  /// Returns:
+  /// - [String]: The main category string
+  String _getMainCategoryFromType(TransactionType type) {
+    switch (type) {
+      case TransactionType.income:
+        return 'income';
+      case TransactionType.expense:
+        return 'expenses';
+    }
   }
 }

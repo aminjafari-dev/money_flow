@@ -1,4 +1,5 @@
 import 'package:get_it/get_it.dart';
+import 'package:money_flow/core/services/category_service.dart';
 import 'package:money_flow/features/add_transaction/data/datasources/local/transaction_local_datasource.dart';
 import 'package:money_flow/features/add_transaction/data/repositories/transaction_repository_impl.dart';
 import 'package:money_flow/features/add_transaction/domain/repositories/transaction_repository.dart';
@@ -28,6 +29,7 @@ Future<void> setupTransactionLocator(GetIt getIt) async {
   getIt.registerLazySingleton<TransactionRepository>(
     () => TransactionRepositoryImpl(
       localDataSource: getIt<TransactionLocalDataSource>(),
+      categoryService: getIt<CategoryService>(),
     ),
   );
 

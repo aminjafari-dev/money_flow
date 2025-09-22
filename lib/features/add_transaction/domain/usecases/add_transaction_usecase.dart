@@ -62,6 +62,7 @@ class AddTransactionUseCase {
       final transaction = TransactionEntity(
         id: transactionId,
         amount: params.amount,
+        mainCategory: params.mainCategory,
         category: params.category,
         subcategory: params.subcategory,
         description: params.description,
@@ -150,7 +151,10 @@ class AddTransactionParams {
   /// Transaction amount (positive for income, negative for expense)
   final double amount;
 
-  /// Main category of the transaction
+  /// Main category of the transaction (income, expenses, charity, investments)
+  final String mainCategory;
+
+  /// Category of the transaction
   final String category;
 
   /// Specific subcategory within the main category
@@ -173,6 +177,7 @@ class AddTransactionParams {
 
   const AddTransactionParams({
     required this.amount,
+    required this.mainCategory,
     required this.category,
     required this.subcategory,
     this.description,
@@ -199,6 +204,7 @@ class AddTransactionParams {
   /// - [AddTransactionParams]: Updated parameters
   AddTransactionParams copyWith({
     double? amount,
+    String? mainCategory,
     String? category,
     String? subcategory,
     String? description,
@@ -209,6 +215,7 @@ class AddTransactionParams {
   }) {
     return AddTransactionParams(
       amount: amount ?? this.amount,
+      mainCategory: mainCategory ?? this.mainCategory,
       category: category ?? this.category,
       subcategory: subcategory ?? this.subcategory,
       description: description ?? this.description,
@@ -224,6 +231,7 @@ class AddTransactionParams {
     if (identical(this, other)) return true;
     return other is AddTransactionParams &&
         other.amount == amount &&
+        other.mainCategory == mainCategory &&
         other.category == category &&
         other.subcategory == subcategory &&
         other.description == description &&
@@ -237,6 +245,7 @@ class AddTransactionParams {
   int get hashCode {
     return Object.hash(
       amount,
+      mainCategory,
       category,
       subcategory,
       description,
@@ -249,6 +258,6 @@ class AddTransactionParams {
 
   @override
   String toString() {
-    return 'AddTransactionParams(amount: $amount, category: $category, subcategory: $subcategory, description: $description, dateTime: $dateTime, type: $type, isFromSms: $isFromSms, merchant: $merchant)';
+    return 'AddTransactionParams(amount: $amount, mainCategory: $mainCategory, category: $category, subcategory: $subcategory, description: $description, dateTime: $dateTime, type: $type, isFromSms: $isFromSms, merchant: $merchant)';
   }
 }

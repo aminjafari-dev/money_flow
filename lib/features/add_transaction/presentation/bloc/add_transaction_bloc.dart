@@ -308,6 +308,7 @@ class AddTransactionBloc
       final params = event.when(
         initialize: () => AddTransactionParams(
           amount: 0.0,
+          mainCategory: 'expenses',
           category: '',
           subcategory: '',
           dateTime: DateTime.now(),
@@ -315,6 +316,7 @@ class AddTransactionBloc
         ),
         loadCategories: () => AddTransactionParams(
           amount: 0.0,
+          mainCategory: 'expenses',
           category: '',
           subcategory: '',
           dateTime: DateTime.now(),
@@ -322,6 +324,7 @@ class AddTransactionBloc
         ),
         loadSubcategories: (category) => AddTransactionParams(
           amount: 0.0,
+          mainCategory: 'expenses',
           category: '',
           subcategory: '',
           dateTime: DateTime.now(),
@@ -330,6 +333,7 @@ class AddTransactionBloc
         suggestCategory: (amount, description, merchant) =>
             AddTransactionParams(
               amount: 0.0,
+              mainCategory: 'expenses',
               category: '',
               subcategory: '',
               dateTime: DateTime.now(),
@@ -347,6 +351,7 @@ class AddTransactionBloc
               isFromSms,
             ) => AddTransactionParams(
               amount: amount,
+              mainCategory: _getMainCategoryFromType(type),
               category: category,
               subcategory: subcategory,
               description: description,
@@ -393,14 +398,24 @@ class AddTransactionBloc
     }
   }
 
-  /// Gets default categories for both expense and income transactions.
+  /// Gets default categories (subcategories from CategoryService).
   /// This method provides fallback categories when the repository fails to load them.
   ///
   /// Returns:
-  /// - [List<String>]: List of default category names
+  /// - [List<String>]: List of default subcategory names
   List<String> _getDefaultCategories() {
     return [
-      // Expense categories
+      // Income subcategories
+      'Salary',
+      'Freelance',
+      'Business',
+      'Investment Returns',
+      'Bonus',
+      'Gift',
+      'Rental Income',
+      'Refund',
+      'Other Income',
+      // Expense subcategories
       'Food & Dining',
       'Transportation',
       'Shopping',
@@ -409,80 +424,115 @@ class AddTransactionBloc
       'Healthcare',
       'Education',
       'Travel',
+      'Personal Care',
+      'Home & Garden',
+      'Insurance',
       'Other Expenses',
-      // Income categories
-      'Salary',
-      'Freelance',
-      'Business',
-      'Investment',
-      'Gift',
-      'Bonus',
-      'Rental',
-      'Refund',
-      'Other Income',
+      // Charity subcategories
+      'Religious Donations',
+      'Humanitarian Aid',
+      'Education Support',
+      'Healthcare Support',
+      'Environmental Causes',
+      'Animal Welfare',
+      'Community Support',
+      'Other Charity',
+      // Investment subcategories
+      'Stocks',
+      'Bonds',
+      'Mutual Funds',
+      'Real Estate',
+      'Cryptocurrency',
+      'Savings Account',
+      'Fixed Deposit',
+      'Gold',
+      'Other Investments',
     ];
   }
 
-  /// Gets default subcategories for a given category.
+  /// Gets default subcategories for a given main category.
   /// This method provides fallback subcategories when the repository fails to load them.
   ///
   /// Parameters:
-  /// - [category]: The selected category name
+  /// - [mainCategoryId]: The main category ID (income, expenses, charity, investments)
   ///
   /// Returns:
   /// - [List<String>]: List of default subcategory names
-  List<String> _getDefaultSubcategories(String category) {
-    switch (category.toLowerCase()) {
-      // Expense subcategories
-      case 'food & dining':
-        return ['Restaurant', 'Groceries', 'Fast Food', 'Coffee', 'Other'];
-      case 'transportation':
+  List<String> _getDefaultSubcategories(String mainCategoryId) {
+    switch (mainCategoryId.toLowerCase()) {
+      case 'income':
         return [
-          'Gas',
-          'Public Transport',
-          'Taxi/Uber',
-          'Parking',
-          'Maintenance',
+          'Salary',
+          'Freelance',
+          'Business',
+          'Investment Returns',
+          'Bonus',
+          'Gift',
+          'Rental Income',
+          'Refund',
+          'Other Income',
         ];
-      case 'shopping':
-        return ['Clothing', 'Electronics', 'Home & Garden', 'Books', 'Other'];
-      case 'entertainment':
-        return ['Movies', 'Games', 'Sports', 'Music', 'Other'];
-      case 'bills & utilities':
-        return ['Electricity', 'Water', 'Internet', 'Phone', 'Insurance'];
-      case 'healthcare':
-        return ['Doctor', 'Pharmacy', 'Dental', 'Vision', 'Other'];
-      case 'education':
-        return ['Tuition', 'Books', 'Supplies', 'Courses', 'Other'];
-      case 'travel':
-        return ['Flights', 'Hotels', 'Food', 'Activities', 'Other'];
 
-      // Income subcategories
-      case 'salary':
-        return ['Base Salary', 'Overtime', 'Commission', 'Tips', 'Other'];
-      case 'freelance':
-        return ['Consulting', 'Design', 'Writing', 'Programming', 'Other'];
-      case 'business':
-        return ['Sales', 'Services', 'Products', 'Partnerships', 'Other'];
-      case 'investment':
-        return ['Stocks', 'Bonds', 'Real Estate', 'Crypto', 'Other'];
-      case 'gift':
-        return ['Birthday', 'Holiday', 'Wedding', 'Anniversary', 'Other'];
-      case 'bonus':
-        return ['Performance', 'Holiday', 'Signing', 'Retention', 'Other'];
-      case 'rental':
-        return ['Property', 'Car', 'Equipment', 'Storage', 'Other'];
-      case 'refund':
+      case 'expenses':
         return [
-          'Tax Refund',
-          'Purchase Return',
+          'Food & Dining',
+          'Transportation',
+          'Shopping',
+          'Entertainment',
+          'Bills & Utilities',
+          'Healthcare',
+          'Education',
+          'Travel',
+          'Personal Care',
+          'Home & Garden',
           'Insurance',
-          'Overpayment',
-          'Other',
+          'Other Expenses',
+        ];
+
+      case 'charity':
+        return [
+          'Religious Donations',
+          'Humanitarian Aid',
+          'Education Support',
+          'Healthcare Support',
+          'Environmental Causes',
+          'Animal Welfare',
+          'Community Support',
+          'Other Charity',
+        ];
+
+      case 'investments':
+        return [
+          'Stocks',
+          'Bonds',
+          'Mutual Funds',
+          'Real Estate',
+          'Cryptocurrency',
+          'Savings Account',
+          'Fixed Deposit',
+          'Gold',
+          'Other Investments',
         ];
 
       default:
         return ['General', 'Miscellaneous', 'Other'];
+    }
+  }
+
+  /// Gets the main category based on transaction type.
+  /// This helper method determines the default main category for a transaction type.
+  ///
+  /// Parameters:
+  /// - [type]: The transaction type
+  ///
+  /// Returns:
+  /// - [String]: The main category string
+  String _getMainCategoryFromType(TransactionType type) {
+    switch (type) {
+      case TransactionType.income:
+        return 'income';
+      case TransactionType.expense:
+        return 'expenses';
     }
   }
 }

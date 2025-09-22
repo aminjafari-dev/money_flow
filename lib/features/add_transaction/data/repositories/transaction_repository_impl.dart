@@ -1,8 +1,9 @@
 import 'package:dartz/dartz.dart';
 import 'package:money_flow/core/error/exceptions.dart';
 import 'package:money_flow/core/error/failures.dart';
+import 'package:money_flow/core/services/category_service.dart';
 import 'package:money_flow/features/add_transaction/data/datasources/local/transaction_local_datasource.dart';
-import 'package:money_flow/shared/models/transaction_model.dart';
+import 'package:money_flow/features/add_transaction/data/models/transaction_model.dart';
 import 'package:money_flow/features/add_transaction/domain/entities/transaction_entity.dart';
 import 'package:money_flow/features/add_transaction/domain/repositories/transaction_repository.dart';
 
@@ -23,8 +24,12 @@ import 'package:money_flow/features/add_transaction/domain/repositories/transact
 /// ```
 class TransactionRepositoryImpl implements TransactionRepository {
   final TransactionLocalDataSource localDataSource;
+  final CategoryService categoryService;
 
-  TransactionRepositoryImpl({required this.localDataSource});
+  TransactionRepositoryImpl({
+    required this.localDataSource,
+    required this.categoryService,
+  });
 
   /// Adds a new transaction to the system.
   /// This method validates the transaction and stores it locally.
@@ -252,30 +257,19 @@ class TransactionRepositoryImpl implements TransactionRepository {
   }
 
   /// Gets available categories for transaction categorization.
-  /// This method retrieves all unique categories from stored transactions.
+  /// This method retrieves all subcategories from the CategoryService.
   ///
   /// Returns:
   /// - [Either<Failure, List<String>>]: Success with category list or failure
   ///
-  /// This method provides the list of available categories for the add transaction form.
+  /// This method provides the list of available subcategories for the add transaction form.
   @override
   Future<Either<Failure, List<String>>> getAvailableCategories() async {
     try {
-      // Get from local storage
-      final categories = await localDataSource.getAvailableCategories();
+      // Get all subcategories from CategoryService
+      final subcategories = await categoryService.getAllSubcategories();
 
-      // If no categories found, return default categories
-      if (categories.isEmpty) {
-        return const Right([
-          'Food',
-          'Transportation',
-          'Entertainment',
-          'Utilities',
-          'Other',
-        ]);
-      }
-
-      return Right(categories);
+      return Right(subcategories);
     } on CacheException catch (e) {
       return Left(CacheFailure(e.message));
     } catch (e) {
@@ -283,11 +277,11 @@ class TransactionRepositoryImpl implements TransactionRepository {
     }
   }
 
-  /// Gets available subcategories for a specific category.
-  /// This method retrieves all unique subcategories for the given category.
+  /// Gets available subcategories for a specific main category.
+  /// This method retrieves subcategories from the CategoryService.
   ///
   /// Parameters:
-  /// - [category]: The parent category
+  /// - [mainCategoryId]: The main category ID (income, expenses, charity, investments)
   ///
   /// Returns:
   /// - [Either<Failure, List<String>>]: Success with subcategory list or failure
@@ -295,19 +289,13 @@ class TransactionRepositoryImpl implements TransactionRepository {
   /// This method provides subcategories based on the selected main category.
   @override
   Future<Either<Failure, List<String>>> getSubcategoriesForCategory(
-    String category,
+    String mainCategoryId,
   ) async {
     try {
-      // Get from local storage
-      final subcategories = await localDataSource.getSubcategoriesForCategory(
-        category,
+      // Get subcategories from CategoryService
+      final subcategories = await categoryService.getSubcategories(
+        mainCategoryId,
       );
-
-      // If no subcategories found, return default subcategories based on category
-      if (subcategories.isEmpty) {
-        final defaultSubcategories = _getDefaultSubcategories(category);
-        return Right(defaultSubcategories);
-      }
 
       return Right(subcategories);
     } on CacheException catch (e) {

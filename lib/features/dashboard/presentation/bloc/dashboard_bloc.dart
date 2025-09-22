@@ -392,6 +392,8 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
                 (transaction) => TransactionEntity(
                   id: transaction['id']?.toString() ?? '',
                   amount: (transaction['amount'] as num?)?.toDouble() ?? 0.0,
+                  mainCategory:
+                      transaction['mainCategory']?.toString() ?? 'expenses',
                   category: transaction['category']?.toString() ?? '',
                   subcategory: transaction['subcategory']?.toString() ?? '',
                   description: transaction['description']?.toString(),

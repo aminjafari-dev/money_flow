@@ -34,45 +34,50 @@ class TransactionModel {
   @HiveField(1)
   final double amount;
 
-  /// Main category of the transaction
+  /// Main category of the transaction (income, expenses, charity, investments)
   @HiveField(2)
+  final String mainCategory;
+
+  /// Category of the transaction
+  @HiveField(3)
   final String category;
 
   /// Specific subcategory within the main category
-  @HiveField(3)
+  @HiveField(4)
   final String subcategory;
 
   /// Optional description or notes about the transaction
-  @HiveField(4)
+  @HiveField(5)
   final String? description;
 
   /// Date and time when the transaction occurred (ISO 8601 string)
-  @HiveField(5)
+  @HiveField(6)
   final String dateTime;
 
   /// Type of transaction (expense or income)
-  @HiveField(6)
+  @HiveField(7)
   final String type;
 
   /// Whether this transaction was created from SMS import
-  @HiveField(7)
+  @HiveField(8)
   final bool isFromSms;
 
   /// Merchant or vendor name
-  @HiveField(8)
+  @HiveField(9)
   final String? merchant;
 
   /// Timestamp when the transaction was created
-  @HiveField(9)
+  @HiveField(10)
   final String createdAt;
 
   /// Timestamp when the transaction was last updated
-  @HiveField(10)
+  @HiveField(11)
   final String updatedAt;
 
   const TransactionModel({
     required this.id,
     required this.amount,
+    required this.mainCategory,
     required this.category,
     required this.subcategory,
     this.description,
@@ -98,6 +103,7 @@ class TransactionModel {
   /// final json = {
   ///   'id': 'txn_123',
   ///   'amount': 25.50,
+  ///   'mainCategory': 'expenses',
   ///   'category': 'Food',
   ///   'subcategory': 'Groceries',
   ///   'description': 'Weekly shopping',
@@ -114,6 +120,7 @@ class TransactionModel {
     return TransactionModel(
       id: json['id'] as String,
       amount: (json['amount'] as num).toDouble(),
+      mainCategory: json['mainCategory'] as String,
       category: json['category'] as String,
       subcategory: json['subcategory'] as String,
       description: json['description'] as String?,
@@ -140,6 +147,7 @@ class TransactionModel {
   /// final entity = TransactionEntity(
   ///   id: 'txn_123',
   ///   amount: 25.50,
+  ///   mainCategory: 'expenses',
   ///   category: 'Food',
   ///   subcategory: 'Groceries',
   ///   dateTime: DateTime.now(),
@@ -152,6 +160,7 @@ class TransactionModel {
     return TransactionModel(
       id: entity.id,
       amount: entity.amount,
+      mainCategory: entity.mainCategory,
       category: entity.category,
       subcategory: entity.subcategory,
       description: entity.description,
@@ -180,6 +189,7 @@ class TransactionModel {
     return {
       'id': id,
       'amount': amount,
+      'mainCategory': mainCategory,
       'category': category,
       'subcategory': subcategory,
       'description': description,
@@ -208,6 +218,7 @@ class TransactionModel {
     return TransactionEntity(
       id: id,
       amount: amount,
+      mainCategory: mainCategory,
       category: category,
       subcategory: subcategory,
       description: description,
@@ -224,6 +235,7 @@ class TransactionModel {
   /// Parameters:
   /// - [id]: Optional new ID
   /// - [amount]: Optional new amount
+  /// - [mainCategory]: Optional new main category
   /// - [category]: Optional new category
   /// - [subcategory]: Optional new subcategory
   /// - [description]: Optional new description
@@ -239,6 +251,7 @@ class TransactionModel {
   TransactionModel copyWith({
     String? id,
     double? amount,
+    String? mainCategory,
     String? category,
     String? subcategory,
     String? description,
@@ -252,6 +265,7 @@ class TransactionModel {
     return TransactionModel(
       id: id ?? this.id,
       amount: amount ?? this.amount,
+      mainCategory: mainCategory ?? this.mainCategory,
       category: category ?? this.category,
       subcategory: subcategory ?? this.subcategory,
       description: description ?? this.description,
@@ -292,6 +306,7 @@ class TransactionModel {
     return other is TransactionModel &&
         other.id == id &&
         other.amount == amount &&
+        other.mainCategory == mainCategory &&
         other.category == category &&
         other.subcategory == subcategory &&
         other.description == description &&
@@ -308,6 +323,7 @@ class TransactionModel {
     return Object.hash(
       id,
       amount,
+      mainCategory,
       category,
       subcategory,
       description,
@@ -322,6 +338,6 @@ class TransactionModel {
 
   @override
   String toString() {
-    return 'TransactionModel(id: $id, amount: $amount, category: $category, subcategory: $subcategory, description: $description, dateTime: $dateTime, type: $type, isFromSms: $isFromSms, merchant: $merchant, createdAt: $createdAt, updatedAt: $updatedAt)';
+    return 'TransactionModel(id: $id, amount: $amount, mainCategory: $mainCategory, category: $category, subcategory: $subcategory, description: $description, dateTime: $dateTime, type: $type, isFromSms: $isFromSms, merchant: $merchant, createdAt: $createdAt, updatedAt: $updatedAt)';
   }
 }
