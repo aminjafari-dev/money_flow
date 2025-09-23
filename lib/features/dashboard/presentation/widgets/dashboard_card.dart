@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:money_flow/core/widgets/widgets.dart';
 import 'package:money_flow/core/theme/app_colors.dart';
-import 'package:money_flow/core/constants/image_path.dart';
 
 /// Widget for displaying individual dashboard financial cards.
 /// This widget shows financial information in a clean card format.

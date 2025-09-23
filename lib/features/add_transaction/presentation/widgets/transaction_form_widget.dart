@@ -13,6 +13,8 @@ import 'package:money_flow/features/add_transaction/presentation/widgets/categor
 import 'package:money_flow/core/widgets/g_gap.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../../core/di/locator.dart';
+
 /// Main form widget for adding/editing transactions.
 /// This widget provides a comprehensive form interface for transaction entry
 /// with all necessary fields and validation.
@@ -239,37 +241,28 @@ class _TransactionFormWidgetState extends State<TransactionFormWidget> {
   /// Builds the category selection section.
   /// This method creates the category selector widget.
   Widget _buildCategorySection(AddTransactionMainState state) {
-    return state.loadCategories.when(
-      initial: () => const SizedBox(),
-      loading: () => CategorySelectorWidget(
-        categories: const [],
-        selectedCategory: selectedCategory,
-        onCategorySelected: (_) {},
-        isLoading: true,
-      ),
-      completed: (categories) => CategorySelectorWidget(
-        categories: categories,
-        selectedCategory: selectedCategory,
-        onCategorySelected: (category) {
-          setState(() {
-            selectedCategory = category;
-            selectedSubcategory = ''; // Clear subcategory when category changes
-          });
-          // Load subcategories for the new category
-          context.read<AddTransactionBloc>().add(
-            AddTransactionEvent.loadSubcategories(category: category),
-          );
-        },
-        enabled: !state.addTransaction.maybeWhen(
-          loading: () => true,
-          orElse: () => false,
-        ),
-      ),
-      error: (message) => CategorySelectorWidget(
-        categories: const [],
-        selectedCategory: selectedCategory,
-        onCategorySelected: (_) {},
-        errorMessage: message,
+    // For simplified version, we'll use hardcoded categories
+    final categories = [
+      'Food',
+      'Transport',
+      'Shopping',
+      'Entertainment',
+      'Bills',
+      'Other',
+    ];
+
+    return CategorySelectorWidget(
+      categories: categories,
+      selectedCategory: selectedCategory,
+      onCategorySelected: (category) {
+        setState(() {
+          selectedCategory = category;
+          selectedSubcategory = ''; // Clear subcategory when category changes
+        });
+      },
+      enabled: !state.addTransaction.maybeWhen(
+        loading: () => true,
+        orElse: () => false,
       ),
     );
   }
@@ -281,32 +274,20 @@ class _TransactionFormWidgetState extends State<TransactionFormWidget> {
       return const SizedBox();
     }
 
-    return state.loadSubcategories.when(
-      initial: () => const SizedBox(),
-      loading: () => SubcategorySelectorWidget(
-        subcategories: const [],
-        selectedSubcategory: selectedSubcategory,
-        onSubcategorySelected: (_) {},
-        isLoading: true,
-      ),
-      completed: (subcategories) => SubcategorySelectorWidget(
-        subcategories: subcategories,
-        selectedSubcategory: selectedSubcategory,
-        onSubcategorySelected: (subcategory) {
-          setState(() {
-            selectedSubcategory = subcategory;
-          });
-        },
-        enabled: !state.addTransaction.maybeWhen(
-          loading: () => true,
-          orElse: () => false,
-        ),
-      ),
-      error: (message) => SubcategorySelectorWidget(
-        subcategories: const [],
-        selectedSubcategory: selectedSubcategory,
-        onSubcategorySelected: (_) {},
-        errorMessage: message,
+    // For simplified version, we'll use hardcoded subcategories based on category
+    final subcategories = _getSubcategoriesForCategory(selectedCategory);
+
+    return SubcategorySelectorWidget(
+      subcategories: subcategories,
+      selectedSubcategory: selectedSubcategory,
+      onSubcategorySelected: (subcategory) {
+        setState(() {
+          selectedSubcategory = subcategory;
+        });
+      },
+      enabled: !state.addTransaction.maybeWhen(
+        loading: () => true,
+        orElse: () => false,
       ),
     );
   }
@@ -327,7 +308,7 @@ class _TransactionFormWidgetState extends State<TransactionFormWidget> {
             ),
             GGap.small(),
             GText(
-              'DESCRIPTION',
+              'DESCRIPTION (OPTIONAL)',
               style: AppFonts.labelLarge.copyWith(
                 color: AppColors.primary,
                 fontWeight: FontWeight.w600,
@@ -629,11 +610,11 @@ class _TransactionFormWidgetState extends State<TransactionFormWidget> {
     }
 
     // Submit transaction
-    context.read<AddTransactionBloc>().add(
+    getIt<AddTransactionBloc>().add(
       AddTransactionEvent.addTransaction(
         amount: amount,
+        mainCategory: _getMainCategoryFromType(type),
         category: selectedCategory,
-        subcategory: selectedSubcategory,
         description: _descriptionController.text.isEmpty
             ? null
             : _descriptionController.text,
@@ -648,14 +629,14 @@ class _TransactionFormWidgetState extends State<TransactionFormWidget> {
 
   /// Checks if the form can be submitted.
   /// This method determines if the form is ready for submission.
+  /// Only amount and category are required; subcategory and description are optional.
   bool _canSubmitForm() {
-    return amount != 0 &&
-        selectedCategory.isNotEmpty &&
-        selectedSubcategory.isNotEmpty;
+    return amount != 0 && selectedCategory.isNotEmpty;
   }
 
   /// Gets all validation errors for the current form state.
   /// This method collects all validation errors into a single list.
+  /// Only amount and category are required; subcategory and description are optional.
   List<String> _getValidationErrors() {
     final errors = <String>[];
 
@@ -667,10 +648,39 @@ class _TransactionFormWidgetState extends State<TransactionFormWidget> {
       errors.add('Please select a category');
     }
 
-    if (selectedSubcategory.isEmpty) {
-      errors.add('Please select a subcategory');
-    }
+    // Subcategory is now optional, so we don't validate it
+    // Description is also optional, so we don't validate it
 
     return errors;
+  }
+
+  /// Gets subcategories for a given category.
+  /// This method returns hardcoded subcategories based on the selected category.
+  List<String> _getSubcategoriesForCategory(String category) {
+    switch (category) {
+      case 'Food':
+        return ['Restaurant', 'Groceries', 'Fast Food', 'Coffee'];
+      case 'Transport':
+        return ['Gas', 'Public Transport', 'Taxi', 'Parking'];
+      case 'Shopping':
+        return ['Clothing', 'Electronics', 'Books', 'Other'];
+      case 'Entertainment':
+        return ['Movies', 'Games', 'Sports', 'Music'];
+      case 'Bills':
+        return ['Electricity', 'Water', 'Internet', 'Phone'];
+      default:
+        return ['General'];
+    }
+  }
+
+  /// Gets the main category from transaction type.
+  /// This method maps transaction types to main categories.
+  String _getMainCategoryFromType(TransactionType type) {
+    switch (type) {
+      case TransactionType.income:
+        return 'income';
+      case TransactionType.expense:
+        return 'expenses';
+    }
   }
 }

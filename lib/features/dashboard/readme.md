@@ -82,7 +82,7 @@ The **Dashboard Feature** serves as the central command center of the FinanceFlo
 Navigator.pushNamed(context, PageName.dashboard);
 
 // Access dashboard BLoC
-final dashboardBloc = context.read<DashboardBloc>();
+final dashboardBloc = getIt<DashboardBloc>();
 
 // Trigger dashboard data refresh
 dashboardBloc.add(DashboardEvent.refreshDashboardData(userId: 'user123'));

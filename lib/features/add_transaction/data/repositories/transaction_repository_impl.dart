@@ -3,7 +3,7 @@ import 'package:money_flow/core/error/exceptions.dart';
 import 'package:money_flow/core/error/failures.dart';
 import 'package:money_flow/core/services/category_service.dart';
 import 'package:money_flow/features/add_transaction/data/datasources/local/transaction_local_datasource.dart';
-import 'package:money_flow/features/add_transaction/data/models/transaction_model.dart';
+import 'package:money_flow/shared/models/transaction_model.dart';
 import 'package:money_flow/features/add_transaction/domain/entities/transaction_entity.dart';
 import 'package:money_flow/features/add_transaction/domain/repositories/transaction_repository.dart';
 
@@ -257,19 +257,22 @@ class TransactionRepositoryImpl implements TransactionRepository {
   }
 
   /// Gets available categories for transaction categorization.
-  /// This method retrieves all subcategories from the CategoryService.
+  /// This method retrieves the 4 main categories from the CategoryService.
   ///
   /// Returns:
-  /// - [Either<Failure, List<String>>]: Success with category list or failure
+  /// - [Either<Failure, List<String>>]: Success with main category list or failure
   ///
-  /// This method provides the list of available subcategories for the add transaction form.
+  /// This method provides the list of available main categories for the add transaction form.
   @override
   Future<Either<Failure, List<String>>> getAvailableCategories() async {
     try {
-      // Get all subcategories from CategoryService
-      final subcategories = await categoryService.getAllSubcategories();
+      // Get main categories from CategoryService
+      final mainCategories = await categoryService.getMainCategories();
+      final categoryNames = mainCategories
+          .map((category) => category.name)
+          .toList();
 
-      return Right(subcategories);
+      return Right(categoryNames);
     } on CacheException catch (e) {
       return Left(CacheFailure(e.message));
     } catch (e) {
@@ -278,33 +281,22 @@ class TransactionRepositoryImpl implements TransactionRepository {
   }
 
   /// Gets available subcategories for a specific main category.
-  /// This method retrieves subcategories from the CategoryService.
+  /// Note: Always returns empty list as subcategories are not used.
   ///
   /// Parameters:
   /// - [mainCategoryId]: The main category ID (income, expenses, charity, investments)
   ///
   /// Returns:
-  /// - [Either<Failure, List<String>>]: Success with subcategory list or failure
+  /// - [Either<Failure, List<String>>]: Success with empty list (no subcategories)
   ///
-  /// This method provides subcategories based on the selected main category.
+  /// This method is kept for compatibility but returns empty list as subcategories are not supported.
   @override
+  @Deprecated('Subcategories are not supported in the current implementation')
   Future<Either<Failure, List<String>>> getSubcategoriesForCategory(
     String mainCategoryId,
   ) async {
-    try {
-      // Get subcategories from CategoryService
-      final subcategories = await categoryService.getSubcategories(
-        mainCategoryId,
-      );
-
-      return Right(subcategories);
-    } on CacheException catch (e) {
-      return Left(CacheFailure(e.message));
-    } catch (e) {
-      return Left(
-        UnknownFailure('Failed to get subcategories for category: $e'),
-      );
-    }
+    // Always return empty list as subcategories are not supported
+    return const Right([]);
   }
 
   /// Gets transaction statistics for analytics.
@@ -352,8 +344,8 @@ class TransactionRepositoryImpl implements TransactionRepository {
     }
   }
 
-  /// Suggests category and subcategory based on transaction details.
-  /// This method uses simple pattern matching for category suggestions.
+  /// Suggests category based on transaction details.
+  /// This method uses simple pattern matching for category suggestions from the 4 main categories.
   ///
   /// Parameters:
   /// - [amount]: The transaction amount
@@ -363,7 +355,7 @@ class TransactionRepositoryImpl implements TransactionRepository {
   /// Returns:
   /// - [Either<Failure, CategorySuggestion>]: Success with suggestions or failure
   ///
-  /// This method uses simple pattern matching to suggest appropriate categories.
+  /// This method uses simple pattern matching to suggest appropriate main categories.
   @override
   Future<Either<Failure, CategorySuggestion>> suggestCategory({
     required double amount,
@@ -371,24 +363,19 @@ class TransactionRepositoryImpl implements TransactionRepository {
     String? merchant,
   }) async {
     try {
-      // Simple pattern matching for category suggestions
-      final suggestedCategory = _suggestCategoryFromPatterns(
+      // Simple pattern matching for main category suggestions
+      final suggestedCategory = _suggestMainCategoryFromPatterns(
+        amount: amount,
         description: description,
         merchant: merchant,
       );
 
-      final suggestedSubcategory = _suggestSubcategoryFromPatterns(
-        category: suggestedCategory,
-        description: description,
-        merchant: merchant,
-      );
-
-      // Create suggestion object
+      // Create suggestion object (no subcategory as we don't use them)
       final suggestion = CategorySuggestion(
         suggestedCategory: suggestedCategory,
-        suggestedSubcategory: suggestedSubcategory,
+        suggestedSubcategory: null, // No subcategories
         confidence: 0.7, // Simple pattern matching confidence
-        alternativeCategories: _getAlternativeCategories(suggestedCategory),
+        alternativeCategories: _getAlternativeMainCategories(suggestedCategory),
       );
 
       return Right(suggestion);
@@ -397,172 +384,78 @@ class TransactionRepositoryImpl implements TransactionRepository {
     }
   }
 
-  /// Private method to suggest category based on patterns.
-  /// This method uses simple keyword matching for category suggestions.
+  /// Private method to suggest main category based on patterns.
+  /// This method uses simple keyword matching and amount analysis for category suggestions.
   ///
   /// Parameters:
+  /// - [amount]: Transaction amount
   /// - [description]: Transaction description
   /// - [merchant]: Merchant name
   ///
   /// Returns:
-  /// - [String]: Suggested category
-  String _suggestCategoryFromPatterns({String? description, String? merchant}) {
-    final text = '${description ?? ''} ${merchant ?? ''}'.toLowerCase();
-
-    // Food-related keywords
-    if (text.contains(
-      RegExp(
-        r'\b(food|restaurant|cafe|grocery|supermarket|market|dining|eat|meal|pizza|burger|coffee|tea)\b',
-      ),
-    )) {
-      return 'Food';
-    }
-
-    // Transportation-related keywords
-    if (text.contains(
-      RegExp(
-        r'\b(transport|taxi|uber|lyft|bus|train|metro|gas|fuel|parking|car|vehicle)\b',
-      ),
-    )) {
-      return 'Transportation';
-    }
-
-    // Entertainment-related keywords
-    if (text.contains(
-      RegExp(
-        r'\b(entertainment|movie|cinema|theater|game|sport|gym|fitness|music|book|streaming|netflix|spotify)\b',
-      ),
-    )) {
-      return 'Entertainment';
-    }
-
-    // Utilities-related keywords
-    if (text.contains(
-      RegExp(
-        r'\b(utility|electric|water|internet|phone|mobile|bill|payment|subscription)\b',
-      ),
-    )) {
-      return 'Utilities';
-    }
-
-    // Default to Other if no pattern matches
-    return 'Other';
-  }
-
-  /// Private method to suggest subcategory based on patterns.
-  /// This method uses simple keyword matching for subcategory suggestions.
-  ///
-  /// Parameters:
-  /// - [category]: Main category
-  /// - [description]: Transaction description
-  /// - [merchant]: Merchant name
-  ///
-  /// Returns:
-  /// - [String]: Suggested subcategory
-  String _suggestSubcategoryFromPatterns({
-    required String category,
+  /// - [String]: Suggested main category (Income, Expenses, Charity, Investments)
+  String _suggestMainCategoryFromPatterns({
+    required double amount,
     String? description,
     String? merchant,
   }) {
     final text = '${description ?? ''} ${merchant ?? ''}'.toLowerCase();
 
-    switch (category) {
-      case 'Food':
-        if (text.contains(RegExp(r'\b(grocery|supermarket|market|store)\b'))) {
-          return 'Groceries';
-        }
-        if (text.contains(RegExp(r'\b(restaurant|cafe|dining|eat|meal)\b'))) {
-          return 'Restaurant';
-        }
-        return 'Groceries';
+    // Positive amounts might indicate income
+    if (amount > 0) {
+      // Income-related keywords
+      if (text.contains(
+        RegExp(
+          r'\b(salary|wage|income|bonus|refund|return|deposit|payment|earn|revenue|profit)\b',
+        ),
+      )) {
+        return 'Income';
+      }
 
-      case 'Transportation':
-        if (text.contains(RegExp(r'\b(gas|fuel|petrol)\b'))) {
-          return 'Gas';
-        }
-        if (text.contains(RegExp(r'\b(taxi|uber|lyft)\b'))) {
-          return 'Taxi';
-        }
-        if (text.contains(RegExp(r'\b(bus|train|metro|public)\b'))) {
-          return 'Public Transport';
-        }
-        return 'Gas';
-
-      case 'Entertainment':
-        if (text.contains(RegExp(r'\b(movie|cinema|theater)\b'))) {
-          return 'Movies';
-        }
-        if (text.contains(RegExp(r'\b(game|gaming)\b'))) {
-          return 'Games';
-        }
-        if (text.contains(RegExp(r'\b(gym|fitness|sport)\b'))) {
-          return 'Fitness';
-        }
-        return 'Movies';
-
-      case 'Utilities':
-        if (text.contains(RegExp(r'\b(electric|power|energy)\b'))) {
-          return 'Electricity';
-        }
-        if (text.contains(RegExp(r'\b(water|sewer)\b'))) {
-          return 'Water';
-        }
-        if (text.contains(RegExp(r'\b(internet|wifi|broadband)\b'))) {
-          return 'Internet';
-        }
-        if (text.contains(RegExp(r'\b(phone|mobile|telecom)\b'))) {
-          return 'Phone';
-        }
-        return 'Electricity';
-
-      default:
-        return 'Misc';
+      // Investment-related keywords for positive amounts
+      if (text.contains(
+        RegExp(
+          r'\b(investment|dividend|interest|return|gain|stock|bond|fund|crypto|savings)\b',
+        ),
+      )) {
+        return 'Investments';
+      }
     }
+
+    // Charity-related keywords
+    if (text.contains(
+      RegExp(
+        r'\b(charity|donation|donate|give|help|support|aid|foundation|nonprofit|church|mosque|temple|zakat|tithe)\b',
+      ),
+    )) {
+      return 'Charity';
+    }
+
+    // Investment-related keywords for any amount
+    if (text.contains(
+      RegExp(
+        r'\b(investment|invest|stock|bond|mutual|fund|crypto|bitcoin|ethereum|savings|deposit|portfolio)\b',
+      ),
+    )) {
+      return 'Investments';
+    }
+
+    // Default to Expenses for negative amounts or unmatched patterns
+    return 'Expenses';
   }
 
-  /// Private method to get default subcategories for a category.
-  /// This method provides fallback subcategories when none are found in storage.
-  ///
-  /// Parameters:
-  /// - [category]: Main category
-  ///
-  /// Returns:
-  /// - [List<String>]: List of default subcategories
-  List<String> _getDefaultSubcategories(String category) {
-    switch (category) {
-      case 'Food':
-        return ['Groceries', 'Restaurant', 'Fast Food', 'Coffee'];
-      case 'Transportation':
-        return ['Gas', 'Taxi', 'Public Transport', 'Parking'];
-      case 'Entertainment':
-        return ['Movies', 'Games', 'Fitness', 'Music'];
-      case 'Utilities':
-        return ['Electricity', 'Water', 'Internet', 'Phone'];
-      case 'Other':
-        return ['Misc', 'Shopping', 'Health', 'Education'];
-      default:
-        return ['Misc'];
-    }
-  }
-
-  /// Private method to get alternative categories.
-  /// This method provides alternative category suggestions.
+  /// Private method to get alternative main categories.
+  /// This method provides alternative category suggestions from the 4 main categories.
   ///
   /// Parameters:
   /// - [suggestedCategory]: The primary suggested category
   ///
   /// Returns:
-  /// - [List<String>]: List of alternative categories
-  List<String> _getAlternativeCategories(String suggestedCategory) {
-    const allCategories = [
-      'Food',
-      'Transportation',
-      'Entertainment',
-      'Utilities',
-      'Other',
-    ];
+  /// - [List<String>]: List of alternative main categories
+  List<String> _getAlternativeMainCategories(String suggestedCategory) {
+    const allMainCategories = ['Income', 'Expenses', 'Charity', 'Investments'];
 
-    return allCategories
+    return allMainCategories
         .where((category) => category != suggestedCategory)
         .toList();
   }

@@ -4,9 +4,6 @@ import 'package:money_flow/features/add_transaction/data/datasources/local/trans
 import 'package:money_flow/features/add_transaction/data/repositories/transaction_repository_impl.dart';
 import 'package:money_flow/features/add_transaction/domain/repositories/transaction_repository.dart';
 import 'package:money_flow/features/add_transaction/domain/usecases/add_transaction_usecase.dart';
-import 'package:money_flow/features/add_transaction/domain/usecases/get_categories_usecase.dart';
-import 'package:money_flow/features/add_transaction/domain/usecases/suggest_category_usecase.dart';
-import 'package:money_flow/features/add_transaction/domain/usecases/validate_transaction_usecase.dart';
 import 'package:money_flow/features/add_transaction/presentation/bloc/add_transaction_bloc.dart';
 
 /// Sets up all dependencies for the transactions feature.
@@ -21,11 +18,20 @@ import 'package:money_flow/features/add_transaction/presentation/bloc/add_transa
 /// ```
 Future<void> setupTransactionLocator(GetIt getIt) async {
   // Data sources
+  // Register local data source as lazy singleton to ensure single instance
+  // This is useful for maintaining consistent local storage state
   getIt.registerLazySingleton<TransactionLocalDataSource>(
     () => TransactionLocalDataSource(),
   );
 
+  // Initialize the local data source
+  // This ensures Hive boxes and adapters are properly set up before use
+  final localDataSource = getIt<TransactionLocalDataSource>();
+  await localDataSource.initialize();
+
   // Repositories
+  // Register repository implementation as lazy singleton
+  // This ensures consistent data access across the application
   getIt.registerLazySingleton<TransactionRepository>(
     () => TransactionRepositoryImpl(
       localDataSource: getIt<TransactionLocalDataSource>(),
@@ -34,34 +40,18 @@ Future<void> setupTransactionLocator(GetIt getIt) async {
   );
 
   // Use cases
+  // Register use cases as lazy singletons for consistent business logic
+  // This ensures the same use case instance is used throughout the app
+
+  // Add transaction use case
   getIt.registerLazySingleton<AddTransactionUseCase>(
     () => AddTransactionUseCase(repository: getIt<TransactionRepository>()),
   );
 
-  getIt.registerLazySingleton<GetCategoriesUseCase>(
-    () => GetCategoriesUseCase(repository: getIt<TransactionRepository>()),
-  );
-
-  getIt.registerLazySingleton<GetSubcategoriesUseCase>(
-    () => GetSubcategoriesUseCase(repository: getIt<TransactionRepository>()),
-  );
-
-  getIt.registerLazySingleton<SuggestCategoryUseCase>(
-    () => SuggestCategoryUseCase(repository: getIt<TransactionRepository>()),
-  );
-
-  getIt.registerLazySingleton<ValidateTransactionUseCase>(
-    () => ValidateTransactionUseCase(),
-  );
-
-  // BLoCs
+  // BLoC
+  // Register BLoC as singleton to maintain state across widget rebuilds
+  // This is important for preserving transaction form state during navigation
   getIt.registerSingleton<AddTransactionBloc>(
-    AddTransactionBloc(
-      addTransactionUseCase: getIt<AddTransactionUseCase>(),
-      getCategoriesUseCase: getIt<GetCategoriesUseCase>(),
-      getSubcategoriesUseCase: getIt<GetSubcategoriesUseCase>(),
-      suggestCategoryUseCase: getIt<SuggestCategoryUseCase>(),
-      // validateTransactionUseCase: getIt<ValidateTransactionUseCase>(),
-    ),
+    AddTransactionBloc(addTransactionUseCase: getIt<AddTransactionUseCase>()),
   );
 }

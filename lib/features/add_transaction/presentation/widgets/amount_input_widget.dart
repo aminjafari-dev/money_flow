@@ -15,7 +15,7 @@ import 'package:money_flow/core/widgets/g_gap.dart';
 /// AmountInputWidget(
 ///   amount: 25.50,
 ///   onAmountChanged: (amount) {
-///     context.read<AddTransactionBloc>().add(
+///     getIt<AddTransactionBloc>().add(
 ///       AddTransactionEvent.updateAmount(amount: amount),
 ///     );
 ///   },

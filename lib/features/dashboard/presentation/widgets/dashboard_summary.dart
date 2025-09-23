@@ -4,37 +4,21 @@ import 'package:money_flow/core/theme/app_colors.dart';
 import 'package:money_flow/core/constants/image_path.dart';
 import 'package:money_flow/features/dashboard/domain/entities/dashboard_entity.dart';
 import 'package:money_flow/features/dashboard/presentation/widgets/dashboard_card.dart';
-import 'package:money_flow/features/dashboard/presentation/widgets/time_period_selector.dart';
 
 /// Widget for displaying the financial summary section of the dashboard.
-/// This widget shows key financial metrics in card format with time period selector.
+/// This widget shows key financial metrics in card format.
 ///
 /// Usage Example:
 /// ```dart
 /// DashboardSummary(
 ///   dashboard: dashboardEntity,
-///   selectedTimePeriod: TimePeriod.monthly,
-///   onTimePeriodChanged: (period) {
-///     // Handle time period change
-///   },
 /// );
 /// ```
 class DashboardSummary extends StatelessWidget {
   /// Dashboard entity containing financial data
   final DashboardEntity dashboard;
 
-  /// Currently selected time period
-  final TimePeriod selectedTimePeriod;
-
-  /// Callback function called when time period changes
-  final ValueChanged<TimePeriod> onTimePeriodChanged;
-
-  const DashboardSummary({
-    super.key,
-    required this.dashboard,
-    required this.selectedTimePeriod,
-    required this.onTimePeriodChanged,
-  });
+  const DashboardSummary({super.key, required this.dashboard});
 
   @override
   Widget build(BuildContext context) {
@@ -50,12 +34,6 @@ class DashboardSummary extends StatelessWidget {
             fontWeight: FontWeight.bold,
             fontSize: 18,
           ),
-        ),
-        GGap.medium(),
-        // Time Period Selector
-        TimePeriodSelector(
-          selectedPeriod: selectedTimePeriod,
-          onPeriodChanged: onTimePeriodChanged,
         ),
         GGap.medium(),
         // Financial Cards Grid

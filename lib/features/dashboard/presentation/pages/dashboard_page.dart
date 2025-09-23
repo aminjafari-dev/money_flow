@@ -9,7 +9,6 @@ import 'package:money_flow/features/dashboard/presentation/bloc/dashboard_event.
 import 'package:money_flow/features/dashboard/presentation/bloc/dashboard_state.dart';
 import 'package:money_flow/features/dashboard/presentation/widgets/dashboard_summary.dart';
 import 'package:money_flow/features/dashboard/presentation/widgets/recent_transactions.dart';
-import 'package:money_flow/features/dashboard/presentation/widgets/time_period_selector.dart';
 import 'package:money_flow/features/dashboard/domain/entities/dashboard_entity.dart';
 
 /// Main dashboard page for displaying financial overview.
@@ -62,25 +61,11 @@ class _DashboardPageState extends State<DashboardPage> {
             return state.getDashboardData.when(
               initial: () => const _InitialWidget(),
               loading: () => const _LoadingWidget(),
-              completed: (dashboard) => _DashboardContent(
-                dashboard: dashboard,
-                selectedTimePeriod: state.selectedTimePeriod,
-                onTimePeriodChanged: (timePeriod) {
-                  _dashboardBloc.add(
-                    DashboardEvent.changeTimePeriod(
-                      userId: widget.userId,
-                      timePeriod: timePeriod,
-                    ),
-                  );
-                },
-              ),
+              completed: (dashboard) => _DashboardContent(dashboard: dashboard),
               error: (message) => _ErrorWidget(
                 message: message,
                 onRetry: () => _dashboardBloc.add(
-                  DashboardEvent.getDashboardData(
-                    userId: widget.userId,
-                    timePeriod: state.selectedTimePeriod,
-                  ),
+                  DashboardEvent.getDashboardData(userId: widget.userId),
                 ),
               ),
             );
@@ -106,10 +91,19 @@ class _DashboardPageState extends State<DashboardPage> {
   }
 
   /// Handles add transaction button tap.
-  /// This method navigates to the add transaction page.
-  void _onAddTransactionTap() {
+  /// This method navigates to the add transaction page and refreshes dashboard on return.
+  void _onAddTransactionTap() async {
     // Navigate to the Add Transaction page using named routes
-    Navigator.of(context).pushNamed(PageName.addTransaction);
+    final result = await Navigator.of(
+      context,
+    ).pushNamed(PageName.addTransaction);
+
+    // If a transaction was added (result is not null), refresh the dashboard
+    if (result != null) {
+      _dashboardBloc.add(
+        DashboardEvent.getDashboardData(userId: widget.userId),
+      );
+    }
   }
 }
 
@@ -176,29 +170,15 @@ class _DashboardContent extends StatelessWidget {
   /// Dashboard data to display
   final DashboardEntity dashboard;
 
-  /// Currently selected time period
-  final TimePeriod selectedTimePeriod;
-
-  /// Callback function called when time period changes
-  final ValueChanged<TimePeriod> onTimePeriodChanged;
-
-  const _DashboardContent({
-    required this.dashboard,
-    required this.selectedTimePeriod,
-    required this.onTimePeriodChanged,
-  });
+  const _DashboardContent({required this.dashboard});
 
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Column(
         children: [
-          // Financial Summary Cards with Time Period Selector
-          DashboardSummary(
-            dashboard: dashboard,
-            selectedTimePeriod: selectedTimePeriod,
-            onTimePeriodChanged: onTimePeriodChanged,
-          ),
+          // Financial Summary Cards
+          DashboardSummary(dashboard: dashboard),
           const SizedBox(height: 24),
           // Recent Transactions
           RecentTransactions(transactions: dashboard.recentTransactions),

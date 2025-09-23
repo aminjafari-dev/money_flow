@@ -14,7 +14,7 @@ import 'package:money_flow/core/widgets/g_gap.dart';
 ///   categories: ['Food', 'Transportation', 'Entertainment'],
 ///   selectedCategory: 'Food',
 ///   onCategorySelected: (category) {
-///     context.read<AddTransactionBloc>().add(
+///     getIt<AddTransactionBloc>().add(
 ///       AddTransactionEvent.updateCategory(category: category),
 ///     );
 ///   },
@@ -215,7 +215,7 @@ class CategorySelectorWidget extends StatelessWidget {
 ///   subcategories: ['Groceries', 'Restaurant', 'Fast Food'],
 ///   selectedSubcategory: 'Groceries',
 ///   onSubcategorySelected: (subcategory) {
-///     context.read<AddTransactionBloc>().add(
+///     getIt<AddTransactionBloc>().add(
 ///       AddTransactionEvent.updateSubcategory(subcategory: subcategory),
 ///     );
 ///   },
@@ -257,7 +257,7 @@ class SubcategorySelectorWidget extends StatelessWidget {
       children: [
         // Section header
         GText(
-          'Subcategory',
+          'Subcategory (Optional)',
           style: TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.w500,

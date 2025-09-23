@@ -1,6 +1,6 @@
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:money_flow/core/error/exceptions.dart';
-import 'package:money_flow/features/add_transaction/data/models/transaction_model.dart';
+import 'package:money_flow/shared/models/transaction_model.dart';
 
 /// Local data source for transaction data using Hive database.
 /// This handles all local storage operations for transaction information.
@@ -26,6 +26,9 @@ class TransactionLocalDataSource {
   /// Initializes Hive box for transaction data.
   /// This method must be called before using any other methods.
   ///
+  /// If there's a data migration issue (type mismatch), it will clear the existing data
+  /// and start fresh to prevent app crashes.
+  ///
   /// Usage Example:
   /// ```dart
   /// final localDataSource = TransactionLocalDataSource();
@@ -43,10 +46,34 @@ class TransactionLocalDataSource {
         _transactionBoxName,
       );
     } catch (e) {
-      // If initialization fails, throw cache exception
-      throw CacheException(
-        'Failed to initialize transaction local storage: $e',
-      );
+      // If there's a type mismatch error (data migration issue), clear the box and retry
+      if (e.toString().contains('is not a subtype of type') ||
+          e.toString().contains('type cast')) {
+        try {
+          // Close the box if it's open
+          if (_transactionBox != null && _transactionBox!.isOpen) {
+            await _transactionBox!.close();
+          }
+
+          // Delete the box to clear all data
+          await Hive.deleteBoxFromDisk(_transactionBoxName);
+
+          // Try to open the box again (this will create a fresh box)
+          _transactionBox = await Hive.openBox<TransactionModel>(
+            _transactionBoxName,
+          );
+        } catch (retryError) {
+          // If retry also fails, throw the original error
+          throw CacheException(
+            'Failed to initialize transaction local storage after data migration: $retryError',
+          );
+        }
+      } else {
+        // For other types of errors, throw cache exception
+        throw CacheException(
+          'Failed to initialize transaction local storage: $e',
+        );
+      }
     }
   }
 

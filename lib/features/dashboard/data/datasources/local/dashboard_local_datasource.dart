@@ -22,7 +22,8 @@ class DashboardLocalDataSource {
   static const String _dashboardBoxName = 'dashboard_data';
 
   /// Hive box name for storing transaction data
-  static const String _transactionBoxName = 'transaction_data';
+  /// Note: This should match the box name used in TransactionLocalDataSource
+  static const String _transactionBoxName = 'transactions';
 
   /// Hive box instance for dashboard data
   Box<DashboardModel>? _dashboardBox;
@@ -32,6 +33,9 @@ class DashboardLocalDataSource {
 
   /// Initializes Hive boxes for dashboard and transaction data.
   /// This method must be called before using any other methods.
+  ///
+  /// If there's a data migration issue (type mismatch), it will clear the existing data
+  /// and start fresh to prevent app crashes.
   ///
   /// Usage Example:
   /// ```dart
@@ -44,20 +48,52 @@ class DashboardLocalDataSource {
       if (!Hive.isAdapterRegistered(0)) {
         Hive.registerAdapter(DashboardModelAdapter());
       }
-      if (!Hive.isAdapterRegistered(1)) {
-        Hive.registerAdapter(TransactionModelAdapter());
-      }
+      // Note: TransactionModelAdapter is registered by TransactionLocalDataSource
+      // with typeId: 2, not here with typeId: 1
 
       // Open dashboard data box
       _dashboardBox = await Hive.openBox<DashboardModel>(_dashboardBoxName);
 
       // Open transaction data box
+      // Note: This uses the same box name as TransactionLocalDataSource
+      // to ensure consistency across the app
       _transactionBox = await Hive.openBox<TransactionModel>(
         _transactionBoxName,
       );
     } catch (e) {
-      // If initialization fails, throw cache exception
-      throw CacheException('Failed to initialize dashboard local storage: $e');
+      // If there's a type mismatch error (data migration issue), clear the boxes and retry
+      if (e.toString().contains('is not a subtype of type') ||
+          e.toString().contains('type cast')) {
+        try {
+          // Close boxes if they're open
+          if (_dashboardBox != null && _dashboardBox!.isOpen) {
+            await _dashboardBox!.close();
+          }
+          if (_transactionBox != null && _transactionBox!.isOpen) {
+            await _transactionBox!.close();
+          }
+
+          // Delete the boxes to clear all data
+          await Hive.deleteBoxFromDisk(_dashboardBoxName);
+          await Hive.deleteBoxFromDisk(_transactionBoxName);
+
+          // Try to open the boxes again (this will create fresh boxes)
+          _dashboardBox = await Hive.openBox<DashboardModel>(_dashboardBoxName);
+          _transactionBox = await Hive.openBox<TransactionModel>(
+            _transactionBoxName,
+          );
+        } catch (retryError) {
+          // If retry also fails, throw the original error
+          throw CacheException(
+            'Failed to initialize dashboard local storage after data migration: $retryError',
+          );
+        }
+      } else {
+        // For other types of errors, throw cache exception
+        throw CacheException(
+          'Failed to initialize dashboard local storage: $e',
+        );
+      }
     }
   }
 
@@ -177,6 +213,7 @@ class DashboardLocalDataSource {
 
   /// Clears all cached dashboard data for a user.
   /// This method is useful for data cleanup or user logout scenarios.
+  /// Note: This clears ALL transactions since we don't use user-specific keys.
   ///
   /// Parameters:
   /// - [userId]: Unique identifier for the user
@@ -195,12 +232,9 @@ class DashboardLocalDataSource {
       // Remove dashboard data
       await _dashboardBox!.delete(userId);
 
-      // Remove all transactions for this user
-      final userTransactionKeys = _transactionBox!.keys
-          .where((key) => key.toString().startsWith('${userId}_'))
-          .toList();
-
-      await _transactionBox!.deleteAll(userTransactionKeys);
+      // Clear all transactions (since we don't use user-specific keys)
+      // In a multi-user app, this would need to be more selective
+      await _transactionBox!.clear();
     } catch (e) {
       throw CacheException('Failed to clear cached data: $e');
     }
@@ -250,23 +284,18 @@ class DashboardLocalDataSource {
     int limit = 10,
   }) async {
     try {
-      // Get all transaction keys for this user
-      final userTransactionKeys = _transactionBox!.keys
-          .where((key) => key.toString().startsWith('${userId}_'))
-          .toList();
+      // Get all transactions from the transaction box (not user-specific keys)
+      final allTransactions = _transactionBox!.values.toList();
 
-      // Sort keys by timestamp (newest first)
-      userTransactionKeys.sort((a, b) => b.toString().compareTo(a.toString()));
+      // Sort transactions by date (newest first)
+      allTransactions.sort((a, b) {
+        final dateA = DateTime.parse(a.dateTime);
+        final dateB = DateTime.parse(b.dateTime);
+        return dateB.compareTo(dateA);
+      });
 
-      // Get transactions up to the limit
-      final transactions = <TransactionModel>[];
-      for (int i = 0; i < limit && i < userTransactionKeys.length; i++) {
-        final transaction = _transactionBox!.get(userTransactionKeys[i]);
-        if (transaction != null) {
-          transactions.add(transaction);
-        }
-      }
-
+      // Return limited results
+      final transactions = allTransactions.take(limit).toList();
       return transactions;
     } catch (e) {
       throw CacheException('Failed to retrieve recent transactions: $e');
@@ -275,9 +304,10 @@ class DashboardLocalDataSource {
 
   /// Private method to cache transactions in Hive.
   /// This method stores individual transactions for efficient querying.
+  /// Note: Transactions are stored with their ID as key to match TransactionLocalDataSource.
   ///
   /// Parameters:
-  /// - [userId]: Unique identifier for the user
+  /// - [userId]: Unique identifier for the user (not used for key generation)
   /// - [transactions]: List of transactions to cache
   Future<void> _cacheTransactions(
     String userId,
@@ -289,11 +319,9 @@ class DashboardLocalDataSource {
         await initialize();
       }
 
-      // Cache each transaction with user-specific key
+      // Cache each transaction with their ID as key (consistent with TransactionLocalDataSource)
       for (final transaction in transactions) {
-        final key =
-            '${userId}_${transaction.id}_${DateTime.parse(transaction.dateTime).millisecondsSinceEpoch}';
-        await _transactionBox!.put(key, transaction);
+        await _transactionBox!.put(transaction.id, transaction);
       }
     } catch (e) {
       throw CacheException('Failed to cache transactions: $e');

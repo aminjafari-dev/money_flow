@@ -104,11 +104,6 @@ class AddTransactionUseCase {
       return 'Category is required';
     }
 
-    // Validate subcategory
-    if (params.subcategory.trim().isEmpty) {
-      return 'Subcategory is required';
-    }
-
     // Validate date (prevent future dates for most transactions)
     if (params.dateTime.isAfter(DateTime.now().add(const Duration(days: 1)))) {
       return 'Transaction date cannot be more than 1 day in the future';

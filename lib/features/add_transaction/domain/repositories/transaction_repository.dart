@@ -205,8 +205,8 @@ class CategorySuggestion {
   /// Suggested main category
   final String suggestedCategory;
 
-  /// Suggested subcategory
-  final String suggestedSubcategory;
+  /// Suggested subcategory (optional, as subcategories are no longer used)
+  final String? suggestedSubcategory;
 
   /// Confidence level of the suggestion (0.0 to 1.0)
   final double confidence;
@@ -216,7 +216,7 @@ class CategorySuggestion {
 
   const CategorySuggestion({
     required this.suggestedCategory,
-    required this.suggestedSubcategory,
+    this.suggestedSubcategory,
     required this.confidence,
     this.alternativeCategories = const [],
   });

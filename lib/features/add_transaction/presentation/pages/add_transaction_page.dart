@@ -55,11 +55,6 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
   @override
   void initState() {
     super.initState();
-    // Initialize the form when the page loads
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      getIt<AddTransactionBloc>().add(const AddTransactionEvent.initialize());
-    });
-
     // Set default date time
     _dateTimeController.text = _formatDateTime(DateTime.now());
   }
@@ -78,30 +73,30 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
 
   @override
   Widget build(BuildContext context) {
-    return  BlocConsumer<AddTransactionBloc, AddTransactionMainState>(
+    return BlocConsumer<AddTransactionBloc, AddTransactionMainState>(
       bloc: getIt<AddTransactionBloc>(),
-        listener: (context, state) {
-          // Handle transaction addition success
-          state.addTransaction.when(
-            initial: () {},
-            loading: () {},
-            completed: (transaction) {
-              _showSuccessSnackBar('Transaction added successfully!');
-              Navigator.of(context).pop(transaction);
-            },
-            error: (message) {
-              _showErrorSnackBar(message);
-            },
-          );
-        },
-        builder: (context, state) {
-          return Scaffold(
-            backgroundColor: Colors.white,
-            appBar: _buildSimpleAppBar(context),
-            body: _buildSimpleBody(context, state),
-          );
-        },
-      
+      listener: (context, state) {
+        // Handle transaction addition success
+        state.addTransaction.when(
+          initial: () {},
+          loading: () {},
+          completed: (transaction) {
+            _showSuccessSnackBar('Transaction added successfully!');
+            // Return the transaction to trigger dashboard refresh
+            Navigator.of(context).pop(transaction);
+          },
+          error: (message) {
+            _showErrorSnackBar(message);
+          },
+        );
+      },
+      builder: (context, state) {
+        return Scaffold(
+          backgroundColor: Colors.white,
+          appBar: _buildSimpleAppBar(context),
+          body: _buildSimpleBody(context, state),
+        );
+      },
     );
   }
 
@@ -186,25 +181,20 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
   /// Builds the category selection section with horizontal chips.
   /// This shows available categories as selectable chips.
   Widget _buildCategorySection(AddTransactionMainState state) {
-    return state.loadCategories.when(
-      initial: () => const SizedBox(),
-      loading: () => CategorySelectorWidget(
-        categories: const [],
-        selectedCategory: selectedCategory,
-        onCategorySelected: (_) {},
-        isLoading: true,
-      ),
-      completed: (categories) => CategorySelectorWidget(
-        categories: categories,
-        selectedCategory: selectedCategory,
-        onCategorySelected: (category) => _selectCategory(context, category),
-      ),
-      error: (message) => CategorySelectorWidget(
-        categories: const [],
-        selectedCategory: selectedCategory,
-        onCategorySelected: (_) {},
-        errorMessage: message,
-      ),
+    // For simplified version, we'll use hardcoded categories
+    final categories = [
+      'Food',
+      'Transport',
+      'Shopping',
+      'Entertainment',
+      'Bills',
+      'Other',
+    ];
+
+    return CategorySelectorWidget(
+      categories: categories,
+      selectedCategory: selectedCategory,
+      onCategorySelected: (category) => _selectCategory(context, category),
     );
   }
 
@@ -215,26 +205,14 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
       return const SizedBox();
     }
 
-    return state.loadSubcategories.when(
-      initial: () => const SizedBox(),
-      loading: () => SubcategorySelectorWidget(
-        subcategories: const [],
-        selectedSubcategory: selectedSubcategory,
-        onSubcategorySelected: (_) {},
-        isLoading: true,
-      ),
-      completed: (subcategories) => SubcategorySelectorWidget(
-        subcategories: subcategories,
-        selectedSubcategory: selectedSubcategory,
-        onSubcategorySelected: (subcategory) =>
-            _selectSubcategory(context, subcategory),
-      ),
-      error: (message) => SubcategorySelectorWidget(
-        subcategories: const [],
-        selectedSubcategory: selectedSubcategory,
-        onSubcategorySelected: (_) {},
-        errorMessage: message,
-      ),
+    // For simplified version, we'll use hardcoded subcategories based on category
+    final subcategories = _getSubcategoriesForCategory(selectedCategory);
+
+    return SubcategorySelectorWidget(
+      subcategories: subcategories,
+      selectedSubcategory: selectedSubcategory,
+      onSubcategorySelected: (subcategory) =>
+          _selectSubcategory(context, subcategory),
     );
   }
 
@@ -276,10 +254,7 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
       orElse: () => false,
     );
 
-    final canSave =
-        selectedCategory.isNotEmpty &&
-        selectedSubcategory.isNotEmpty &&
-        amount != 0;
+    final canSave = selectedCategory.isNotEmpty && amount != 0;
 
     return TransactionActionButtonsWidget(
       onCancel: () => Navigator.of(context).pop(),
@@ -317,10 +292,6 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
       selectedCategory = category;
       selectedSubcategory = ''; // Clear subcategory when category changes
     });
-    // Load subcategories for the new category
-    context.read<AddTransactionBloc>().add(
-      AddTransactionEvent.loadSubcategories(category: category),
-    );
   }
 
   /// Selects a subcategory.
@@ -364,11 +335,11 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
 
   /// Saves the transaction.
   void _saveTransaction(BuildContext context, AddTransactionMainState state) {
-    context.read<AddTransactionBloc>().add(
+    getIt<AddTransactionBloc>().add(
       AddTransactionEvent.addTransaction(
         amount: amount,
+        mainCategory: _getMainCategoryFromType(type),
         category: selectedCategory,
-        subcategory: selectedSubcategory,
         description: _descriptionController.text.isEmpty
             ? null
             : _descriptionController.text,
@@ -376,5 +347,35 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
         type: type,
       ),
     );
+  }
+
+  /// Gets subcategories for a given category.
+  /// This method returns hardcoded subcategories based on the selected category.
+  List<String> _getSubcategoriesForCategory(String category) {
+    switch (category) {
+      case 'Food':
+        return ['Restaurant', 'Groceries', 'Fast Food', 'Coffee'];
+      case 'Transport':
+        return ['Gas', 'Public Transport', 'Taxi', 'Parking'];
+      case 'Shopping':
+        return ['Clothing', 'Electronics', 'Books', 'Other'];
+      case 'Entertainment':
+        return ['Movies', 'Games', 'Sports', 'Music'];
+      case 'Bills':
+        return ['Electricity', 'Water', 'Internet', 'Phone'];
+      default:
+        return ['General'];
+    }
+  }
+
+  /// Gets the main category from transaction type.
+  /// This method maps transaction types to main categories.
+  String _getMainCategoryFromType(TransactionType type) {
+    switch (type) {
+      case TransactionType.income:
+        return 'income';
+      case TransactionType.expense:
+        return 'expenses';
+    }
   }
 }

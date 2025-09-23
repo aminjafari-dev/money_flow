@@ -2,9 +2,12 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:money_flow/core/error/exceptions.dart';
 import 'package:money_flow/core/services/category_models.dart';
 
-/// Service for managing categories and subcategories.
+/// Service for managing categories.
 /// This service handles all category operations including initialization,
 /// CRUD operations, and local storage management.
+///
+/// Currently supports 4 main categories: Income, Expenses, Charity, Investments
+/// without any subcategories for simplified transaction categorization.
 ///
 /// Usage Example:
 /// ```dart
@@ -14,8 +17,8 @@ import 'package:money_flow/core/services/category_models.dart';
 /// // Get main categories
 /// final mainCategories = await categoryService.getMainCategories();
 ///
-/// // Get subcategories for a category
-/// final subcategories = await categoryService.getSubcategories('income');
+/// // Get a specific category
+/// final category = await categoryService.getCategory('income');
 ///
 /// // Add new category
 /// await categoryService.addCategory(newCategory);
@@ -56,10 +59,10 @@ class CategoryService {
   }
 
   /// Initializes default categories on first app startup.
-  /// This method sets up the main categories and their subcategories.
+  /// This method sets up the 4 main categories without any subcategories.
   Future<void> _initializeDefaultCategories() async {
     try {
-      // Define the 4 main categories as per your requirement
+      // Define the 4 main categories without subcategories
       final defaultCategories = [
         // Income - Main category for all income types
         CategoryModel(
@@ -67,17 +70,7 @@ class CategoryService {
           name: 'Income',
           type: 'main',
           icon: 'income_icon',
-          subcategories: [
-            'Salary',
-            'Freelance',
-            'Business',
-            'Investment Returns',
-            'Bonus',
-            'Gift',
-            'Rental Income',
-            'Refund',
-            'Other Income',
-          ],
+          subcategories: [], // No subcategories
         ),
 
         // Expenses - Main category for all expense types
@@ -86,20 +79,7 @@ class CategoryService {
           name: 'Expenses',
           type: 'main',
           icon: 'expense_icon',
-          subcategories: [
-            'Food & Dining',
-            'Transportation',
-            'Shopping',
-            'Entertainment',
-            'Bills & Utilities',
-            'Healthcare',
-            'Education',
-            'Travel',
-            'Personal Care',
-            'Home & Garden',
-            'Insurance',
-            'Other Expenses',
-          ],
+          subcategories: [], // No subcategories
         ),
 
         // Charity - Main category for charitable donations
@@ -108,16 +88,7 @@ class CategoryService {
           name: 'Charity',
           type: 'main',
           icon: 'charity_icon',
-          subcategories: [
-            'Religious Donations',
-            'Humanitarian Aid',
-            'Education Support',
-            'Healthcare Support',
-            'Environmental Causes',
-            'Animal Welfare',
-            'Community Support',
-            'Other Charity',
-          ],
+          subcategories: [], // No subcategories
         ),
 
         // Investments - Main category for all investment types
@@ -126,17 +97,7 @@ class CategoryService {
           name: 'Investments',
           type: 'main',
           icon: 'investment_icon',
-          subcategories: [
-            'Stocks',
-            'Bonds',
-            'Mutual Funds',
-            'Real Estate',
-            'Cryptocurrency',
-            'Savings Account',
-            'Fixed Deposit',
-            'Gold',
-            'Other Investments',
-          ],
+          subcategories: [], // No subcategories
         ),
       ];
 
@@ -180,16 +141,18 @@ class CategoryService {
   }
 
   /// Gets subcategories for a specific main category.
+  /// Note: Currently returns empty list as subcategories are not used.
   ///
   /// Parameters:
   /// - [mainCategoryId]: ID of the main category
   ///
   /// Returns:
-  /// - [List<String>]: List of subcategory names
+  /// - [List<String>]: Empty list (no subcategories)
   ///
   /// Usage Example:
   /// ```dart
   /// final subcategories = await categoryService.getSubcategories('income');
+  /// // Returns: []
   /// ```
   Future<List<String>> getSubcategories(String mainCategoryId) async {
     try {
@@ -204,7 +167,8 @@ class CategoryService {
         return [];
       }
 
-      return category.subcategories;
+      // Return empty list as we don't use subcategories
+      return [];
     } catch (e) {
       throw CacheException('Failed to get subcategories: $e');
     }
@@ -265,6 +229,7 @@ class CategoryService {
   }
 
   /// Adds a subcategory to an existing main category.
+  /// Note: This method is deprecated as subcategories are not used.
   ///
   /// Parameters:
   /// - [mainCategoryId]: ID of the main category
@@ -272,109 +237,53 @@ class CategoryService {
   ///
   /// Usage Example:
   /// ```dart
+  /// // This method does nothing as subcategories are not supported
   /// await categoryService.addSubcategory('income', 'Consulting');
   /// ```
+  @Deprecated('Subcategories are not supported in the current implementation')
   Future<void> addSubcategory(
     String mainCategoryId,
     String subcategoryName,
   ) async {
-    try {
-      // Ensure box is initialized
-      if (_categoryBox == null) {
-        await initialize();
-      }
-
-      // Get the main category
-      final category = _categoryBox!.get(mainCategoryId);
-      if (category == null || category.type != 'main') {
-        throw CacheException('Main category not found: $mainCategoryId');
-      }
-
-      // Check if subcategory already exists
-      if (category.subcategories.contains(subcategoryName)) {
-        return; // Already exists
-      }
-
-      // Add subcategory
-      final updatedSubcategories = [...category.subcategories, subcategoryName];
-      final updatedCategory = category.copyWith(
-        subcategories: updatedSubcategories,
-      );
-
-      // Store updated category
-      await _categoryBox!.put(mainCategoryId, updatedCategory);
-    } catch (e) {
-      throw CacheException('Failed to add subcategory: $e');
-    }
+    // Do nothing - subcategories are not supported
+    return;
   }
 
   /// Determines the main category for a given subcategory.
-  /// This is used for dashboard categorization.
+  /// Note: Always returns null as subcategories are not used.
   ///
   /// Parameters:
   /// - [subcategoryName]: Name of the subcategory
   ///
   /// Returns:
-  /// - [String?]: Main category ID or null if not found
+  /// - [String?]: Always null (no subcategories exist)
   ///
   /// Usage Example:
   /// ```dart
   /// final mainCategory = await categoryService.getMainCategoryForSubcategory('Salary');
-  /// // Returns: 'income'
+  /// // Returns: null
   /// ```
+  @Deprecated('Subcategories are not supported in the current implementation')
   Future<String?> getMainCategoryForSubcategory(String subcategoryName) async {
-    try {
-      // Ensure box is initialized
-      if (_categoryBox == null) {
-        await initialize();
-      }
-
-      // Get all main categories
-      final mainCategories = await getMainCategories();
-
-      // Find the main category that contains this subcategory
-      for (final category in mainCategories) {
-        if (category.subcategories.contains(subcategoryName)) {
-          return category.id;
-        }
-      }
-
-      return null; // Not found
-    } catch (e) {
-      throw CacheException('Failed to get main category for subcategory: $e');
-    }
+    // Always return null as subcategories are not supported
+    return null;
   }
 
   /// Gets all subcategories across all main categories.
-  /// This is useful for autocomplete or search functionality.
+  /// Note: Always returns empty list as subcategories are not used.
   ///
   /// Returns:
-  /// - [List<String>]: List of all subcategory names
+  /// - [List<String>]: Empty list (no subcategories exist)
   ///
   /// Usage Example:
   /// ```dart
   /// final allSubcategories = await categoryService.getAllSubcategories();
+  /// // Returns: []
   /// ```
+  @Deprecated('Subcategories are not supported in the current implementation')
   Future<List<String>> getAllSubcategories() async {
-    try {
-      // Ensure box is initialized
-      if (_categoryBox == null) {
-        await initialize();
-      }
-
-      // Get all main categories
-      final mainCategories = await getMainCategories();
-
-      // Collect all subcategories
-      final allSubcategories = <String>[];
-      for (final category in mainCategories) {
-        allSubcategories.addAll(category.subcategories);
-      }
-
-      return allSubcategories;
-    } catch (e) {
-      throw CacheException('Failed to get all subcategories: $e');
-    }
+    // Always return empty list as subcategories are not supported
+    return [];
   }
 
   /// Clears all category data.

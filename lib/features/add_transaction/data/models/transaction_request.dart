@@ -179,11 +179,6 @@ class TransactionRequest {
       errors.add('Category is required');
     }
 
-    // Validate subcategory
-    if (subcategory.trim().isEmpty) {
-      errors.add('Subcategory is required');
-    }
-
     // Validate type
     if (type != 'expense' && type != 'income') {
       errors.add('Type must be either "expense" or "income"');
