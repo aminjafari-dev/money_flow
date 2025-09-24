@@ -29,11 +29,12 @@ Future<void> setupLocator() async {
     () => CategoryInitializationService(getIt<CategoryService>()),
   );
 
+  // Initialize transaction feature dependencies first
+  // This ensures TransactionModelAdapter is registered before dashboard tries to use it
+  await setupTransactionLocator(getIt);
+
   // Initialize dashboard feature dependencies
   await setupDashboardLocator(getIt);
-
-  // Initialize transaction feature dependencies
-  await setupTransactionLocator(getIt);
 
   // Initialize category system
   final categoryInitService = getIt<CategoryInitializationService>();

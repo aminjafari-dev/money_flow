@@ -38,7 +38,7 @@ class DashboardRepositoryImpl implements DashboardRepository {
   const DashboardRepositoryImpl({required this.localDataSource});
 
   /// Retrieves dashboard data for a specific user from local storage.
-  /// This method gets the most recent dashboard data cached locally.
+  /// This method calculates dashboard data from stored transactions.
   ///
   /// Parameters:
   /// - [userId]: Unique identifier for the user
@@ -59,15 +59,10 @@ class DashboardRepositoryImpl implements DashboardRepository {
     String userId,
   ) async {
     try {
-      // Get dashboard data from local storage
+      // Get dashboard data calculated from transactions
       final dashboardModel = await localDataSource.getCachedDashboardData(
         userId,
       );
-
-      if (dashboardModel == null) {
-        // If no cached dashboard exists, create empty dashboard
-        return Right(_createEmptyDashboard());
-      }
 
       // Convert model to domain entity
       final dashboardEntity = dashboardModel.toDomain();
@@ -79,26 +74,5 @@ class DashboardRepositoryImpl implements DashboardRepository {
       // Handle unexpected errors
       return Left(ServerFailure('Unexpected error: $e'));
     }
-  }
-
-  /// Creates an empty dashboard entity for new users.
-  /// This method provides default values when no data exists.
-  ///
-  /// Returns:
-  /// - [DashboardEntity]: Empty dashboard with zero values
-  ///
-  /// Usage Example:
-  /// ```dart
-  /// final emptyDashboard = _createEmptyDashboard();
-  /// // All values will be 0.0 and recentTransactions will be empty
-  /// ```
-  DashboardEntity _createEmptyDashboard() {
-    return const DashboardEntity(
-      totalIncome: 0.0,
-      totalExpenses: 0.0,
-      totalCharity: 0.0,
-      totalInvestments: 0.0,
-      recentTransactions: [],
-    );
   }
 }

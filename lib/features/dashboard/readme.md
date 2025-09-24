@@ -2,7 +2,7 @@
 
 ## Description
 
-The **Dashboard Feature** serves as the central command center of the FinanceFlow money management app. It provides users with a comprehensive financial health overview at a glance, displaying income, expenses, charity donations, and investment progress in an intuitive, visual format.
+The **Dashboard Feature** serves as the central command center of the FinanceFlow money management app. It provides users with a comprehensive financial health overview at a glance, displaying income, expenses, charity donations, and investment progress in an intuitive, visual format. The dashboard calculates all financial metrics dynamically from stored transactions using the shared TransactionModel.
 
 ## Architecture
 
@@ -10,18 +10,14 @@ The **Dashboard Feature** serves as the central command center of the FinanceFlo
 - **Entities**: `dashboard_entity.dart` - Pure business objects for dashboard and transaction data
 - **Repositories**: `dashboard_repository.dart` - Abstract repository interface for dashboard operations
 - **Use Cases**: 
-  - `get_dashboard_data_usecase.dart` - Retrieves dashboard data
-  - `refresh_dashboard_data_usecase.dart` - Refreshes dashboard data by recalculating from transactions
-  - `get_cached_dashboard_data_usecase.dart` - Retrieves cached dashboard data for offline access
-  - `update_dashboard_data_usecase.dart` - Updates dashboard data with new information
+  - `get_dashboard_data_usecase.dart` - Retrieves dashboard data calculated from transactions
 
 ### Data Layer
 - **Models**: 
-  - `dashboard_model.dart` - Data models with JSON serialization support
+  - `dashboard_model.dart` - Data models with JSON serialization support, uses shared TransactionModel
   - `dashboard_request.dart` - Request model for API calls
-- **Data Sources**: `dashboard_local_datasource.dart` - Local data source using Hive for offline storage
-- **Repositories**: `dashboard_repository_impl.dart` - Repository implementation with local storage
-- **Services**: `dashboard_calculation_service.dart` - Business logic for financial calculations
+- **Data Sources**: `dashboard_local_datasource.dart` - Local data source that calculates dashboard data from transactions
+- **Repositories**: `dashboard_repository_impl.dart` - Repository implementation with transaction-based calculations
 
 ### Presentation Layer
 - **BLoC**: 
@@ -42,10 +38,7 @@ The **Dashboard Feature** serves as the central command center of the FinanceFlo
 
 ## Use Cases
 
-1. **Get Dashboard Data**: Retrieves current financial overview from local storage
-2. **Refresh Dashboard Data**: Recalculates financial totals from stored transactions
-3. **Get Cached Dashboard Data**: Provides offline access to previously cached data
-4. **Update Dashboard Data**: Saves updated financial information to local storage
+1. **Get Dashboard Data**: Calculates current financial overview from stored transactions
 
 ## Data Flow
 
@@ -53,18 +46,19 @@ The **Dashboard Feature** serves as the central command center of the FinanceFlo
 2. **BLoC Processing**: DashboardBloc processes event and calls GetDashboardDataUseCase
 3. **Use Case Execution**: Use case validates input and calls DashboardRepository
 4. **Repository Implementation**: RepositoryImpl calls DashboardLocalDataSource
-5. **Data Retrieval**: LocalDataSource retrieves data from Hive database
-6. **State Update**: BLoC emits new state with dashboard data
+5. **Data Calculation**: LocalDataSource calculates dashboard data from all stored transactions
+6. **State Update**: BLoC emits new state with calculated dashboard data
 7. **UI Update**: DashboardPage rebuilds with new financial information
 
 ## Key Components
 
-- **Offline-First Architecture**: All data stored locally using Hive database
+- **Transaction-Based Calculations**: All dashboard data calculated dynamically from stored transactions
+- **Shared TransactionModel**: Uses consistent transaction model across the app
 - **Clean Architecture**: Proper layer separation with dependency inversion
 - **BLoC Pattern**: State management with freezed for immutable states
 - **Type Safety**: Strong typing throughout all layers
 - **Error Handling**: Comprehensive error handling with Either pattern
-- **Financial Calculations**: Smart business logic for financial aggregations
+- **Real-Time Financial Metrics**: Dashboard always reflects current transaction data
 - **Responsive UI**: Clean, modern design with proper state management
 
 ## Dependencies
@@ -84,6 +78,6 @@ Navigator.pushNamed(context, PageName.dashboard);
 // Access dashboard BLoC
 final dashboardBloc = getIt<DashboardBloc>();
 
-// Trigger dashboard data refresh
-dashboardBloc.add(DashboardEvent.refreshDashboardData(userId: 'user123'));
+// Trigger dashboard data calculation
+dashboardBloc.add(DashboardEvent.getDashboardData(userId: 'user123'));
 ```

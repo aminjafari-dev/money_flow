@@ -7,9 +7,14 @@ import 'package:money_flow/features/dashboard/presentation/bloc/dashboard_bloc.d
 
 /// Dependency injection setup for dashboard feature.
 /// This function registers all dashboard-related dependencies.
+/// Uses shared TransactionModel for consistency across the app.
+///
+/// IMPORTANT: This must be called AFTER setupTransactionLocator() to ensure
+/// TransactionModelAdapter is registered before dashboard tries to use it.
 ///
 /// Usage Example:
 /// ```dart
+/// await setupTransactionLocator(getIt); // Must be called first
 /// await setupDashboardLocator(getIt);
 /// ```
 Future<void> setupDashboardLocator(GetIt getIt) async {

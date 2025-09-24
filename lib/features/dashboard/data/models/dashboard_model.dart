@@ -1,13 +1,9 @@
-import 'package:hive/hive.dart';
 import 'package:money_flow/features/dashboard/domain/entities/dashboard_entity.dart';
-// ignore: unused_import
-import 'package:money_flow/features/add_transaction/domain/entities/transaction_entity.dart';
 import 'package:money_flow/shared/models/transaction_model.dart';
-
-part 'dashboard_model.g.dart';
 
 /// Data model for dashboard information with JSON serialization support.
 /// This model handles data transformation between API responses and domain entities.
+/// Uses shared TransactionModel for consistency across the app.
 ///
 /// Usage Example:
 /// ```dart
@@ -18,21 +14,20 @@ part 'dashboard_model.g.dart';
 /// // To JSON
 /// final jsonData = dashboardModel.toJson();
 /// ```
-@HiveType(typeId: 0)
 class DashboardModel {
-  @HiveField(0)
+  /// Total income amount for the current period
   final double totalIncome;
 
-  @HiveField(1)
+  /// Total expenses amount for the current period
   final double totalExpenses;
 
-  @HiveField(2)
+  /// Total charity donations amount for the current period
   final double totalCharity;
 
-  @HiveField(3)
+  /// Total investments value for the current period
   final double totalInvestments;
 
-  @HiveField(4)
+  /// List of recent transactions using shared TransactionModel
   final List<TransactionModel> recentTransactions;
 
   const DashboardModel({
