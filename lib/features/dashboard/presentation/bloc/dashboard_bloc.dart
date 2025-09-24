@@ -40,7 +40,8 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
     // Register event handlers
     on<DashboardEvent>((event, emit) async {
       await event.when(
-        getDashboardData: (userId) => _onGetDashboardData(userId, emit),
+        getDashboardData: (userId, timePeriod) =>
+            _onGetDashboardData(userId, timePeriod, emit),
       );
     });
   }
@@ -50,14 +51,16 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
   ///
   /// Parameters:
   /// - [userId]: Unique identifier for the user
+  /// - [timePeriod]: Time period for data calculation
   /// - [emit]: State emitter for updating the state
   ///
   /// Usage Example:
   /// ```dart
-  /// await _onGetDashboardData('user123', emit);
+  /// await _onGetDashboardData('user123', 'weekly', emit);
   /// ```
   Future<void> _onGetDashboardData(
     String userId,
+    String timePeriod,
     Emitter<DashboardState> emit,
   ) async {
     // Check if emit is still valid
@@ -69,7 +72,10 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
 
     try {
       // Call use case to get dashboard data
-      final params = GetDashboardDataParams(userId: userId);
+      final params = GetDashboardDataParams(
+        userId: userId,
+        timePeriod: timePeriod,
+      );
       final result = await getDashboardDataUseCase.call(params);
 
       // Check if emit is still valid

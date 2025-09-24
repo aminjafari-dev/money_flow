@@ -83,28 +83,46 @@ class DashboardLocalDataSource {
   }
 
   /// Retrieves dashboard data calculated from transactions.
-  /// This method calculates dashboard data from stored transactions.
+  /// This method calculates dashboard data from stored transactions for a specific time period.
   ///
   /// Parameters:
   /// - [userId]: Unique identifier for the user
+  /// - [timePeriod]: Time period for data calculation ('weekly', 'monthly', 'yearly', or 'all')
   ///
   /// Returns:
   /// - [DashboardModel]: Calculated dashboard data from transactions
   ///
   /// Usage Example:
   /// ```dart
-  /// final dashboardData = await localDataSource.getCachedDashboardData('user123');
+  /// final dashboardData = await localDataSource.getCachedDashboardData('user123', 'weekly');
   /// final dashboardEntity = dashboardData.toDomain();
   /// ```
-  Future<DashboardModel> getCachedDashboardData(String userId) async {
+  Future<DashboardModel> getCachedDashboardData(
+    String userId,
+    String timePeriod,
+  ) async {
     try {
       // Ensure box is initialized
       if (_transactionBox == null) {
         await initialize();
       }
 
-      // Get all transactions from the transaction box
-      final allTransactions = _transactionBox!.values.toList();
+      // Get transactions based on time period
+      List<TransactionModel> allTransactions;
+      switch (timePeriod.toLowerCase()) {
+        case 'weekly':
+          allTransactions = await _getWeeklyTransactions();
+          break;
+        case 'monthly':
+          allTransactions = await _getMonthlyTransactions();
+          break;
+        case 'yearly':
+          allTransactions = await _getYearlyTransactions();
+          break;
+        default:
+          // Get all transactions if no specific period is requested
+          allTransactions = _transactionBox!.values.toList();
+      }
 
       // Calculate totals from transactions
       double totalIncome = 0.0;
@@ -262,6 +280,71 @@ class DashboardLocalDataSource {
     } catch (e) {
       throw CacheException('Failed to retrieve recent transactions: $e');
     }
+  }
+
+  /// Private method to get weekly transactions.
+  /// This method calculates the date range for the current week and retrieves transactions.
+  ///
+  /// Returns:
+  /// - [List<TransactionModel>]: List of weekly transaction models
+  Future<List<TransactionModel>> _getWeeklyTransactions() async {
+    final now = DateTime.now();
+    final startOfWeek = now.subtract(Duration(days: now.weekday - 1));
+    final startDate = DateTime(
+      startOfWeek.year,
+      startOfWeek.month,
+      startOfWeek.day,
+    );
+    final endDate = DateTime(now.year, now.month, now.day, 23, 59, 59);
+
+    final allTransactions = _transactionBox!.values.toList();
+    return allTransactions.where((transaction) {
+      final transactionDate = DateTime.parse(transaction.dateTime);
+      return transactionDate.isAfter(
+            startDate.subtract(const Duration(days: 1)),
+          ) &&
+          transactionDate.isBefore(endDate.add(const Duration(days: 1)));
+    }).toList();
+  }
+
+  /// Private method to get monthly transactions.
+  /// This method calculates the date range for the current month and retrieves transactions.
+  ///
+  /// Returns:
+  /// - [List<TransactionModel>]: List of monthly transaction models
+  Future<List<TransactionModel>> _getMonthlyTransactions() async {
+    final now = DateTime.now();
+    final startOfMonth = DateTime(now.year, now.month, 1);
+    final endDate = DateTime(now.year, now.month, now.day, 23, 59, 59);
+
+    final allTransactions = _transactionBox!.values.toList();
+    return allTransactions.where((transaction) {
+      final transactionDate = DateTime.parse(transaction.dateTime);
+      return transactionDate.isAfter(
+            startOfMonth.subtract(const Duration(days: 1)),
+          ) &&
+          transactionDate.isBefore(endDate.add(const Duration(days: 1)));
+    }).toList();
+  }
+
+  /// Private method to get yearly transactions.
+  /// This method calculates the date range for the current year and retrieves transactions.
+  ///
+  /// Returns:
+  /// - [List<TransactionModel>]: List of yearly transaction models
+  Future<List<TransactionModel>> _getYearlyTransactions() async {
+    final now = DateTime.now();
+    final startOfYear = DateTime(now.year, 1, 1);
+    final endDate = DateTime(now.year, now.month, now.day, 23, 59, 59);
+
+    final allTransactions = _transactionBox!.values.toList();
+    return allTransactions.where((transaction) {
+      final transactionDate = DateTime.parse(transaction.dateTime);
+      return transactionDate.isAfter(
+            startOfYear.subtract(const Duration(days: 1)),
+          ) &&
+          transactionDate.isBefore(endDate.add(const Duration(days: 1)));
+    }).toList();
   }
 
   /// Closes Hive box and cleans up resources.

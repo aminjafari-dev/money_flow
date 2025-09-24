@@ -38,17 +38,18 @@ class DashboardRepositoryImpl implements DashboardRepository {
   const DashboardRepositoryImpl({required this.localDataSource});
 
   /// Retrieves dashboard data for a specific user from local storage.
-  /// This method calculates dashboard data from stored transactions.
+  /// This method calculates dashboard data from stored transactions for a specific time period.
   ///
   /// Parameters:
   /// - [userId]: Unique identifier for the user
+  /// - [timePeriod]: Time period for data calculation ('weekly', 'monthly', 'yearly', or 'all')
   ///
   /// Returns:
   /// - [Either<Failure, DashboardEntity>]: Either a failure or dashboard data
   ///
   /// Usage Example:
   /// ```dart
-  /// final result = await repository.getDashboardData('user123');
+  /// final result = await repository.getDashboardData('user123', 'weekly');
   /// result.fold(
   ///   (failure) => print('Error: ${failure.message}'),
   ///   (dashboard) => print('Income: \$${dashboard.totalIncome}'),
@@ -57,11 +58,13 @@ class DashboardRepositoryImpl implements DashboardRepository {
   @override
   Future<Either<Failure, DashboardEntity>> getDashboardData(
     String userId,
+    String timePeriod,
   ) async {
     try {
       // Get dashboard data calculated from transactions
       final dashboardModel = await localDataSource.getCachedDashboardData(
         userId,
+        timePeriod,
       );
 
       // Convert model to domain entity

@@ -15,17 +15,20 @@ part 'dashboard_event.freezed.dart';
 @freezed
 class DashboardEvent with _$DashboardEvent {
   /// Event to trigger getting dashboard data for a user.
-  /// This event fetches the current dashboard data from local storage.
+  /// This event fetches the current dashboard data from local storage for a specific time period.
   ///
   /// Parameters:
   /// - [userId]: Unique identifier for the user
+  /// - [timePeriod]: Time period for data calculation ('weekly', 'monthly', 'yearly', or 'all')
   ///
   /// Usage Example:
   /// ```dart
   /// getIt<DashboardBloc>().add(
-  ///   DashboardEvent.getDashboardData(userId: 'user123'),
+  ///   DashboardEvent.getDashboardData(userId: 'user123', timePeriod: 'weekly'),
   /// );
   /// ```
-  const factory DashboardEvent.getDashboardData({required String userId}) =
-      GetDashboardData;
+  const factory DashboardEvent.getDashboardData({
+    required String userId,
+    required String timePeriod,
+  }) = GetDashboardData;
 }

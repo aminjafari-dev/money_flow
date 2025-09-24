@@ -39,14 +39,14 @@ class GetDashboardDataUseCase {
   /// This method handles the business logic for fetching dashboard information.
   ///
   /// Parameters:
-  /// - [params]: Parameters containing user ID for data retrieval
+  /// - [params]: Parameters containing user ID and time period for data retrieval
   ///
   /// Returns:
   /// - [Either<Failure, DashboardEntity>]: Either a failure or dashboard data
   ///
   /// Usage Example:
   /// ```dart
-  /// final params = GetDashboardDataParams(userId: 'user123');
+  /// final params = GetDashboardDataParams(userId: 'user123', timePeriod: 'weekly');
   /// final result = await getDashboardDataUseCase.call(params);
   ///
   /// result.fold(
@@ -64,7 +64,10 @@ class GetDashboardDataUseCase {
 
     try {
       // Get dashboard data from repository
-      final result = await repository.getDashboardData(params.userId);
+      final result = await repository.getDashboardData(
+        params.userId,
+        params.timePeriod,
+      );
 
       return result;
     } catch (e) {
@@ -79,34 +82,43 @@ class GetDashboardDataUseCase {
 ///
 /// Usage Example:
 /// ```dart
-/// final params = GetDashboardDataParams(userId: 'user123');
+/// final params = GetDashboardDataParams(userId: 'user123', timePeriod: 'weekly');
 /// final result = await useCase.call(params);
 /// ```
 class GetDashboardDataParams {
   /// Unique identifier for the user
   final String userId;
 
+  /// Time period for data calculation ('weekly', 'monthly', 'yearly', or 'all')
+  final String timePeriod;
+
   /// Creates a new instance of GetDashboardDataParams.
   ///
   /// Parameters:
   /// - [userId]: Unique identifier for the user
+  /// - [timePeriod]: Time period for data calculation
   ///
   /// Usage Example:
   /// ```dart
-  /// final params = GetDashboardDataParams(userId: 'user123');
+  /// final params = GetDashboardDataParams(userId: 'user123', timePeriod: 'weekly');
   /// ```
-  const GetDashboardDataParams({required this.userId});
+  const GetDashboardDataParams({
+    required this.userId,
+    required this.timePeriod,
+  });
 
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       other is GetDashboardDataParams &&
           runtimeType == other.runtimeType &&
-          userId == other.userId;
+          userId == other.userId &&
+          timePeriod == other.timePeriod;
 
   @override
-  int get hashCode => userId.hashCode;
+  int get hashCode => userId.hashCode ^ timePeriod.hashCode;
 
   @override
-  String toString() => 'GetDashboardDataParams{userId: $userId}';
+  String toString() =>
+      'GetDashboardDataParams{userId: $userId, timePeriod: $timePeriod}';
 }

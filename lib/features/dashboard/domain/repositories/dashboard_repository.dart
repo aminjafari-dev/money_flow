@@ -15,7 +15,7 @@ import 'package:money_flow/features/dashboard/domain/entities/dashboard_entity.d
 /// }
 /// ```
 abstract class DashboardRepository {
-  /// Retrieves dashboard data for a specific user.
+  /// Retrieves dashboard data for a specific user and time period.
   ///
   /// This method fetches comprehensive financial overview including:
   /// - Total income, expenses, charity, and investments
@@ -23,17 +23,21 @@ abstract class DashboardRepository {
   ///
   /// Parameters:
   /// - [userId]: Unique identifier for the user
+  /// - [timePeriod]: Time period for data calculation ('weekly', 'monthly', 'yearly', or 'all')
   ///
   /// Returns:
   /// - [Either<Failure, DashboardEntity>]: Either a failure or dashboard data
   ///
   /// Usage Example:
   /// ```dart
-  /// final result = await dashboardRepository.getDashboardData('user123');
+  /// final result = await dashboardRepository.getDashboardData('user123', 'weekly');
   /// result.fold(
   ///   (failure) => print('Error: ${failure.message}'),
   ///   (dashboard) => print('Income: \$${dashboard.totalIncome}'),
   /// );
   /// ```
-  Future<Either<Failure, DashboardEntity>> getDashboardData(String userId);
+  Future<Either<Failure, DashboardEntity>> getDashboardData(
+    String userId,
+    String timePeriod,
+  );
 }

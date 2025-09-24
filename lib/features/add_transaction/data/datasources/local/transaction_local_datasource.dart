@@ -496,6 +496,77 @@ class TransactionLocalDataSource {
     }
   }
 
+  /// Gets transactions for the current week.
+  /// This method retrieves all transactions from the start of the current week to now.
+  ///
+  /// Returns:
+  /// - [List<TransactionModel>]: List of weekly transaction models
+  ///
+  /// Usage Example:
+  /// ```dart
+  /// final weeklyTransactions = await localDataSource.getWeeklyTransactions();
+  /// ```
+  Future<List<TransactionModel>> getWeeklyTransactions() async {
+    try {
+      final now = DateTime.now();
+      final startOfWeek = now.subtract(Duration(days: now.weekday - 1));
+      final startDate = DateTime(
+        startOfWeek.year,
+        startOfWeek.month,
+        startOfWeek.day,
+      );
+      final endDate = DateTime(now.year, now.month, now.day, 23, 59, 59);
+
+      return await getTransactionsByDateRange(startDate, endDate);
+    } catch (e) {
+      throw CacheException('Failed to get weekly transactions: $e');
+    }
+  }
+
+  /// Gets transactions for the current month.
+  /// This method retrieves all transactions from the start of the current month to now.
+  ///
+  /// Returns:
+  /// - [List<TransactionModel>]: List of monthly transaction models
+  ///
+  /// Usage Example:
+  /// ```dart
+  /// final monthlyTransactions = await localDataSource.getMonthlyTransactions();
+  /// ```
+  Future<List<TransactionModel>> getMonthlyTransactions() async {
+    try {
+      final now = DateTime.now();
+      final startOfMonth = DateTime(now.year, now.month, 1);
+      final endDate = DateTime(now.year, now.month, now.day, 23, 59, 59);
+
+      return await getTransactionsByDateRange(startOfMonth, endDate);
+    } catch (e) {
+      throw CacheException('Failed to get monthly transactions: $e');
+    }
+  }
+
+  /// Gets transactions for the current year.
+  /// This method retrieves all transactions from the start of the current year to now.
+  ///
+  /// Returns:
+  /// - [List<TransactionModel>]: List of yearly transaction models
+  ///
+  /// Usage Example:
+  /// ```dart
+  /// final yearlyTransactions = await localDataSource.getYearlyTransactions();
+  /// ```
+  Future<List<TransactionModel>> getYearlyTransactions() async {
+    try {
+      final now = DateTime.now();
+      final startOfYear = DateTime(now.year, 1, 1);
+      final endDate = DateTime(now.year, now.month, now.day, 23, 59, 59);
+
+      return await getTransactionsByDateRange(startOfYear, endDate);
+    } catch (e) {
+      throw CacheException('Failed to get yearly transactions: $e');
+    }
+  }
+
   /// Closes Hive box and cleans up resources.
   /// This method should be called when the data source is no longer needed.
   ///

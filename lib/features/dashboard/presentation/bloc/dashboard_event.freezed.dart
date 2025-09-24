@@ -17,19 +17,21 @@ final _privateConstructorUsedError = UnsupportedError(
 /// @nodoc
 mixin _$DashboardEvent {
   String get userId => throw _privateConstructorUsedError;
+  String get timePeriod => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(String userId) getDashboardData,
+    required TResult Function(String userId, String timePeriod)
+        getDashboardData,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(String userId)? getDashboardData,
+    TResult? Function(String userId, String timePeriod)? getDashboardData,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String userId)? getDashboardData,
+    TResult Function(String userId, String timePeriod)? getDashboardData,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -63,7 +65,7 @@ abstract class $DashboardEventCopyWith<$Res> {
           DashboardEvent value, $Res Function(DashboardEvent) then) =
       _$DashboardEventCopyWithImpl<$Res, DashboardEvent>;
   @useResult
-  $Res call({String userId});
+  $Res call({String userId, String timePeriod});
 }
 
 /// @nodoc
@@ -82,11 +84,16 @@ class _$DashboardEventCopyWithImpl<$Res, $Val extends DashboardEvent>
   @override
   $Res call({
     Object? userId = null,
+    Object? timePeriod = null,
   }) {
     return _then(_value.copyWith(
       userId: null == userId
           ? _value.userId
           : userId // ignore: cast_nullable_to_non_nullable
+              as String,
+      timePeriod: null == timePeriod
+          ? _value.timePeriod
+          : timePeriod // ignore: cast_nullable_to_non_nullable
               as String,
     ) as $Val);
   }
@@ -100,7 +107,7 @@ abstract class _$$GetDashboardDataImplCopyWith<$Res>
       __$$GetDashboardDataImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String userId});
+  $Res call({String userId, String timePeriod});
 }
 
 /// @nodoc
@@ -117,11 +124,16 @@ class __$$GetDashboardDataImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? userId = null,
+    Object? timePeriod = null,
   }) {
     return _then(_$GetDashboardDataImpl(
       userId: null == userId
           ? _value.userId
           : userId // ignore: cast_nullable_to_non_nullable
+              as String,
+      timePeriod: null == timePeriod
+          ? _value.timePeriod
+          : timePeriod // ignore: cast_nullable_to_non_nullable
               as String,
     ));
   }
@@ -130,14 +142,17 @@ class __$$GetDashboardDataImplCopyWithImpl<$Res>
 /// @nodoc
 
 class _$GetDashboardDataImpl implements GetDashboardData {
-  const _$GetDashboardDataImpl({required this.userId});
+  const _$GetDashboardDataImpl(
+      {required this.userId, required this.timePeriod});
 
   @override
   final String userId;
+  @override
+  final String timePeriod;
 
   @override
   String toString() {
-    return 'DashboardEvent.getDashboardData(userId: $userId)';
+    return 'DashboardEvent.getDashboardData(userId: $userId, timePeriod: $timePeriod)';
   }
 
   @override
@@ -145,11 +160,13 @@ class _$GetDashboardDataImpl implements GetDashboardData {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$GetDashboardDataImpl &&
-            (identical(other.userId, userId) || other.userId == userId));
+            (identical(other.userId, userId) || other.userId == userId) &&
+            (identical(other.timePeriod, timePeriod) ||
+                other.timePeriod == timePeriod));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, userId);
+  int get hashCode => Object.hash(runtimeType, userId, timePeriod);
 
   /// Create a copy of DashboardEvent
   /// with the given fields replaced by the non-null parameter values.
@@ -163,27 +180,28 @@ class _$GetDashboardDataImpl implements GetDashboardData {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(String userId) getDashboardData,
+    required TResult Function(String userId, String timePeriod)
+        getDashboardData,
   }) {
-    return getDashboardData(userId);
+    return getDashboardData(userId, timePeriod);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(String userId)? getDashboardData,
+    TResult? Function(String userId, String timePeriod)? getDashboardData,
   }) {
-    return getDashboardData?.call(userId);
+    return getDashboardData?.call(userId, timePeriod);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String userId)? getDashboardData,
+    TResult Function(String userId, String timePeriod)? getDashboardData,
     required TResult orElse(),
   }) {
     if (getDashboardData != null) {
-      return getDashboardData(userId);
+      return getDashboardData(userId, timePeriod);
     }
     return orElse();
   }
@@ -218,11 +236,14 @@ class _$GetDashboardDataImpl implements GetDashboardData {
 }
 
 abstract class GetDashboardData implements DashboardEvent {
-  const factory GetDashboardData({required final String userId}) =
-      _$GetDashboardDataImpl;
+  const factory GetDashboardData(
+      {required final String userId,
+      required final String timePeriod}) = _$GetDashboardDataImpl;
 
   @override
   String get userId;
+  @override
+  String get timePeriod;
 
   /// Create a copy of DashboardEvent
   /// with the given fields replaced by the non-null parameter values.

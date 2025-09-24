@@ -10,6 +10,7 @@ import 'package:money_flow/features/dashboard/presentation/bloc/dashboard_event.
 import 'package:money_flow/features/dashboard/presentation/bloc/dashboard_state.dart';
 import 'package:money_flow/features/dashboard/presentation/widgets/dashboard_summary.dart';
 import 'package:money_flow/features/dashboard/presentation/widgets/recent_transactions.dart';
+import 'package:money_flow/features/dashboard/presentation/widgets/time_period_selector.dart';
 import 'package:money_flow/features/dashboard/domain/entities/dashboard_entity.dart';
 
 /// Main dashboard page for displaying financial overview.
@@ -34,6 +35,7 @@ class DashboardPage extends StatefulWidget {
 
 class _DashboardPageState extends State<DashboardPage> {
   late final DashboardBloc _dashboardBloc;
+  String _selectedTimePeriod = 'monthly'; // Default to monthly
 
   @override
   void initState() {
@@ -41,7 +43,12 @@ class _DashboardPageState extends State<DashboardPage> {
     // Get the BLoC instance once and reuse it
     _dashboardBloc = getIt<DashboardBloc>();
     // Load dashboard data when page initializes
-    _dashboardBloc.add(DashboardEvent.getDashboardData(userId: widget.userId));
+    _dashboardBloc.add(
+      DashboardEvent.getDashboardData(
+        userId: widget.userId,
+        timePeriod: _selectedTimePeriod,
+      ),
+    );
   }
 
   @override
@@ -59,22 +66,37 @@ class _DashboardPageState extends State<DashboardPage> {
             icon: Icon(Icons.settings, color: AppColors.textSecondary),
           ),
         ],
-        body: BlocBuilder<DashboardBloc, DashboardState>(
-          builder: (context, state) {
-            return state.getDashboardData.when(
-              initial: () => _InitialWidget(l10n: l10n),
-              loading: () => const _LoadingWidget(),
-              completed: (dashboard) =>
-                  _DashboardContent(dashboard: dashboard, l10n: l10n),
-              error: (message) => _ErrorWidget(
-                message: message,
-                l10n: l10n,
-                onRetry: () => _dashboardBloc.add(
-                  DashboardEvent.getDashboardData(userId: widget.userId),
-                ),
+        body: Column(
+          children: [
+            // Time Period Selector
+            TimePeriodSelector(
+              selectedPeriod: _selectedTimePeriod,
+              onPeriodChanged: _onTimePeriodChanged,
+            ),
+            // Dashboard Content
+            Expanded(
+              child: BlocBuilder<DashboardBloc, DashboardState>(
+                builder: (context, state) {
+                  return state.getDashboardData.when(
+                    initial: () => _InitialWidget(l10n: l10n),
+                    loading: () => const _LoadingWidget(),
+                    completed: (dashboard) =>
+                        _DashboardContent(dashboard: dashboard, l10n: l10n),
+                    error: (message) => _ErrorWidget(
+                      message: message,
+                      l10n: l10n,
+                      onRetry: () => _dashboardBloc.add(
+                        DashboardEvent.getDashboardData(
+                          userId: widget.userId,
+                          timePeriod: _selectedTimePeriod,
+                        ),
+                      ),
+                    ),
+                  );
+                },
               ),
-            );
-          },
+            ),
+          ],
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: _onAddTransactionTap,
@@ -96,6 +118,25 @@ class _DashboardPageState extends State<DashboardPage> {
     ).showSnackBar(SnackBar(content: GText(l10n.settingsComingSoon)));
   }
 
+  /// Handles time period selection change.
+  /// This method updates the selected time period and refreshes dashboard data.
+  ///
+  /// Parameters:
+  /// - [timePeriod]: Selected time period ('weekly', 'monthly', 'yearly')
+  void _onTimePeriodChanged(String timePeriod) {
+    setState(() {
+      _selectedTimePeriod = timePeriod;
+    });
+
+    // Refresh dashboard data with new time period
+    _dashboardBloc.add(
+      DashboardEvent.getDashboardData(
+        userId: widget.userId,
+        timePeriod: timePeriod,
+      ),
+    );
+  }
+
   /// Handles add transaction button tap.
   /// This method navigates to the add transaction page and refreshes dashboard on return.
   void _onAddTransactionTap() async {
@@ -107,7 +148,10 @@ class _DashboardPageState extends State<DashboardPage> {
     // If a transaction was added (result is not null), refresh the dashboard
     if (result != null) {
       _dashboardBloc.add(
-        DashboardEvent.getDashboardData(userId: widget.userId),
+        DashboardEvent.getDashboardData(
+          userId: widget.userId,
+          timePeriod: _selectedTimePeriod,
+        ),
       );
     }
   }
