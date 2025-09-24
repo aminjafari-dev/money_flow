@@ -11,6 +11,7 @@ import 'package:money_flow/features/add_transaction/presentation/widgets/categor
 import 'package:money_flow/features/add_transaction/presentation/widgets/transaction_action_buttons_widget.dart';
 import 'package:money_flow/features/add_transaction/presentation/widgets/transaction_form_field_widget.dart';
 import 'package:money_flow/shared/models/category/category_models.dart';
+import 'package:money_flow/l10n/generated/app_localizations.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 /// Main page for adding new transactions.
@@ -110,6 +111,8 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+
     return BlocConsumer<AddTransactionBloc, AddTransactionMainState>(
       bloc: getIt<AddTransactionBloc>(),
       listener: (context, state) {
@@ -118,7 +121,7 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
           initial: () {},
           loading: () {},
           completed: (transaction) {
-            _showSuccessSnackBar('Transaction added successfully!');
+            _showSuccessSnackBar(l10n.transactionAddedSuccessfully);
             // Return the transaction to trigger dashboard refresh
             Navigator.of(context).pop(transaction);
           },
@@ -130,8 +133,8 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
       builder: (context, state) {
         return Scaffold(
           backgroundColor: Colors.white,
-          appBar: _buildSimpleAppBar(context),
-          body: _buildSimpleBody(context, state),
+          appBar: _buildSimpleAppBar(context, l10n),
+          body: _buildSimpleBody(context, state, l10n),
         );
       },
     );
@@ -139,7 +142,10 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
 
   /// Builds a simple app bar matching the design image.
   /// This method creates a minimal app bar with just close button and title.
-  PreferredSizeWidget _buildSimpleAppBar(BuildContext context) {
+  PreferredSizeWidget _buildSimpleAppBar(
+    BuildContext context,
+    AppLocalizations l10n,
+  ) {
     return AppBar(
       backgroundColor: Colors.white,
       elevation: 0,
@@ -147,9 +153,9 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
         icon: const Icon(Icons.close, color: Colors.black),
         onPressed: () => Navigator.of(context).pop(),
       ),
-      title: const GText(
-        'Add Transaction',
-        style: TextStyle(
+      title: GText(
+        l10n.addTransactionPageTitle,
+        style: const TextStyle(
           color: Colors.black,
           fontSize: 18,
           fontWeight: FontWeight.w600,
@@ -162,7 +168,11 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
   /// Builds the simple body matching the design image.
   /// This creates a clean, minimal interface with large amount display,
   /// category chips, and simple form fields.
-  Widget _buildSimpleBody(BuildContext context, AddTransactionMainState state) {
+  Widget _buildSimpleBody(
+    BuildContext context,
+    AddTransactionMainState state,
+    AppLocalizations l10n,
+  ) {
     return SafeArea(
       child: Padding(
         padding: const EdgeInsets.all(20.0),
@@ -175,22 +185,22 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
             const SizedBox(height: 40),
 
             // Category section
-            _buildCategorySection(state),
+            _buildCategorySection(state, l10n),
 
             const SizedBox(height: 30),
 
             // Description field
-            _buildDescriptionField(),
+            _buildDescriptionField(l10n),
 
             const SizedBox(height: 20),
 
             // Date & Time field
-            _buildDateTimeField(),
+            _buildDateTimeField(l10n),
 
             const Spacer(),
 
             // Action buttons at bottom
-            _buildActionButtons(context, state),
+            _buildActionButtons(context, state, l10n),
           ],
         ),
       ),
@@ -212,7 +222,10 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
 
   /// Builds the category selection section with horizontal chips.
   /// This shows the 4 main categories (Income, Expenses, Charity, Investments) as selectable chips.
-  Widget _buildCategorySection(AddTransactionMainState state) {
+  Widget _buildCategorySection(
+    AddTransactionMainState state,
+    AppLocalizations l10n,
+  ) {
     // Convert CategoryModel list to String list for the widget
     final categoryNames = availableCategories.map((cat) => cat.name).toList();
 
@@ -222,16 +235,17 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
       onCategorySelected: (category) => _selectCategory(context, category),
       isLoading: isLoadingCategories,
       errorMessage: categoryError,
+      l10n: l10n,
     );
   }
 
   /// Builds the description input field.
   /// This creates a simple text field for transaction description.
-  Widget _buildDescriptionField() {
+  Widget _buildDescriptionField(AppLocalizations l10n) {
     return TransactionFormFieldWidget(
       controller: _descriptionController,
-      labelText: 'Description',
-      hintText: 'Enter description',
+      labelText: l10n.description,
+      hintText: l10n.enterDescription,
       onChanged: (value) {
         // Description is managed by the TextEditingController
         // No need to update BLoC state
@@ -241,11 +255,11 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
 
   /// Builds the date and time input field.
   /// This creates a simple text field for transaction date and time.
-  Widget _buildDateTimeField() {
+  Widget _buildDateTimeField(AppLocalizations l10n) {
     return TransactionFormFieldWidget(
       controller: _dateTimeController,
-      labelText: 'Date & Time',
-      hintText: 'Select date and time',
+      labelText: l10n.dateTime,
+      hintText: l10n.selectDateTime,
       readOnly: true,
       suffixIcon: const Icon(Icons.calendar_today),
       onTap: () => _selectDateTime(context),
@@ -257,6 +271,7 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
   Widget _buildActionButtons(
     BuildContext context,
     AddTransactionMainState state,
+    AppLocalizations l10n,
   ) {
     final isLoading = state.addTransaction.maybeWhen(
       loading: () => true,
@@ -271,6 +286,8 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
       onSave: () => _saveTransaction(context, state),
       isLoading: isLoading,
       canSave: canSave,
+      cancelText: l10n.cancel,
+      saveText: l10n.save,
     );
   }
 

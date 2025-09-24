@@ -3,6 +3,7 @@ import 'package:money_flow/core/theme/app_colors.dart';
 import 'package:money_flow/core/theme/app_fonts.dart';
 import 'package:money_flow/core/widgets/g_text.dart';
 import 'package:money_flow/core/widgets/g_gap.dart';
+import 'package:money_flow/l10n/generated/app_localizations.dart';
 
 /// Widget for selecting transaction categories and subcategories.
 /// This widget provides a user-friendly interface for selecting categories
@@ -39,6 +40,9 @@ class CategorySelectorWidget extends StatelessWidget {
   /// Error message if category loading fails
   final String? errorMessage;
 
+  /// Localization instance for localized strings
+  final AppLocalizations? l10n;
+
   const CategorySelectorWidget({
     super.key,
     required this.categories,
@@ -47,6 +51,7 @@ class CategorySelectorWidget extends StatelessWidget {
     this.enabled = true,
     this.isLoading = false,
     this.errorMessage,
+    this.l10n,
   });
 
   @override
@@ -56,7 +61,7 @@ class CategorySelectorWidget extends StatelessWidget {
       children: [
         // Section header
         GText(
-          'Category',
+          l10n?.category ?? 'Category',
           style: TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.w500,
@@ -99,7 +104,7 @@ class CategorySelectorWidget extends StatelessWidget {
           ),
           GGap.small(),
           GText(
-            'Loading categories...',
+            l10n?.loadingCategories ?? 'Loading categories...',
             style: AppFonts.bodyMedium.copyWith(
               color: AppColors.onSurfaceVariant,
             ),
@@ -150,7 +155,7 @@ class CategorySelectorWidget extends StatelessWidget {
           borderRadius: BorderRadius.circular(12.0),
         ),
         child: GText(
-          'No categories available',
+          l10n?.noCategoriesAvailable ?? 'No categories available',
           style: AppFonts.bodyMedium.copyWith(
             color: AppColors.onSurfaceVariant,
           ),

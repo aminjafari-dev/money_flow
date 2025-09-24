@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:money_flow/core/di/locator.dart';
 import 'package:money_flow/core/router/page_router.dart';
 import 'package:money_flow/core/router/page_name.dart';
 import 'package:money_flow/core/theme/app_theme.dart';
 import 'package:money_flow/core/services/localization_service.dart';
+import 'package:money_flow/l10n/generated/app_localizations.dart';
 
 /// Main entry point of the Money Flow application.
 /// This function initializes the app and sets up all necessary services.
@@ -89,11 +91,14 @@ class MoneyFlowApp extends StatelessWidget {
 
       // Configure localization
       localizationsDelegates: const [
-        // Add any custom localization delegates here
+        AppLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
       ],
       supportedLocales: const [
         Locale('en', ''), // English
-        // Add more locales as needed
+        Locale('fa', ''), // Persian
       ],
       locale: const Locale('en', ''),
 

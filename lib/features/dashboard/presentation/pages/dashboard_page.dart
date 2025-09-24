@@ -4,6 +4,7 @@ import 'package:money_flow/core/di/locator.dart';
 import 'package:money_flow/core/widgets/widgets.dart';
 import 'package:money_flow/core/theme/app_colors.dart';
 import 'package:money_flow/core/router/page_name.dart';
+import 'package:money_flow/l10n/generated/app_localizations.dart';
 import 'package:money_flow/features/dashboard/presentation/bloc/dashboard_bloc.dart';
 import 'package:money_flow/features/dashboard/presentation/bloc/dashboard_event.dart';
 import 'package:money_flow/features/dashboard/presentation/bloc/dashboard_state.dart';
@@ -45,10 +46,12 @@ class _DashboardPageState extends State<DashboardPage> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+
     return BlocProvider.value(
       value: _dashboardBloc,
       child: GScaffold(
-        title: 'Dashboard',
+        title: l10n.dashboard,
         backgroundColor: AppColors.background,
         actions: [
           IconButton(
@@ -59,11 +62,13 @@ class _DashboardPageState extends State<DashboardPage> {
         body: BlocBuilder<DashboardBloc, DashboardState>(
           builder: (context, state) {
             return state.getDashboardData.when(
-              initial: () => const _InitialWidget(),
+              initial: () => _InitialWidget(l10n: l10n),
               loading: () => const _LoadingWidget(),
-              completed: (dashboard) => _DashboardContent(dashboard: dashboard),
+              completed: (dashboard) =>
+                  _DashboardContent(dashboard: dashboard, l10n: l10n),
               error: (message) => _ErrorWidget(
                 message: message,
+                l10n: l10n,
                 onRetry: () => _dashboardBloc.add(
                   DashboardEvent.getDashboardData(userId: widget.userId),
                 ),
@@ -84,10 +89,11 @@ class _DashboardPageState extends State<DashboardPage> {
   /// Handles settings icon tap.
   /// This method navigates to the settings page.
   void _onSettingsTap() {
+    final l10n = AppLocalizations.of(context);
     // TODO: Navigate to settings page
     ScaffoldMessenger.of(
       context,
-    ).showSnackBar(const SnackBar(content: GText('Settings coming soon!')));
+    ).showSnackBar(SnackBar(content: GText(l10n.settingsComingSoon)));
   }
 
   /// Handles add transaction button tap.
@@ -110,11 +116,15 @@ class _DashboardPageState extends State<DashboardPage> {
 /// Widget for displaying the initial state.
 /// This widget is shown when no data has been loaded yet.
 class _InitialWidget extends StatelessWidget {
-  const _InitialWidget();
+  final AppLocalizations? l10n;
+
+  const _InitialWidget({this.l10n});
 
   @override
   Widget build(BuildContext context) {
-    return const Center(child: GText('Welcome to your dashboard!'));
+    return Center(
+      child: GText(l10n?.welcomeToDashboard ?? 'Welcome to your dashboard!'),
+    );
   }
 }
 
@@ -135,10 +145,13 @@ class _ErrorWidget extends StatelessWidget {
   /// Error message to display
   final String message;
 
+  /// Localization instance for localized strings
+  final AppLocalizations? l10n;
+
   /// Callback function to retry the operation
   final VoidCallback onRetry;
 
-  const _ErrorWidget({required this.message, required this.onRetry});
+  const _ErrorWidget({required this.message, this.l10n, required this.onRetry});
 
   @override
   Widget build(BuildContext context) {
@@ -148,7 +161,10 @@ class _ErrorWidget extends StatelessWidget {
         children: [
           Icon(Icons.error_outline, size: 64, color: AppColors.textLight),
           const SizedBox(height: 16),
-          GText('Something went wrong', style: GTextStyle.titleLarge),
+          GText(
+            l10n?.somethingWentWrong ?? 'Something went wrong',
+            style: GTextStyle.titleLarge,
+          ),
           const SizedBox(height: 8),
           GText(
             message,
@@ -157,7 +173,10 @@ class _ErrorWidget extends StatelessWidget {
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 16),
-          ElevatedButton(onPressed: onRetry, child: const GText('Retry')),
+          ElevatedButton(
+            onPressed: onRetry,
+            child: GText(l10n?.retry ?? 'Retry'),
+          ),
         ],
       ),
     );
@@ -170,7 +189,10 @@ class _DashboardContent extends StatelessWidget {
   /// Dashboard data to display
   final DashboardEntity dashboard;
 
-  const _DashboardContent({required this.dashboard});
+  /// Localization instance for localized strings
+  final AppLocalizations? l10n;
+
+  const _DashboardContent({required this.dashboard, this.l10n});
 
   @override
   Widget build(BuildContext context) {
@@ -178,10 +200,13 @@ class _DashboardContent extends StatelessWidget {
       child: Column(
         children: [
           // Financial Summary Cards
-          DashboardSummary(dashboard: dashboard),
+          DashboardSummary(dashboard: dashboard, l10n: l10n),
           const SizedBox(height: 24),
           // Recent Transactions
-          RecentTransactions(transactions: dashboard.recentTransactions),
+          RecentTransactions(
+            transactions: dashboard.recentTransactions,
+            l10n: l10n,
+          ),
           const SizedBox(height: 80), // Space for FAB
         ],
       ),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:money_flow/core/widgets/widgets.dart';
 import 'package:money_flow/core/theme/app_colors.dart';
 import 'package:money_flow/core/constants/image_path.dart';
+import 'package:money_flow/l10n/generated/app_localizations.dart';
 import 'package:money_flow/features/dashboard/domain/entities/dashboard_entity.dart';
 import 'package:money_flow/features/dashboard/presentation/widgets/dashboard_card.dart';
 
@@ -18,7 +19,10 @@ class DashboardSummary extends StatelessWidget {
   /// Dashboard entity containing financial data
   final DashboardEntity dashboard;
 
-  const DashboardSummary({super.key, required this.dashboard});
+  /// Localization instance for localized strings
+  final AppLocalizations? l10n;
+
+  const DashboardSummary({super.key, required this.dashboard, this.l10n});
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +33,7 @@ class DashboardSummary extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: GText(
-            'Financial Overview',
+            l10n?.financialOverview ?? 'Financial Overview',
             style: GTextStyle.titleMedium,
             fontWeight: FontWeight.bold,
             fontSize: 18,
@@ -52,36 +56,36 @@ class DashboardSummary extends StatelessWidget {
       children: [
         // Income Card
         DashboardCard(
-          title: 'Income',
+          title: l10n?.income ?? 'Income',
           amount: dashboard.totalIncome,
-          description: 'Received this month',
+          description: l10n?.receivedThisMonth ?? 'Received this month',
           imagePath: ImagePath.incomeImage,
           color: AppColors.success,
         ),
         GGap.small(),
         // Expenses Card
         DashboardCard(
-          title: 'Expenses',
+          title: l10n?.expense ?? 'Expenses',
           amount: dashboard.totalExpenses,
-          description: 'Spent this month',
+          description: l10n?.spentThisMonth ?? 'Spent this month',
           imagePath: ImagePath.expenseImage,
           color: AppColors.danger,
         ),
         GGap.small(),
         // Charity Card
         DashboardCard(
-          title: 'Charity',
+          title: l10n?.charity ?? 'Charity',
           amount: dashboard.totalCharity,
-          description: 'Donated this month',
+          description: l10n?.donatedThisMonth ?? 'Donated this month',
           imagePath: ImagePath.charityImage,
           color: AppColors.categoryPink,
         ),
         GGap.small(),
         // Investments Card
         DashboardCard(
-          title: 'Investments',
+          title: l10n?.investment ?? 'Investments',
           amount: dashboard.totalInvestments,
-          description: 'Current value',
+          description: l10n?.currentValue ?? 'Current value',
           imagePath: ImagePath.investImage,
           color: AppColors.categoryPurple,
         ),
