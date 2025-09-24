@@ -3,7 +3,7 @@ import 'package:money_flow/core/error/exceptions.dart';
 import 'package:money_flow/core/error/failures.dart';
 import 'package:money_flow/core/services/category_service.dart';
 import 'package:money_flow/features/add_transaction/data/datasources/local/transaction_local_datasource.dart';
-import 'package:money_flow/shared/models/transaction_model.dart';
+import 'package:money_flow/shared/models/transaction/transaction_model.dart';
 import 'package:money_flow/features/add_transaction/domain/entities/transaction_entity.dart';
 import 'package:money_flow/features/add_transaction/domain/repositories/transaction_repository.dart';
 

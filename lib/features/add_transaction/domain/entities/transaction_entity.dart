@@ -25,11 +25,8 @@ class TransactionEntity extends Equatable {
   /// Main category of the transaction (income, expenses, charity, investments)
   final String mainCategory;
 
-  /// Category of the transaction (e.g., Food, Transportation)
+  /// Category name of the transaction (Income, Expenses, Charity, Investments)
   final String category;
-
-  /// Specific subcategory within the main category (e.g., Groceries, Gas)
-  final String subcategory;
 
   /// Optional description or notes about the transaction
   final String? description;
@@ -51,7 +48,6 @@ class TransactionEntity extends Equatable {
     required this.amount,
     required this.mainCategory,
     required this.category,
-    required this.subcategory,
     this.description,
     required this.dateTime,
     required this.type,
@@ -66,7 +62,6 @@ class TransactionEntity extends Equatable {
     double? amount,
     String? mainCategory,
     String? category,
-    String? subcategory,
     String? description,
     DateTime? dateTime,
     TransactionType? type,
@@ -78,7 +73,6 @@ class TransactionEntity extends Equatable {
       amount: amount ?? this.amount,
       mainCategory: mainCategory ?? this.mainCategory,
       category: category ?? this.category,
-      subcategory: subcategory ?? this.subcategory,
       description: description ?? this.description,
       dateTime: dateTime ?? this.dateTime,
       type: type ?? this.type,
@@ -112,7 +106,6 @@ class TransactionEntity extends Equatable {
     amount,
     mainCategory,
     category,
-    subcategory,
     description,
     dateTime,
     type,

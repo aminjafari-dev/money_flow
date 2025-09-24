@@ -1,6 +1,6 @@
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:money_flow/core/error/exceptions.dart';
-import 'package:money_flow/core/services/category_models.dart';
+import 'package:money_flow/shared/models/category/category_models.dart';
 
 /// Service for managing categories.
 /// This service handles all category operations including initialization,

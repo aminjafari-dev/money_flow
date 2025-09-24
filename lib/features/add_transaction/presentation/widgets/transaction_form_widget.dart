@@ -85,7 +85,7 @@ class _TransactionFormWidgetState extends State<TransactionFormWidget> {
     if (widget.isEditMode && widget.transactionToEdit != null) {
       final transaction = widget.transactionToEdit!;
       selectedCategory = transaction.category;
-      selectedSubcategory = transaction.subcategory;
+      selectedSubcategory = ''; // No subcategories in simplified version
       amount = transaction.amount;
       dateTime = transaction.dateTime;
       type = transaction.type;

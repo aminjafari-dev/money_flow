@@ -75,7 +75,6 @@ class AddTransactionBloc
         amount: amount,
         mainCategory: mainCategory,
         category: category,
-        subcategory: '', // No subcategories in simplified version
         description: description,
         dateTime: dateTime,
         type: type,

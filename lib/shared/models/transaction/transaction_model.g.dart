@@ -21,21 +21,20 @@ class TransactionModelAdapter extends TypeAdapter<TransactionModel> {
       amount: fields[1] as double,
       mainCategory: fields[2] as String,
       category: fields[3] as String,
-      subcategory: fields[4] as String,
-      description: fields[5] as String?,
-      dateTime: fields[6] as String,
-      type: fields[7] as String,
-      isFromSms: fields[8] as bool,
-      merchant: fields[9] as String?,
-      createdAt: fields[10] as String,
-      updatedAt: fields[11] as String,
+      description: fields[4] as String?,
+      dateTime: fields[5] as String,
+      type: fields[6] as String,
+      isFromSms: fields[7] as bool,
+      merchant: fields[8] as String?,
+      createdAt: fields[9] as String,
+      updatedAt: fields[10] as String,
     );
   }
 
   @override
   void write(BinaryWriter writer, TransactionModel obj) {
     writer
-      ..writeByte(12)
+      ..writeByte(11)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -45,20 +44,18 @@ class TransactionModelAdapter extends TypeAdapter<TransactionModel> {
       ..writeByte(3)
       ..write(obj.category)
       ..writeByte(4)
-      ..write(obj.subcategory)
-      ..writeByte(5)
       ..write(obj.description)
-      ..writeByte(6)
+      ..writeByte(5)
       ..write(obj.dateTime)
-      ..writeByte(7)
+      ..writeByte(6)
       ..write(obj.type)
-      ..writeByte(8)
+      ..writeByte(7)
       ..write(obj.isFromSms)
-      ..writeByte(9)
+      ..writeByte(8)
       ..write(obj.merchant)
-      ..writeByte(10)
+      ..writeByte(9)
       ..write(obj.createdAt)
-      ..writeByte(11)
+      ..writeByte(10)
       ..write(obj.updatedAt);
   }
 

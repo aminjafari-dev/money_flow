@@ -64,7 +64,6 @@ class AddTransactionUseCase {
         amount: params.amount,
         mainCategory: params.mainCategory,
         category: params.category,
-        subcategory: params.subcategory,
         description: params.description,
         dateTime: params.dateTime,
         type: params.type,
@@ -149,11 +148,8 @@ class AddTransactionParams {
   /// Main category of the transaction (income, expenses, charity, investments)
   final String mainCategory;
 
-  /// Category of the transaction
+  /// Category name of the transaction (Income, Expenses, Charity, Investments)
   final String category;
-
-  /// Specific subcategory within the main category
-  final String subcategory;
 
   /// Optional description or notes about the transaction
   final String? description;
@@ -174,7 +170,6 @@ class AddTransactionParams {
     required this.amount,
     required this.mainCategory,
     required this.category,
-    required this.subcategory,
     this.description,
     required this.dateTime,
     required this.type,
@@ -201,7 +196,6 @@ class AddTransactionParams {
     double? amount,
     String? mainCategory,
     String? category,
-    String? subcategory,
     String? description,
     DateTime? dateTime,
     TransactionType? type,
@@ -212,7 +206,6 @@ class AddTransactionParams {
       amount: amount ?? this.amount,
       mainCategory: mainCategory ?? this.mainCategory,
       category: category ?? this.category,
-      subcategory: subcategory ?? this.subcategory,
       description: description ?? this.description,
       dateTime: dateTime ?? this.dateTime,
       type: type ?? this.type,
@@ -228,7 +221,6 @@ class AddTransactionParams {
         other.amount == amount &&
         other.mainCategory == mainCategory &&
         other.category == category &&
-        other.subcategory == subcategory &&
         other.description == description &&
         other.dateTime == dateTime &&
         other.type == type &&
@@ -242,7 +234,6 @@ class AddTransactionParams {
       amount,
       mainCategory,
       category,
-      subcategory,
       description,
       dateTime,
       type,
@@ -253,6 +244,6 @@ class AddTransactionParams {
 
   @override
   String toString() {
-    return 'AddTransactionParams(amount: $amount, mainCategory: $mainCategory, category: $category, subcategory: $subcategory, description: $description, dateTime: $dateTime, type: $type, isFromSms: $isFromSms, merchant: $merchant)';
+    return 'AddTransactionParams(amount: $amount, mainCategory: $mainCategory, category: $category, description: $description, dateTime: $dateTime, type: $type, isFromSms: $isFromSms, merchant: $merchant)';
   }
 }

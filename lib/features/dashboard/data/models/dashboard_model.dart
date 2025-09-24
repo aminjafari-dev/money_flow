@@ -1,5 +1,5 @@
 import 'package:money_flow/features/dashboard/domain/entities/dashboard_entity.dart';
-import 'package:money_flow/shared/models/transaction_model.dart';
+import 'package:money_flow/shared/models/transaction/transaction_model.dart';
 
 /// Data model for dashboard information with JSON serialization support.
 /// This model handles data transformation between API responses and domain entities.

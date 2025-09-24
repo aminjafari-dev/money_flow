@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:money_flow/core/di/locator.dart';
+import 'package:money_flow/core/services/category_service.dart';
 import 'package:money_flow/core/widgets/g_text.dart';
 import 'package:money_flow/features/add_transaction/domain/entities/transaction_entity.dart';
 import 'package:money_flow/features/add_transaction/presentation/bloc/add_transaction_bloc.dart';
@@ -9,6 +10,7 @@ import 'package:money_flow/features/add_transaction/presentation/widgets/amount_
 import 'package:money_flow/features/add_transaction/presentation/widgets/category_selector_widget.dart';
 import 'package:money_flow/features/add_transaction/presentation/widgets/transaction_action_buttons_widget.dart';
 import 'package:money_flow/features/add_transaction/presentation/widgets/transaction_form_field_widget.dart';
+import 'package:money_flow/shared/models/category/category_models.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 /// Main page for adding new transactions.
@@ -47,16 +49,22 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
 
   // Local form state management
   String selectedCategory = '';
-  String selectedSubcategory = '';
   double amount = 0.0;
   DateTime dateTime = DateTime.now();
   TransactionType type = TransactionType.expense;
+
+  // Category management
+  List<CategoryModel> availableCategories = [];
+  bool isLoadingCategories = true;
+  String? categoryError;
 
   @override
   void initState() {
     super.initState();
     // Set default date time
     _dateTimeController.text = _formatDateTime(DateTime.now());
+    // Load categories from CategoryService
+    _loadCategories();
   }
 
   @override
@@ -69,6 +77,35 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
 
   String _formatDateTime(DateTime dateTime) {
     return '${dateTime.day}/${dateTime.month}/${dateTime.year} ${dateTime.hour.toString().padLeft(2, '0')}:${dateTime.minute.toString().padLeft(2, '0')}';
+  }
+
+  /// Loads categories from CategoryService.
+  /// This method fetches the 4 main categories (Income, Expenses, Charity, Investments)
+  /// and updates the UI state accordingly.
+  Future<void> _loadCategories() async {
+    try {
+      setState(() {
+        isLoadingCategories = true;
+        categoryError = null;
+      });
+
+      final categoryService = getIt<CategoryService>();
+      final categories = await categoryService.getMainCategories();
+
+      if (mounted) {
+        setState(() {
+          availableCategories = categories;
+          isLoadingCategories = false;
+        });
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() {
+          categoryError = 'Failed to load categories: $e';
+          isLoadingCategories = false;
+        });
+      }
+    }
   }
 
   @override
@@ -142,11 +179,6 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
 
             const SizedBox(height: 30),
 
-            // Subcategory section
-            _buildSubcategorySection(state),
-
-            const SizedBox(height: 30),
-
             // Description field
             _buildDescriptionField(),
 
@@ -179,40 +211,17 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
   }
 
   /// Builds the category selection section with horizontal chips.
-  /// This shows available categories as selectable chips.
+  /// This shows the 4 main categories (Income, Expenses, Charity, Investments) as selectable chips.
   Widget _buildCategorySection(AddTransactionMainState state) {
-    // For simplified version, we'll use hardcoded categories
-    final categories = [
-      'Food',
-      'Transport',
-      'Shopping',
-      'Entertainment',
-      'Bills',
-      'Other',
-    ];
+    // Convert CategoryModel list to String list for the widget
+    final categoryNames = availableCategories.map((cat) => cat.name).toList();
 
     return CategorySelectorWidget(
-      categories: categories,
+      categories: categoryNames,
       selectedCategory: selectedCategory,
       onCategorySelected: (category) => _selectCategory(context, category),
-    );
-  }
-
-  /// Builds the subcategory selection section with horizontal chips.
-  /// This shows available subcategories for the selected category.
-  Widget _buildSubcategorySection(AddTransactionMainState state) {
-    if (selectedCategory.isEmpty) {
-      return const SizedBox();
-    }
-
-    // For simplified version, we'll use hardcoded subcategories based on category
-    final subcategories = _getSubcategoriesForCategory(selectedCategory);
-
-    return SubcategorySelectorWidget(
-      subcategories: subcategories,
-      selectedSubcategory: selectedSubcategory,
-      onSubcategorySelected: (subcategory) =>
-          _selectSubcategory(context, subcategory),
+      isLoading: isLoadingCategories,
+      errorMessage: categoryError,
     );
   }
 
@@ -254,7 +263,8 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
       orElse: () => false,
     );
 
-    final canSave = selectedCategory.isNotEmpty && amount != 0;
+    final canSave =
+        selectedCategory.isNotEmpty && amount != 0 && !isLoadingCategories;
 
     return TransactionActionButtonsWidget(
       onCancel: () => Navigator.of(context).pop(),
@@ -287,17 +297,17 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
   }
 
   /// Selects a category.
+  /// This method updates the selected category and determines the transaction type
+  /// based on the category selection.
   void _selectCategory(BuildContext context, String category) {
     setState(() {
       selectedCategory = category;
-      selectedSubcategory = ''; // Clear subcategory when category changes
-    });
-  }
-
-  /// Selects a subcategory.
-  void _selectSubcategory(BuildContext context, String subcategory) {
-    setState(() {
-      selectedSubcategory = subcategory;
+      // Determine transaction type based on category
+      if (category == 'Income') {
+        type = TransactionType.income;
+      } else {
+        type = TransactionType.expense;
+      }
     });
   }
 
@@ -334,12 +344,20 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
   }
 
   /// Saves the transaction.
+  /// This method creates a transaction using the selected category and form data.
   void _saveTransaction(BuildContext context, AddTransactionMainState state) {
+    // Find the selected category model to get the proper ID
+    final selectedCategoryModel = availableCategories.firstWhere(
+      (cat) => cat.name == selectedCategory,
+      orElse: () => availableCategories.first,
+    );
+
     getIt<AddTransactionBloc>().add(
       AddTransactionEvent.addTransaction(
         amount: amount,
-        mainCategory: _getMainCategoryFromType(type),
-        category: selectedCategory,
+        mainCategory:
+            selectedCategoryModel.id, // Use category ID as main category
+        category: selectedCategory, // Use category name as category
         description: _descriptionController.text.isEmpty
             ? null
             : _descriptionController.text,
@@ -347,35 +365,5 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
         type: type,
       ),
     );
-  }
-
-  /// Gets subcategories for a given category.
-  /// This method returns hardcoded subcategories based on the selected category.
-  List<String> _getSubcategoriesForCategory(String category) {
-    switch (category) {
-      case 'Food':
-        return ['Restaurant', 'Groceries', 'Fast Food', 'Coffee'];
-      case 'Transport':
-        return ['Gas', 'Public Transport', 'Taxi', 'Parking'];
-      case 'Shopping':
-        return ['Clothing', 'Electronics', 'Books', 'Other'];
-      case 'Entertainment':
-        return ['Movies', 'Games', 'Sports', 'Music'];
-      case 'Bills':
-        return ['Electricity', 'Water', 'Internet', 'Phone'];
-      default:
-        return ['General'];
-    }
-  }
-
-  /// Gets the main category from transaction type.
-  /// This method maps transaction types to main categories.
-  String _getMainCategoryFromType(TransactionType type) {
-    switch (type) {
-      case TransactionType.income:
-        return 'income';
-      case TransactionType.expense:
-        return 'expenses';
-    }
   }
 }

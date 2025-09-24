@@ -1,7 +1,7 @@
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:money_flow/core/error/exceptions.dart';
 import 'package:money_flow/features/dashboard/data/models/dashboard_model.dart';
-import 'package:money_flow/shared/models/transaction_model.dart';
+import 'package:money_flow/shared/models/transaction/transaction_model.dart';
 
 /// Local data source for dashboard data using Hive database.
 /// This handles all local storage operations for dashboard information.

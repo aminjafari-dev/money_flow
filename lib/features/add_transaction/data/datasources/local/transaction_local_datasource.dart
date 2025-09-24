@@ -1,6 +1,6 @@
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:money_flow/core/error/exceptions.dart';
-import 'package:money_flow/shared/models/transaction_model.dart';
+import 'package:money_flow/shared/models/transaction/transaction_model.dart';
 
 /// Local data source for transaction data using Hive database.
 /// This handles all local storage operations for transaction information.
@@ -384,13 +384,8 @@ class TransactionLocalDataSource {
         await initialize();
       }
 
-      // Get all transactions and filter by category
-      final allTransactions = _transactionBox!.values.toList();
-      final subcategories = allTransactions
-          .where((transaction) => transaction.category == category)
-          .map((transaction) => transaction.subcategory)
-          .toSet()
-          .toList();
+      // No subcategories in simplified version, return empty list
+      final subcategories = <String>[];
 
       // Sort subcategories alphabetically
       subcategories.sort();

@@ -38,40 +38,36 @@ class TransactionModel {
   @HiveField(2)
   final String mainCategory;
 
-  /// Category of the transaction
+  /// Category name of the transaction (Income, Expenses, Charity, Investments)
   @HiveField(3)
   final String category;
 
-  /// Specific subcategory within the main category
-  @HiveField(4)
-  final String subcategory;
-
   /// Optional description or notes about the transaction
-  @HiveField(5)
+  @HiveField(4)
   final String? description;
 
   /// Date and time when the transaction occurred (ISO 8601 string)
-  @HiveField(6)
+  @HiveField(5)
   final String dateTime;
 
   /// Type of transaction (expense or income)
-  @HiveField(7)
+  @HiveField(6)
   final String type;
 
   /// Whether this transaction was created from SMS import
-  @HiveField(8)
+  @HiveField(7)
   final bool isFromSms;
 
   /// Merchant or vendor name
-  @HiveField(9)
+  @HiveField(8)
   final String? merchant;
 
   /// Timestamp when the transaction was created
-  @HiveField(10)
+  @HiveField(9)
   final String createdAt;
 
   /// Timestamp when the transaction was last updated
-  @HiveField(11)
+  @HiveField(10)
   final String updatedAt;
 
   const TransactionModel({
@@ -79,7 +75,6 @@ class TransactionModel {
     required this.amount,
     required this.mainCategory,
     required this.category,
-    required this.subcategory,
     this.description,
     required this.dateTime,
     required this.type,
@@ -122,7 +117,6 @@ class TransactionModel {
       amount: (json['amount'] as num).toDouble(),
       mainCategory: json['mainCategory'] as String,
       category: json['category'] as String,
-      subcategory: json['subcategory'] as String,
       description: json['description'] as String?,
       dateTime: json['dateTime'] as String,
       type: json['type'] as String,
@@ -162,7 +156,6 @@ class TransactionModel {
       amount: entity.amount,
       mainCategory: entity.mainCategory,
       category: entity.category,
-      subcategory: entity.subcategory,
       description: entity.description,
       dateTime: entity.dateTime.toIso8601String(),
       type: entity.type.name,
@@ -191,7 +184,6 @@ class TransactionModel {
       'amount': amount,
       'mainCategory': mainCategory,
       'category': category,
-      'subcategory': subcategory,
       'description': description,
       'dateTime': dateTime,
       'type': type,
@@ -220,7 +212,6 @@ class TransactionModel {
       amount: amount,
       mainCategory: mainCategory,
       category: category,
-      subcategory: subcategory,
       description: description,
       dateTime: DateTime.parse(dateTime),
       type: _parseTransactionType(type),
@@ -253,7 +244,6 @@ class TransactionModel {
     double? amount,
     String? mainCategory,
     String? category,
-    String? subcategory,
     String? description,
     String? dateTime,
     String? type,
@@ -267,7 +257,6 @@ class TransactionModel {
       amount: amount ?? this.amount,
       mainCategory: mainCategory ?? this.mainCategory,
       category: category ?? this.category,
-      subcategory: subcategory ?? this.subcategory,
       description: description ?? this.description,
       dateTime: dateTime ?? this.dateTime,
       type: type ?? this.type,
@@ -308,7 +297,6 @@ class TransactionModel {
         other.amount == amount &&
         other.mainCategory == mainCategory &&
         other.category == category &&
-        other.subcategory == subcategory &&
         other.description == description &&
         other.dateTime == dateTime &&
         other.type == type &&
@@ -325,7 +313,6 @@ class TransactionModel {
       amount,
       mainCategory,
       category,
-      subcategory,
       description,
       dateTime,
       type,
@@ -338,6 +325,6 @@ class TransactionModel {
 
   @override
   String toString() {
-    return 'TransactionModel(id: $id, amount: $amount, mainCategory: $mainCategory, category: $category, subcategory: $subcategory, description: $description, dateTime: $dateTime, type: $type, isFromSms: $isFromSms, merchant: $merchant, createdAt: $createdAt, updatedAt: $updatedAt)';
+    return 'TransactionModel(id: $id, amount: $amount, mainCategory: $mainCategory, category: $category, description: $description, dateTime: $dateTime, type: $type, isFromSms: $isFromSms, merchant: $merchant, createdAt: $createdAt, updatedAt: $updatedAt)';
   }
 }

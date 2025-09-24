@@ -146,7 +146,6 @@ class AddTransactionUtils {
       amount: amount,
       mainCategory: mainCategory ?? _getMainCategoryFromType(type),
       category: category,
-      subcategory: subcategory,
       description: description,
       dateTime: dateTime,
       type: type,
