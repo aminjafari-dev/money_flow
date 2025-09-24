@@ -320,10 +320,21 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
     setState(() {
       selectedCategory = category;
       // Determine transaction type based on category
-      if (category == 'Income') {
-        type = TransactionType.income;
-      } else {
-        type = TransactionType.expense;
+      switch (category) {
+        case 'Income':
+          type = TransactionType.income;
+          break;
+        case 'Expenses':
+          type = TransactionType.expense;
+          break;
+        case 'Charity':
+          type = TransactionType.charity;
+          break;
+        case 'Investments':
+          type = TransactionType.investments;
+          break;
+        default:
+          type = TransactionType.expense;
       }
     });
   }

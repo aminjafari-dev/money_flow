@@ -115,26 +115,36 @@ class TransactionEntity extends Equatable {
 }
 
 /// Enum representing the type of transaction
-/// This helps distinguish between income and expense transactions
+/// This helps distinguish between different transaction categories
 enum TransactionType {
   /// Represents money going out (expenses)
   expense,
 
   /// Represents money coming in (income)
   income,
+
+  /// Represents money going out for charity donations
+  charity,
+
+  /// Represents money going out for investments
+  investments,
 }
 
 /// Extension on TransactionType for better usability
 /// Provides helper methods for transaction type operations
 extension TransactionTypeExtension on TransactionType {
   /// Gets the display name for the transaction type
-  /// Returns "Expense" or "Income" for UI display
+  /// Returns display name for UI display
   String get displayName {
     switch (this) {
       case TransactionType.expense:
         return 'Expense';
       case TransactionType.income:
         return 'Income';
+      case TransactionType.charity:
+        return 'Charity';
+      case TransactionType.investments:
+        return 'Investments';
     }
   }
 
@@ -146,6 +156,29 @@ extension TransactionTypeExtension on TransactionType {
         return TransactionType.income;
       case TransactionType.income:
         return TransactionType.expense;
+      case TransactionType.charity:
+        return TransactionType.income;
+      case TransactionType.investments:
+        return TransactionType.income;
     }
+  }
+
+  /// Checks if this transaction type represents money going out
+  /// Returns true for expense, charity, and investments
+  bool get isOutgoing {
+    switch (this) {
+      case TransactionType.expense:
+      case TransactionType.charity:
+      case TransactionType.investments:
+        return true;
+      case TransactionType.income:
+        return false;
+    }
+  }
+
+  /// Checks if this transaction type represents money coming in
+  /// Returns true only for income
+  bool get isIncoming {
+    return this == TransactionType.income;
   }
 }

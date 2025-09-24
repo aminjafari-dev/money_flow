@@ -284,6 +284,10 @@ class TransactionModel {
         return TransactionType.expense;
       case 'income':
         return TransactionType.income;
+      case 'charity':
+        return TransactionType.charity;
+      case 'investments':
+        return TransactionType.investments;
       default:
         throw FormatException('Invalid transaction type: $typeString');
     }

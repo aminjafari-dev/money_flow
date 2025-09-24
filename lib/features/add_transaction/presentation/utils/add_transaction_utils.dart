@@ -361,6 +361,10 @@ class AddTransactionUtils {
         return 'income';
       case TransactionType.expense:
         return 'expenses';
+      case TransactionType.charity:
+        return 'charity';
+      case TransactionType.investments:
+        return 'investments';
     }
   }
 }

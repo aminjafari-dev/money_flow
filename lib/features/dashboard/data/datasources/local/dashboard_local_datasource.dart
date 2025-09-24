@@ -114,19 +114,26 @@ class DashboardLocalDataSource {
 
       for (final transaction in allTransactions) {
         final amount = transaction.amount;
-        final mainCategory = transaction.mainCategory.toLowerCase();
+        final transactionType = transaction.type.toLowerCase();
 
-        if (transaction.type.toLowerCase() == 'income') {
-          totalIncome += amount;
-        } else if (transaction.type.toLowerCase() == 'expense') {
-          totalExpenses += amount.abs(); // Ensure positive value for expenses
-
-          // Categorize expenses
-          if (mainCategory == 'charity') {
-            totalCharity += amount.abs();
-          } else if (mainCategory == 'investments') {
-            totalInvestments += amount.abs();
-          }
+        // Handle different transaction types
+        switch (transactionType) {
+          case 'income':
+            totalIncome += amount;
+            break;
+          case 'expense':
+            totalExpenses += amount.abs(); // Ensure positive value for expenses
+            break;
+          case 'charity':
+            totalCharity += amount.abs(); // Ensure positive value for charity
+            break;
+          case 'investments':
+            totalInvestments += amount
+                .abs(); // Ensure positive value for investments
+            break;
+          default:
+            // Fallback for unknown types - treat as expense
+            totalExpenses += amount.abs();
         }
       }
 
