@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:money_flow/core/router/page_name.dart';
+import 'package:money_flow/core/presentation/pages/main_navigation_page.dart';
 import 'package:money_flow/features/dashboard/presentation/pages/dashboard_page.dart';
 import 'package:money_flow/features/add_transaction/presentation/pages/add_transaction_page.dart';
 
@@ -13,6 +14,9 @@ import 'package:money_flow/features/add_transaction/presentation/pages/add_trans
 class PageRouter {
   /// Map of all routes in the application
   static Map<String, WidgetBuilder> routes = {
+    // Main navigation route (root with bottom navigation)
+    PageName.mainNavigation: (context) => const MainNavigationPage(),
+
     // Dashboard routes
     PageName.dashboard: (context) => const DashboardPage(userId: 'user123'),
 
@@ -44,9 +48,9 @@ class PageRouter {
     final routeName = settings.name;
 
     if (routeName == null || !routes.containsKey(routeName)) {
-      // Return a 404 page or redirect to dashboard
+      // Return a 404 page or redirect to main navigation
       return MaterialPageRoute(
-        builder: (context) => const DashboardPage(userId: 'user123'),
+        builder: (context) => const MainNavigationPage(),
       );
     }
 

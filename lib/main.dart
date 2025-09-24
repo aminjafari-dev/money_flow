@@ -103,7 +103,7 @@ class MoneyFlowApp extends StatelessWidget {
       locale: const Locale('en', ''),
 
       // Configure routing
-      initialRoute: PageName.dashboard,
+      initialRoute: PageName.mainNavigation,
       onGenerateRoute: PageRouter.onGenerateRoute,
       routes: PageRouter.routes,
 

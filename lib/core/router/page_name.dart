@@ -6,6 +6,9 @@
 /// Navigator.pushNamed(context, PageName.dashboard);
 /// ```
 class PageName {
+  /// Main navigation page route (root with bottom navigation)
+  static const String mainNavigation = '/main-navigation';
+
   /// Dashboard page route
   static const String dashboard = '/dashboard';
 
