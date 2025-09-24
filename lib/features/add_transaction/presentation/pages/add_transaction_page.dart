@@ -174,35 +174,54 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
     AppLocalizations l10n,
   ) {
     return SafeArea(
-      child: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Large amount display at top
-            _buildAmountDisplay(state),
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          // Check if keyboard is visible
+          final isKeyboardVisible =
+              MediaQuery.of(context).viewInsets.bottom > 0;
 
-            const SizedBox(height: 40),
+          return SingleChildScrollView(
+            padding: const EdgeInsets.all(20.0),
+            child: ConstrainedBox(
+              constraints: BoxConstraints(
+                minHeight: constraints.maxHeight - 40, // Account for padding
+              ),
+              child: IntrinsicHeight(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Large amount display at top
+                    _buildAmountDisplay(state),
 
-            // Category section
-            _buildCategorySection(state, l10n),
+                    const SizedBox(height: 40),
 
-            const SizedBox(height: 30),
+                    // Category section
+                    _buildCategorySection(state, l10n),
 
-            // Description field
-            _buildDescriptionField(l10n),
+                    const SizedBox(height: 30),
 
-            const SizedBox(height: 20),
+                    // Description field
+                    _buildDescriptionField(l10n),
 
-            // Date & Time field
-            _buildDateTimeField(l10n),
+                    const SizedBox(height: 20),
 
-            const Spacer(),
+                    // Date & Time field
+                    _buildDateTimeField(l10n),
 
-            // Action buttons at bottom
-            _buildActionButtons(context, state, l10n),
-          ],
-        ),
+                    // Flexible spacer that adjusts based on keyboard visibility
+                    if (!isKeyboardVisible)
+                      Expanded(child: SizedBox(height: 40))
+                    else
+                      const SizedBox(height: 40),
+
+                    // Action buttons at bottom
+                    _buildActionButtons(context, state, l10n),
+                  ],
+                ),
+              ),
+            ),
+          );
+        },
       ),
     );
   }
