@@ -3,6 +3,7 @@ import 'package:money_flow/core/router/page_name.dart';
 import 'package:money_flow/core/presentation/pages/main_navigation_page.dart';
 import 'package:money_flow/features/dashboard/presentation/pages/dashboard_page.dart';
 import 'package:money_flow/features/add_transaction/presentation/pages/add_transaction_page.dart';
+import 'package:money_flow/features/transactions/presentation/pages/transactions_page.dart';
 
 /// Global page router for the application.
 /// This class manages all route mappings and page navigation.
@@ -22,9 +23,9 @@ class PageRouter {
 
     // Transaction routes
     PageName.addTransaction: (context) => const AddTransactionPage(),
+    PageName.transactions: (context) => const TransactionsPage(),
 
     // TODO: Add other routes as features are implemented
-    // PageName.transactions: (context) => const TransactionsPage(),
     // PageName.analytics: (context) => const AnalyticsPage(),
     // PageName.settings: (context) => const SettingsPage(),
     // PageName.editTransaction: (context) => const EditTransactionPage(),

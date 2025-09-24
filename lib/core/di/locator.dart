@@ -3,6 +3,7 @@ import 'package:money_flow/core/services/category_service.dart';
 import 'package:money_flow/core/services/category_initialization_service.dart';
 import 'package:money_flow/features/dashboard/di/dashboard_di.dart';
 import 'package:money_flow/features/add_transaction/di/transaction_di.dart';
+import 'package:money_flow/features/transactions/di/transactions_di.dart';
 
 /// Global service locator instance.
 /// This instance manages all dependency injection throughout the app.
@@ -35,6 +36,9 @@ Future<void> setupLocator() async {
 
   // Initialize dashboard feature dependencies
   await setupDashboardLocator(getIt);
+
+  // Initialize transactions feature dependencies
+  await setupTransactionsLocator(getIt);
 
   // Initialize category system
   final categoryInitService = getIt<CategoryInitializationService>();

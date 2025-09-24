@@ -3,7 +3,7 @@ import 'package:money_flow/core/theme/app_colors.dart';
 import 'package:money_flow/core/widgets/widgets.dart';
 import 'package:money_flow/l10n/generated/app_localizations.dart';
 import 'package:money_flow/features/dashboard/presentation/pages/dashboard_page.dart';
-import 'package:money_flow/core/presentation/pages/transactions_page.dart';
+import 'package:money_flow/features/transactions/presentation/pages/transactions_page.dart';
 import 'package:money_flow/core/presentation/pages/analytics_page.dart';
 import 'package:money_flow/core/presentation/pages/settings_page.dart';
 
