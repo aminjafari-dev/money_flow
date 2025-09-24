@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:money_flow/core/widgets/widgets.dart';
 import 'package:money_flow/core/theme/app_colors.dart';
+import 'package:money_flow/core/constants/image_path.dart';
 import 'package:money_flow/features/add_transaction/domain/entities/transaction_entity.dart';
 
 /// Widget for displaying individual transaction items in the recent transactions list.
@@ -25,7 +26,7 @@ class TransactionItem extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       child: Row(
         children: [
-          // Left side - Icon with light blue background
+          // Left side - Category image with light blue background
           Container(
             width: 48,
             height: 48,
@@ -35,10 +36,24 @@ class TransactionItem extends StatelessWidget {
               ), // Light blue background like in the image
               borderRadius: BorderRadius.circular(24),
             ),
-            child: Icon(
-              _getIconForCategory(transaction.category),
-              color: const Color(0xFF1976D2), // Blue color like in the image
-              size: 24,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(24),
+              child: Image.asset(
+                ImagePath.getCategoryImage(transaction.category),
+                width: 48,
+                height: 48,
+                fit: BoxFit.cover,
+                errorBuilder: (context, error, stackTrace) {
+                  // Fallback to icon if image fails to load
+                  return Icon(
+                    _getIconForCategory(transaction.category),
+                    color: const Color(
+                      0xFF1976D2,
+                    ), // Blue color like in the image
+                    size: 24,
+                  );
+                },
+              ),
             ),
           ),
           GGap.large(),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:money_flow/core/theme/app_colors.dart';
 import 'package:money_flow/core/widgets/widgets.dart';
+import 'package:money_flow/core/constants/image_path.dart';
 import 'package:money_flow/features/add_transaction/domain/entities/transaction_entity.dart';
 import 'package:intl/intl.dart';
 
@@ -26,7 +27,7 @@ class TransactionItemWidget extends StatelessWidget {
       ),
       child: Row(
         children: [
-          // Category icon
+          // Category image
           Container(
             width: 40,
             height: 40,
@@ -34,7 +35,23 @@ class TransactionItemWidget extends StatelessWidget {
               color: AppColors.primary.withOpacity(0.1),
               borderRadius: BorderRadius.circular(8),
             ),
-            child: Icon(_getCategoryIcon(), color: AppColors.primary, size: 20),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(8),
+              child: Image.asset(
+                ImagePath.getCategoryImage(transaction.category),
+                width: 40,
+                height: 40,
+                fit: BoxFit.cover,
+                errorBuilder: (context, error, stackTrace) {
+                  // Fallback to icon if image fails to load
+                  return Icon(
+                    _getCategoryIcon(),
+                    color: AppColors.primary,
+                    size: 20,
+                  );
+                },
+              ),
+            ),
           ),
           const SizedBox(width: 12),
 
