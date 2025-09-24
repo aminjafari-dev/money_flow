@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:money_flow/core/widgets/g_text.dart';
+import 'package:money_flow/core/widgets/widgets.dart';
 
 /// Widget for transaction action buttons (Cancel and Save).
 /// This widget provides consistent action buttons for transaction forms.
@@ -77,7 +77,7 @@ class TransactionActionButtonsWidget extends StatelessWidget {
             ),
           ),
 
-          const SizedBox(width: 16),
+          GGap.large(),
 
           // Save button
           Expanded(

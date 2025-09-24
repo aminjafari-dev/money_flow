@@ -36,9 +36,10 @@ class RecentTransactions extends StatelessWidget {
             style: GTextStyle.titleMedium,
             fontWeight: FontWeight.bold,
             fontSize: 18,
+            color: AppColors.textPrimary,
           ),
         ),
-        const SizedBox(height: 16),
+        GGap.medium(),
         // Transactions List
         if (transactions.isEmpty)
           _buildEmptyState(l10n)

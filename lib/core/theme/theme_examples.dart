@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../widgets/g_gap.dart';
 import 'app_colors.dart';
 import 'app_fonts.dart';
 
@@ -38,19 +39,19 @@ class ThemeExampleWidget extends StatelessWidget {
           children: [
             // Typography Examples
             _buildTypographySection(),
-            const SizedBox(height: 24),
+            GGap.large(),
 
             // Color Examples
             _buildColorSection(),
-            const SizedBox(height: 24),
+            GGap.large(),
 
             // Button Examples
             _buildButtonSection(),
-            const SizedBox(height: 24),
+            GGap.large(),
 
             // Card Examples
             _buildCardSection(),
-            const SizedBox(height: 24),
+            GGap.large(),
 
             // Financial Data Examples
             _buildFinancialDataSection(),
@@ -69,46 +70,46 @@ class ThemeExampleWidget extends StatelessWidget {
           'Typography Examples',
           style: AppFonts.headingLarge.copyWith(color: AppColors.textPrimary),
         ),
-        const SizedBox(height: 16),
+        GGap.medium(),
 
         // Headings
         Text(
           'Extra Large Heading (24pt)',
           style: AppFonts.headingXL.copyWith(color: AppColors.textPrimary),
         ),
-        const SizedBox(height: 8),
+        GGap.small(),
         Text(
           'Large Heading (20pt)',
           style: AppFonts.headingLarge.copyWith(color: AppColors.textPrimary),
         ),
-        const SizedBox(height: 8),
+        GGap.small(),
         Text(
           'Medium Heading (18pt)',
           style: AppFonts.headingMedium.copyWith(color: AppColors.textPrimary),
         ),
-        const SizedBox(height: 8),
+        GGap.small(),
         Text(
           'Small Heading (16pt)',
           style: AppFonts.headingSmall.copyWith(color: AppColors.textPrimary),
         ),
-        const SizedBox(height: 16),
+        GGap.medium(),
 
         // Body Text
         Text(
           'Large Body Text (16pt) - Used for main content and descriptions',
           style: AppFonts.bodyLarge.copyWith(color: AppColors.textPrimary),
         ),
-        const SizedBox(height: 8),
+        GGap.small(),
         Text(
           'Medium Body Text (14pt) - Used for standard text content and labels',
           style: AppFonts.bodyMedium.copyWith(color: AppColors.textPrimary),
         ),
-        const SizedBox(height: 8),
+          GGap.small(),
         Text(
           'Small Body Text (12pt) - Used for secondary text and captions',
           style: AppFonts.bodySmall.copyWith(color: AppColors.textSecondary),
         ),
-        const SizedBox(height: 16),
+        GGap.medium(),
 
         // Values
         Text(

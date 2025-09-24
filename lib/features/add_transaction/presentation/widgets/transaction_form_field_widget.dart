@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:money_flow/core/widgets/g_gap.dart';
 import 'package:money_flow/core/widgets/g_text.dart';
 
 /// Widget for transaction form input fields.
@@ -73,7 +74,7 @@ class TransactionFormFieldWidget extends StatelessWidget {
           ),
         ),
 
-        const SizedBox(height: 8),
+        GGap.small(),
 
         // Text field
         TextField(

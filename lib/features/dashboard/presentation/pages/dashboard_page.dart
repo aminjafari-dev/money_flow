@@ -160,19 +160,19 @@ class _ErrorWidget extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Icon(Icons.error_outline, size: 64, color: AppColors.textLight),
-          const SizedBox(height: 16),
+          GGap.medium(),
           GText(
             l10n?.somethingWentWrong ?? 'Something went wrong',
             style: GTextStyle.titleLarge,
           ),
-          const SizedBox(height: 8),
+          GGap.small(),
           GText(
             message,
             style: GTextStyle.bodyMedium,
             color: AppColors.textSecondary,
             textAlign: TextAlign.center,
           ),
-          const SizedBox(height: 16),
+          GGap.medium(),
           ElevatedButton(
             onPressed: onRetry,
             child: GText(l10n?.retry ?? 'Retry'),
@@ -201,13 +201,13 @@ class _DashboardContent extends StatelessWidget {
         children: [
           // Financial Summary Cards
           DashboardSummary(dashboard: dashboard, l10n: l10n),
-          const SizedBox(height: 24),
+          GGap.large(),
           // Recent Transactions
           RecentTransactions(
             transactions: dashboard.recentTransactions,
             l10n: l10n,
           ),
-          const SizedBox(height: 80), // Space for FAB
+          GGap.large(), // Space for FAB
         ],
       ),
     );

@@ -41,7 +41,7 @@ class TransactionItem extends StatelessWidget {
               size: 24,
             ),
           ),
-          const SizedBox(width: 16),
+          GGap.large(),
           // Center - Transaction details
           Expanded(
             child: Column(
@@ -56,7 +56,7 @@ class TransactionItem extends StatelessWidget {
                   fontSize: 16,
                   color: AppColors.textPrimary,
                 ),
-                const SizedBox(height: 4),
+                GGap.small(),
                 GText(
                   transaction.category,
                   style: GTextStyle.bodySmall,

@@ -14,6 +14,8 @@ import 'package:money_flow/shared/models/category/category_models.dart';
 import 'package:money_flow/l10n/generated/app_localizations.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../../core/widgets/widgets.dart';
+
 /// Main page for adding new transactions.
 /// This page provides a comprehensive interface for transaction entry
 /// with form validation, category selection, and transaction management.
@@ -193,26 +195,26 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
                     // Large amount display at top
                     _buildAmountDisplay(state),
 
-                    const SizedBox(height: 40),
+                    GGap.large(),
 
                     // Category section
                     _buildCategorySection(state, l10n),
 
-                    const SizedBox(height: 30),
+                    GGap.large(),
 
                     // Description field
                     _buildDescriptionField(l10n),
 
-                    const SizedBox(height: 20),
+                    GGap.large(),
 
                     // Date & Time field
                     _buildDateTimeField(l10n),
 
                     // Flexible spacer that adjusts based on keyboard visibility
                     if (!isKeyboardVisible)
-                      Expanded(child: SizedBox(height: 40))
+                      Expanded(child: GGap.large())
                     else
-                      const SizedBox(height: 40),
+                      GGap.large(),
 
                     // Action buttons at bottom
                     _buildActionButtons(context, state, l10n),

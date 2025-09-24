@@ -69,7 +69,7 @@ class CategorySelectorWidget extends StatelessWidget {
           ),
         ),
 
-        const SizedBox(height: 12),
+        GGap.small(),
 
         // Category selection area
         if (isLoading)
@@ -270,7 +270,7 @@ class SubcategorySelectorWidget extends StatelessWidget {
           ),
         ),
 
-        const SizedBox(height: 12),
+        GGap.small(),
 
         // Subcategory selection area
         if (isLoading)
