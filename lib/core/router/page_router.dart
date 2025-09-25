@@ -5,7 +5,7 @@ import 'package:money_flow/features/dashboard/presentation/pages/dashboard_page.
 import 'package:money_flow/features/add_transaction/presentation/pages/add_transaction_page.dart';
 import 'package:money_flow/features/transactions/presentation/pages/transactions_page.dart';
 import 'package:money_flow/features/sms_import/domain/entities/bank_entity.dart';
-import 'package:money_flow/features/sms_import/presentation/pages/bank_selection_page.dart';
+import 'package:money_flow/features/sms_import/presentation/pages/banks_page.dart';
 import 'package:money_flow/features/sms_import/presentation/pages/sms_conversations_for_bank_page.dart';
 import 'package:money_flow/features/sms_import/presentation/pages/sms_import_page.dart';
 import 'package:money_flow/features/sms_import/presentation/pages/sms_messages_page.dart';
@@ -31,7 +31,7 @@ class PageRouter {
     PageName.transactions: (context) => const TransactionsPage(),
 
     // Bank Selection route
-    PageName.bankSelection: (context) => const BankSelectionPage(),
+    PageName.bankSelection: (context) => const BanksPage(),
 
     // SMS Conversations for Bank Selection route
     PageName.smsConversationsForBank: (context) =>

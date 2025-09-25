@@ -28,15 +28,15 @@ import '../../../../shared/models/bank/bank_model.dart';
 ///   ),
 /// );
 /// ```
-class BankSelectionPage extends StatefulWidget {
+class BanksPage extends StatefulWidget {
   /// Creates a new instance of BankSelectionPage.
-  const BankSelectionPage({super.key});
+  const BanksPage({super.key});
 
   @override
-  State<BankSelectionPage> createState() => _BankSelectionPageState();
+  State<BanksPage> createState() => _BanksPageState();
 }
 
-class _BankSelectionPageState extends State<BankSelectionPage> {
+class _BanksPageState extends State<BanksPage> {
   List<BankEntity> _selectedBanks = [];
   bool _isLoading = true;
   String? _error;
@@ -50,10 +50,10 @@ class _BankSelectionPageState extends State<BankSelectionPage> {
   void initState() {
     super.initState();
 
-  // Register Hive adapters
-  if (!Hive.isAdapterRegistered(1)) {
-    Hive.registerAdapter(BankModelAdapter());
-  }
+    // Register Hive adapters
+    if (!Hive.isAdapterRegistered(1)) {
+      Hive.registerAdapter(BankModelAdapter());
+    }
     _getAllBanksUseCase = getIt<GetAllBanksUseCase>();
     _saveBankUseCase = getIt<SaveBankUseCase>();
     _deleteBankUseCase = getIt<DeleteBankUseCase>();
@@ -90,7 +90,7 @@ class _BankSelectionPageState extends State<BankSelectionPage> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
 
-    return GScaffold(title: 'Bank Selection', body: _buildBody(l10n));
+    return GScaffold(title: 'Banks', body: _buildBody(l10n));
   }
 
   /// Builds the main body based on current state.
@@ -150,7 +150,7 @@ class _BankSelectionPageState extends State<BankSelectionPage> {
                 padding: const EdgeInsets.only(bottom: 12.0),
                 child: BankCardWidget(
                   bank: bank,
-                  onTap: () => _navigateToSmsImport(bank),
+                  onTap: () => _navigateToSmsMessages(bank),
                   onDelete: () => _deleteBank(bank),
                 ),
               );
@@ -199,9 +199,15 @@ class _BankSelectionPageState extends State<BankSelectionPage> {
     );
   }
 
-  /// Navigates to SMS import page for the selected bank.
-  void _navigateToSmsImport(BankEntity bank) {
-    Navigator.pushNamed(context, PageName.smsImport, arguments: bank);
+  /// Navigates to SMS messages page for the selected bank.
+  /// This method navigates directly to the SMS messages page showing
+  /// all messages from the bank's phone number.
+  void _navigateToSmsMessages(BankEntity bank) {
+    Navigator.pushNamed(
+      context,
+      PageName.smsMessages,
+      arguments: bank.phoneNumber,
+    );
   }
 
   /// Deletes a bank from the selection.
