@@ -31,6 +31,10 @@ Future<void> setupLocator() async {
     () => CategoryInitializationService(getIt<CategoryService>()),
   );
 
+  // Initialize category system
+  final categoryInitService = getIt<CategoryInitializationService>();
+  await categoryInitService.initialize();
+  
   // Initialize transaction feature dependencies first
   // This ensures TransactionModelAdapter is registered before dashboard tries to use it
   await setupTransactionLocator(getIt);
@@ -44,9 +48,6 @@ Future<void> setupLocator() async {
   // Initialize SMS import feature dependencies
   await setupSmsImportLocator(getIt);
 
-  // Initialize category system
-  final categoryInitService = getIt<CategoryInitializationService>();
-  await categoryInitService.initialize();
 
   // TODO: Add other feature DI setups as they are implemented
   // await setupAuthLocator(getIt);

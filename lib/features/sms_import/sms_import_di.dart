@@ -1,12 +1,17 @@
 import 'package:get_it/get_it.dart';
 import 'package:money_flow/features/sms_import/data/datasources/sms_datasource.dart';
 import 'package:money_flow/features/sms_import/data/datasources/sms_real_datasource_impl.dart';
+import 'package:money_flow/features/sms_import/data/repositories/bank_repository_impl.dart';
 import 'package:money_flow/features/sms_import/data/repositories/sms_repository_impl.dart';
+import 'package:money_flow/features/sms_import/domain/repositories/bank_repository.dart';
 import 'package:money_flow/features/sms_import/domain/repositories/sms_repository.dart';
 import 'package:money_flow/features/sms_import/domain/usecases/check_sms_permission_usecase.dart';
+import 'package:money_flow/features/sms_import/domain/usecases/delete_bank_usecase.dart';
+import 'package:money_flow/features/sms_import/domain/usecases/get_all_banks_usecase.dart';
 import 'package:money_flow/features/sms_import/domain/usecases/get_sms_conversations_usecase.dart';
 import 'package:money_flow/features/sms_import/domain/usecases/get_sms_messages_by_address_usecase.dart';
 import 'package:money_flow/features/sms_import/domain/usecases/request_sms_permission_usecase.dart';
+import 'package:money_flow/features/sms_import/domain/usecases/save_bank_usecase.dart';
 
 /// Dependency injection setup for SMS Import feature.
 /// This function registers all SMS Import related dependencies
@@ -44,6 +49,15 @@ Future<void> setupSmsImportLocator(GetIt getIt) async {
   getIt.registerLazySingleton<SmsRepository>(
     () => SmsRepositoryImpl(getIt<SmsDataSource>()),
   );
+
+  /// Bank repository implementation for data access operations.
+  /// This repository acts as a bridge between domain and data layers,
+  /// providing a clean abstraction over bank data access using Hive.
+  ///
+  /// Registration: Lazy singleton to ensure single instance and lazy initialization.
+  /// This is appropriate for repositories as they don't maintain state
+  /// and can be shared across the application.
+  getIt.registerLazySingleton<BankRepository>(() => BankRepositoryImpl());
 
   // ==================== USE CASES ====================
 
@@ -89,5 +103,38 @@ Future<void> setupSmsImportLocator(GetIt getIt) async {
   /// and can be shared across the application.
   getIt.registerLazySingleton<RequestSmsPermissionUseCase>(
     () => RequestSmsPermissionUseCase(getIt<SmsRepository>()),
+  );
+
+  /// Use case for getting all banks.
+  /// This use case handles the business logic for retrieving all saved banks
+  /// from the repository.
+  ///
+  /// Registration: Lazy singleton to ensure single instance and lazy initialization.
+  /// This is appropriate for use cases as they don't maintain state
+  /// and can be shared across the application.
+  getIt.registerLazySingleton<GetAllBanksUseCase>(
+    () => GetAllBanksUseCase(getIt<BankRepository>()),
+  );
+
+  /// Use case for saving a bank.
+  /// This use case handles the business logic for persisting a bank entity
+  /// to the repository.
+  ///
+  /// Registration: Lazy singleton to ensure single instance and lazy initialization.
+  /// This is appropriate for use cases as they don't maintain state
+  /// and can be shared across the application.
+  getIt.registerLazySingleton<SaveBankUseCase>(
+    () => SaveBankUseCase(getIt<BankRepository>()),
+  );
+
+  /// Use case for deleting a bank.
+  /// This use case handles the business logic for removing a bank
+  /// from the repository.
+  ///
+  /// Registration: Lazy singleton to ensure single instance and lazy initialization.
+  /// This is appropriate for use cases as they don't maintain state
+  /// and can be shared across the application.
+  getIt.registerLazySingleton<DeleteBankUseCase>(
+    () => DeleteBankUseCase(getIt<BankRepository>()),
   );
 }

@@ -40,10 +40,6 @@ class CategoryService {
   /// ```
   Future<void> initialize() async {
     try {
-      // Register adapter for type-safe storage
-      if (!Hive.isAdapterRegistered(3)) {
-        Hive.registerAdapter(CategoryModelAdapter());
-      }
 
       // Open category data box
       _categoryBox = await Hive.openBox<CategoryModel>(_categoryBoxName);

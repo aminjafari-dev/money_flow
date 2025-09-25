@@ -1,5 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hive/hive.dart';
+import 'package:money_flow/features/sms_import/domain/entities/bank_entity.dart';
 
 part 'bank_model.freezed.dart';
 part 'bank_model.g.dart';
@@ -18,7 +19,7 @@ part 'bank_model.g.dart';
 ///   createdAt: DateTime.now(),
 /// );
 /// ```
-@HiveType(typeId: 3)
+@HiveType(typeId: 1)
 @freezed
 class BankModel with _$BankModel {
   /// Creates a bank model with all required fields.
@@ -48,4 +49,39 @@ class BankModel with _$BankModel {
   /// - [BankModel]: Parsed bank model
   factory BankModel.fromJson(Map<String, dynamic> json) =>
       _$BankModelFromJson(json);
+
+  /// Creates a BankModel from a BankEntity.
+  ///
+  /// Parameters:
+  /// - [entity]: The bank entity to convert
+  ///
+  /// Returns:
+  /// - [BankModel]: Bank model with current timestamp
+  factory BankModel.fromDomain(BankEntity entity) {
+    final now = DateTime.now();
+    return BankModel(
+      id: entity.id,
+      name: entity.name,
+      phoneNumber: entity.phoneNumber,
+      isActive: entity.isActive,
+      createdAt: now,
+      updatedAt: now,
+    );
+  }
+}
+
+/// Extension for converting BankModel to BankEntity.
+extension BankModelExtension on BankModel {
+  /// Converts this BankModel to a BankEntity.
+  ///
+  /// Returns:
+  /// - [BankEntity]: Bank entity representation
+  BankEntity toDomain() {
+    return BankEntity(
+      id: id,
+      name: name,
+      phoneNumber: phoneNumber,
+      isActive: isActive,
+    );
+  }
 }
