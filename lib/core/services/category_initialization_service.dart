@@ -1,4 +1,6 @@
 import 'package:money_flow/core/services/category_service.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:money_flow/shared/models/category/category_models.dart';
 
 /// Service for initializing categories during app startup.
 /// This service ensures that the CategoryService is properly initialized
@@ -24,6 +26,11 @@ class CategoryInitializationService {
   /// ```
   Future<void> initialize() async {
     try {
+
+      if (!Hive.isAdapterRegistered(3)) {
+        Hive.registerAdapter(CategoryModelAdapter());
+      }
+
       // Initialize the CategoryService
       await _categoryService.initialize();
 

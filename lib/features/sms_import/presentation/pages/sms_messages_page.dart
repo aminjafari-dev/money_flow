@@ -125,6 +125,17 @@ class _SmsMessagesViewState extends State<SmsMessagesView> {
                         ),
                       );
                     },
+                    onCategoryAdded: (category) {
+                      // Show success message or handle category addition
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('SMS added to $category successfully!'),
+                          backgroundColor: Theme.of(
+                            context,
+                          ).colorScheme.primary,
+                        ),
+                      );
+                    },
                   ),
                 ],
               ),

@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:money_flow/core/widgets/g_gap.dart';
 import 'package:money_flow/features/sms_import/domain/entities/sms_entity.dart';
 import 'package:money_flow/features/sms_import/presentation/bloc/sms_import_state.dart';
-import 'package:money_flow/features/sms_import/presentation/widgets/messages/sms_messages_header_widget.dart';
 import 'package:money_flow/features/sms_import/presentation/widgets/messages/sms_message_card_widget.dart';
+import 'package:money_flow/features/sms_import/presentation/widgets/messages/sms_category_grid_widget.dart';
 import 'package:money_flow/features/sms_import/presentation/widgets/shared/sms_empty_state_widget.dart';
 import 'package:money_flow/features/sms_import/presentation/widgets/shared/sms_loading_state_widget.dart';
 import 'package:money_flow/features/sms_import/presentation/widgets/shared/sms_error_state_widget.dart';
 import 'package:money_flow/l10n/generated/app_localizations.dart';
+
+import '../../../../core/theme/app_colors.dart';
 
 /// Widget for displaying SMS messages list.
 /// This widget shows a list of SMS messages from a specific sender address
@@ -32,23 +34,29 @@ class SmsMessagesList extends StatelessWidget {
   /// This function is called when the user needs to load messages.
   final VoidCallback onLoadMessages;
 
+  /// Callback when a category is successfully added to an SMS message.
+  final Function(String category)? onCategoryAdded;
+
   /// Creates a new instance of SmsMessagesList.
   ///
   /// Parameters:
   /// - [messagesState]: The current messages state to display
   /// - [onLoadMessages]: Callback function to load SMS messages
+  /// - [onCategoryAdded]: Callback when a category is successfully added
   ///
   /// Usage Example:
   /// ```dart
   /// SmsMessagesList(
   ///   messagesState: MessagesState.completed(messages),
   ///   onLoadMessages: () => loadMessages(),
+  ///   onCategoryAdded: (category) => print('Added to $category'),
   /// )
   /// ```
   const SmsMessagesList({
     super.key,
     required this.messagesState,
     required this.onLoadMessages,
+    this.onCategoryAdded,
   });
 
   @override
@@ -57,7 +65,6 @@ class SmsMessagesList extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-
         // Messages content
         messagesState.when(
           // Initial state - show empty state
@@ -96,18 +103,50 @@ class SmsMessagesList extends StatelessWidget {
   }
 
   /// Builds the messages list when messages are successfully loaded.
-  /// This method creates a scrollable list of message cards
-  /// with message content and timestamp information.
+  /// This method creates a scrollable list of message cards with category grids
+  /// displayed side by side for each message.
   Widget _buildMessagesList(List<SmsEntity> messages) {
     return ListView.separated(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
-      itemCount: messages.length,
-      separatorBuilder: (context, index) => GGap.small(),
+      itemCount: 20,
+      separatorBuilder: (context, index) => GGap.medium(),
       itemBuilder: (context, index) {
         final message = messages[index];
-        return SmsMessageCardWidget(message: message);
+        return _buildMessageWithCategoryGrid(message);
       },
+    );
+  }
+
+  /// Builds a message card with its corresponding category grid side by side.
+  /// This method creates a horizontal layout with the message card on the left
+  /// and the category grid on the right.
+  Widget _buildMessageWithCategoryGrid(SmsEntity message) {
+    return Container(
+      decoration: BoxDecoration(
+        color: AppColors.backgroundLight,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: AppColors.border, width: 1),
+      ),
+      padding: const EdgeInsets.all(16.0),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Message card (flexible to take remaining space)
+          Expanded(child: SmsMessageCardWidget(message: message)),
+
+          // Small gap between card and grid
+          GGap.small(),
+
+          // Category grid (fixed width)
+          Expanded(
+            child: SmsCategoryGridWidget(
+              message: message,
+              onCategoryAdded: onCategoryAdded,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

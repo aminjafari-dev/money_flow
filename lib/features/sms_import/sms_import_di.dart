@@ -1,10 +1,14 @@
 import 'package:get_it/get_it.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:money_flow/features/sms_import/data/models/sms_category_tracking_model.dart';
 import 'package:money_flow/features/sms_import/data/datasources/sms_datasource.dart';
 import 'package:money_flow/features/sms_import/data/datasources/sms_real_datasource_impl.dart';
 import 'package:money_flow/features/sms_import/data/repositories/bank_repository_impl.dart';
 import 'package:money_flow/features/sms_import/data/repositories/sms_repository_impl.dart';
+import 'package:money_flow/features/sms_import/data/repositories/sms_category_tracking_repository_impl.dart';
 import 'package:money_flow/features/sms_import/domain/repositories/bank_repository.dart';
 import 'package:money_flow/features/sms_import/domain/repositories/sms_repository.dart';
+import 'package:money_flow/features/sms_import/domain/repositories/sms_category_tracking_repository.dart';
 import 'package:money_flow/features/sms_import/domain/usecases/check_sms_permission_usecase.dart';
 import 'package:money_flow/features/sms_import/domain/usecases/delete_bank_usecase.dart';
 import 'package:money_flow/features/sms_import/domain/usecases/get_all_banks_usecase.dart';
@@ -12,6 +16,8 @@ import 'package:money_flow/features/sms_import/domain/usecases/get_sms_conversat
 import 'package:money_flow/features/sms_import/domain/usecases/get_sms_messages_by_address_usecase.dart';
 import 'package:money_flow/features/sms_import/domain/usecases/request_sms_permission_usecase.dart';
 import 'package:money_flow/features/sms_import/domain/usecases/save_bank_usecase.dart';
+import 'package:money_flow/features/sms_import/domain/usecases/add_sms_to_category_usecase.dart';
+import 'package:money_flow/features/sms_import/domain/usecases/get_sms_category_status_usecase.dart';
 
 /// Dependency injection setup for SMS Import feature.
 /// This function registers all SMS Import related dependencies
@@ -27,6 +33,11 @@ import 'package:money_flow/features/sms_import/domain/usecases/save_bank_usecase
 /// await setupSmsImportLocator(getIt);
 /// ```
 Future<void> setupSmsImportLocator(GetIt getIt) async {
+
+  if (!Hive.isAdapterRegistered(4)) {
+    Hive.registerAdapter(SmsCategoryTrackingModelAdapter());
+  }
+
   // ==================== DATA SOURCES ====================
 
   /// SMS data source implementation for platform-specific SMS access.
@@ -58,6 +69,23 @@ Future<void> setupSmsImportLocator(GetIt getIt) async {
   /// This is appropriate for repositories as they don't maintain state
   /// and can be shared across the application.
   getIt.registerLazySingleton<BankRepository>(() => BankRepositoryImpl());
+
+  /// SMS category tracking repository implementation for data access operations.
+  /// This repository acts as a bridge between domain and data layers,
+  /// providing a clean abstraction over SMS category tracking data access using Hive.
+  ///
+  /// Registration: Lazy singleton to ensure single instance and lazy initialization.
+  /// This is appropriate for repositories as they don't maintain state
+  /// and can be shared across the application.
+  getIt.registerLazySingleton<SmsCategoryTrackingRepository>(
+    () => SmsCategoryTrackingRepositoryImpl(),
+  );
+
+  // Initialize the SMS category tracking repository
+  final trackingRepository =
+      getIt<SmsCategoryTrackingRepository>()
+          as SmsCategoryTrackingRepositoryImpl;
+  await trackingRepository.init();
 
   // ==================== USE CASES ====================
 
@@ -136,5 +164,32 @@ Future<void> setupSmsImportLocator(GetIt getIt) async {
   /// and can be shared across the application.
   getIt.registerLazySingleton<DeleteBankUseCase>(
     () => DeleteBankUseCase(getIt<BankRepository>()),
+  );
+
+  /// Use case for adding SMS to category.
+  /// This use case handles the business logic for adding an SMS message
+  /// to a specific transaction category and creating a transaction.
+  ///
+  /// Registration: Lazy singleton to ensure single instance and lazy initialization.
+  /// This is appropriate for use cases as they don't maintain state
+  /// and can be shared across the application.
+  getIt.registerLazySingleton<AddSmsToCategoryUseCase>(
+    () => AddSmsToCategoryUseCase(
+      trackingRepository: getIt<SmsCategoryTrackingRepository>(),
+      addTransactionUseCase: getIt(),
+    ),
+  );
+
+  /// Use case for getting SMS category status.
+  /// This use case handles the business logic for checking which categories
+  /// an SMS message has been added to.
+  ///
+  /// Registration: Lazy singleton to ensure single instance and lazy initialization.
+  /// This is appropriate for use cases as they don't maintain state
+  /// and can be shared across the application.
+  getIt.registerLazySingleton<GetSmsCategoryStatusUseCase>(
+    () => GetSmsCategoryStatusUseCase(
+      trackingRepository: getIt<SmsCategoryTrackingRepository>(),
+    ),
   );
 }

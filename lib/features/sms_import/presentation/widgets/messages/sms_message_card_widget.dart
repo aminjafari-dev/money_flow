@@ -8,6 +8,7 @@ import 'package:money_flow/l10n/generated/app_localizations.dart';
 
 /// Card widget for displaying a single SMS message.
 /// This widget shows message information including content, timestamp, and read status.
+/// Category selection functionality is handled by a separate SmsCategoryGridWidget.
 ///
 /// Usage Example:
 /// ```dart
@@ -28,15 +29,7 @@ class SmsMessageCardWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
-    return Container(
-      decoration: BoxDecoration(
-        color: AppColors.backgroundLight,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.border, width: 1),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
+    return  Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Message header with timestamp and read status
@@ -82,8 +75,6 @@ class SmsMessageCardWidget extends StatelessWidget {
               color: AppColors.textPrimary,
             ),
           ],
-        ),
-      ),
     );
   }
 

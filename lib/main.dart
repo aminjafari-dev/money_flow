@@ -46,9 +46,6 @@ void main() async {
   await Hive.initFlutter();
 
 
-  if (!Hive.isAdapterRegistered(3)) {
-    Hive.registerAdapter(CategoryModelAdapter());
-  }
 
   // Initialize localization service
   await LocalizationService.instance.initialize();

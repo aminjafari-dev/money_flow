@@ -34,6 +34,7 @@ Future<void> setupLocator() async {
   // Initialize category system
   final categoryInitService = getIt<CategoryInitializationService>();
   await categoryInitService.initialize();
+
   
   // Initialize transaction feature dependencies first
   // This ensures TransactionModelAdapter is registered before dashboard tries to use it
