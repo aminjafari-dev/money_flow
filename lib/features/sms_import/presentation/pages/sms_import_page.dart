@@ -6,7 +6,6 @@ import 'package:money_flow/features/sms_import/presentation/bloc/sms_import_bloc
 import 'package:money_flow/features/sms_import/presentation/bloc/sms_import_event.dart';
 import 'package:money_flow/features/sms_import/presentation/bloc/sms_import_state.dart';
 import 'package:money_flow/features/sms_import/presentation/widgets/sms_conversations_list.dart';
-import 'package:money_flow/features/sms_import/presentation/widgets/sms_permission_widget.dart';
 
 /// SMS Import page for managing SMS conversations and messages.
 /// This page provides the main interface for the SMS import feature,
@@ -137,17 +136,7 @@ class _SmsImportViewState extends State<SmsImportView> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Permission status widget
-                    SmsPermissionWidget(
-                      permissionState: state.permission,
-                      onRequestPermission: () {
-                        context.read<SmsImportBloc>().add(
-                          const SmsImportEvent.requestPermission(),
-                        );
-                      },
-                    ),
 
-                    const SizedBox(height: 24),
 
                     // SMS conversations list
                     SmsConversationsList(
