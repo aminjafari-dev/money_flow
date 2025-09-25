@@ -6,7 +6,7 @@ import 'package:money_flow/core/widgets/g_text.dart';
 import 'package:money_flow/core/constants/image_path.dart';
 import 'package:money_flow/features/sms_import/domain/entities/sms_entity.dart';
 import 'package:money_flow/features/sms_import/domain/usecases/get_sms_category_status_usecase.dart';
-import 'package:money_flow/features/sms_import/domain/usecases/add_sms_to_category_usecase.dart';
+import 'package:money_flow/features/sms_import/domain/usecases/toggle_sms_category_usecase.dart';
 import 'package:money_flow/core/di/locator.dart';
 import 'package:money_flow/l10n/generated/app_localizations.dart';
 
@@ -118,7 +118,7 @@ class _SmsCategoryGridWidgetState extends State<SmsCategoryGridWidget> {
     final imagePath = ImagePath.getTypeImage(mainCategory);
 
     return GestureDetector(
-      onTap: isAdded ? null : () => _addToCategory(category, mainCategory),
+      onTap: () => _addAndRemoveToCategory(category, mainCategory),
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(15),
@@ -131,7 +131,7 @@ class _SmsCategoryGridWidgetState extends State<SmsCategoryGridWidget> {
             fit: BoxFit.cover,
             // colorFilter: ColorFilter.mode(
             //   isAdded
-                //       ? Colors.white.withValues(alpha: 0.8)
+            //       ? Colors.white.withValues(alpha: 0.8)
             //       : Colors.white.withValues(alpha: 0.6),
             //   BlendMode.overlay,
             // ),
@@ -142,7 +142,7 @@ class _SmsCategoryGridWidgetState extends State<SmsCategoryGridWidget> {
             borderRadius: BorderRadius.circular(12),
             color: isAdded
                 ? color.withValues(alpha: 0.6)
-                : Colors.black.withValues(alpha: 0.2),
+                : Colors.black.withValues(alpha: 0.5),
           ),
           child: Center(
             child: Column(
@@ -225,9 +225,14 @@ class _SmsCategoryGridWidgetState extends State<SmsCategoryGridWidget> {
     }
   }
 
-  /// Adds the SMS message to a specific category.
-  /// This method creates a transaction from the SMS and tracks the assignment.
-  Future<void> _addToCategory(String category, String mainCategory) async {
+  /// Toggles the SMS message category selection with single-selection behavior.
+  /// This method handles adding/removing SMS from categories with single selection logic.
+  /// Only one category can be selected at a time, and tapping the same category
+  /// again will deselect it.
+  Future<void> _addAndRemoveToCategory(
+    String category,
+    String mainCategory,
+  ) async {
     if (_isLoading) return;
 
     setState(() {
@@ -243,10 +248,10 @@ class _SmsCategoryGridWidgetState extends State<SmsCategoryGridWidget> {
         return;
       }
 
-      // Use the actual use case to add SMS to category
-      final addToCategoryUseCase = getIt<AddSmsToCategoryUseCase>();
-      final result = await addToCategoryUseCase.call(
-        AddSmsToCategoryParams(
+      // Use the toggle use case for single-selection behavior
+      final toggleCategoryUseCase = getIt<ToggleSmsCategoryUseCase>();
+      final result = await toggleCategoryUseCase.call(
+        ToggleSmsCategoryParams(
           sms: widget.message,
           category: category,
           mainCategory: mainCategory,
@@ -256,17 +261,23 @@ class _SmsCategoryGridWidgetState extends State<SmsCategoryGridWidget> {
 
       result.fold(
         (failure) {
-          _showErrorSnackBar('Failed to add to $category: ${failure.message}');
+          _showErrorSnackBar('Failed to toggle $category: ${failure.message}');
         },
-        (transaction) {
+        (toggleResult) {
           // Reload category status to reflect the changes
           _loadCategoryStatus();
-          _showSuccessSnackBar('Added to $category');
-          widget.onCategoryAdded?.call(category);
+
+          // Show appropriate message based on the action
+          if (toggleResult.action == ToggleAction.added) {
+            _showSuccessSnackBar('Added to $category');
+            widget.onCategoryAdded?.call(category);
+          } else {
+            _showInfoSnackBar('Removed from $category');
+          }
         },
       );
     } catch (e) {
-      _showErrorSnackBar('Failed to add to $category');
+      _showErrorSnackBar('Failed to toggle $category');
     } finally {
       setState(() {
         _isLoading = false;
@@ -305,6 +316,13 @@ class _SmsCategoryGridWidgetState extends State<SmsCategoryGridWidget> {
   void _showErrorSnackBar(String message) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text(message), backgroundColor: AppColors.error),
+    );
+  }
+
+  /// Shows an info snackbar for neutral actions like removing from category.
+  void _showInfoSnackBar(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(message), backgroundColor: AppColors.primary),
     );
   }
 }

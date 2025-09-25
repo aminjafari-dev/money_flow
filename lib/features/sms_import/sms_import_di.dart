@@ -18,6 +18,7 @@ import 'package:money_flow/features/sms_import/domain/usecases/request_sms_permi
 import 'package:money_flow/features/sms_import/domain/usecases/save_bank_usecase.dart';
 import 'package:money_flow/features/sms_import/domain/usecases/add_sms_to_category_usecase.dart';
 import 'package:money_flow/features/sms_import/domain/usecases/get_sms_category_status_usecase.dart';
+import 'package:money_flow/features/sms_import/domain/usecases/toggle_sms_category_usecase.dart';
 
 /// Dependency injection setup for SMS Import feature.
 /// This function registers all SMS Import related dependencies
@@ -33,7 +34,6 @@ import 'package:money_flow/features/sms_import/domain/usecases/get_sms_category_
 /// await setupSmsImportLocator(getIt);
 /// ```
 Future<void> setupSmsImportLocator(GetIt getIt) async {
-
   if (!Hive.isAdapterRegistered(4)) {
     Hive.registerAdapter(SmsCategoryTrackingModelAdapter());
   }
@@ -190,6 +190,21 @@ Future<void> setupSmsImportLocator(GetIt getIt) async {
   getIt.registerLazySingleton<GetSmsCategoryStatusUseCase>(
     () => GetSmsCategoryStatusUseCase(
       trackingRepository: getIt<SmsCategoryTrackingRepository>(),
+    ),
+  );
+
+  /// Use case for toggling SMS category selection with single-selection behavior.
+  /// This use case handles the business logic for single category selection
+  /// where only one category can be selected at a time, and tapping the same
+  /// category again will deselect it.
+  ///
+  /// Registration: Lazy singleton to ensure single instance and lazy initialization.
+  /// This is appropriate for use cases as they don't maintain state
+  /// and can be shared across the application.
+  getIt.registerLazySingleton<ToggleSmsCategoryUseCase>(
+    () => ToggleSmsCategoryUseCase(
+      trackingRepository: getIt<SmsCategoryTrackingRepository>(),
+      addSmsToCategoryUseCase: getIt<AddSmsToCategoryUseCase>(),
     ),
   );
 }
