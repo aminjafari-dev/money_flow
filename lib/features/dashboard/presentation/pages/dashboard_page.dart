@@ -60,6 +60,7 @@ class _DashboardPageState extends State<DashboardPage> {
       child: GScaffold(
         title: l10n.dashboard,
         backgroundColor: AppColors.background,
+        automaticallyImplyLeading: false,
         actions: [
           IconButton(
             onPressed: _onSettingsTap,

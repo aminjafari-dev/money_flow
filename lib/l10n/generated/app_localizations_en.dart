@@ -352,4 +352,18 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get openSettings => 'Open Settings';
+
+  @override
+  String get noTransactionsRightNow =>
+      'You don\'t have any transactions right now';
+
+  @override
+  String get startByAddingFirstTransaction =>
+      'Start by adding your first transaction manually or import from SMS';
+
+  @override
+  String get addTransactionManually => 'Add Transaction Manually';
+
+  @override
+  String get importFromSms => 'Import from SMS';
 }

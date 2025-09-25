@@ -65,6 +65,9 @@ class GScaffold extends StatelessWidget {
   /// Whether the app bar should snap
   final bool snap;
 
+  /// Whether to automatically imply leading
+  final bool automaticallyImplyLeading;
+
   /// Creates a new instance of GScaffold.
   ///
   /// Parameters:
@@ -114,6 +117,7 @@ class GScaffold extends StatelessWidget {
     this.pinned = false,
     this.floating = false,
     this.snap = false,
+    this.automaticallyImplyLeading = true,
   });
 
   @override
@@ -134,11 +138,14 @@ class GScaffold extends StatelessWidget {
                 ),
               ),
 
+
               // Add actions if provided
               actions: actions,
 
               // Add leading widget if provided
               leading: leading,
+
+              automaticallyImplyLeading: automaticallyImplyLeading,
 
               // Set consistent elevation
               elevation: 0,

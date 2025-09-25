@@ -769,6 +769,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Open Settings'**
   String get openSettings;
+
+  /// No description provided for @noTransactionsRightNow.
+  ///
+  /// In en, this message translates to:
+  /// **'You don\'t have any transactions right now'**
+  String get noTransactionsRightNow;
+
+  /// No description provided for @startByAddingFirstTransaction.
+  ///
+  /// In en, this message translates to:
+  /// **'Start by adding your first transaction manually or import from SMS'**
+  String get startByAddingFirstTransaction;
+
+  /// No description provided for @addTransactionManually.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Transaction Manually'**
+  String get addTransactionManually;
+
+  /// No description provided for @importFromSms.
+  ///
+  /// In en, this message translates to:
+  /// **'Import from SMS'**
+  String get importFromSms;
 }
 
 class _AppLocalizationsDelegate

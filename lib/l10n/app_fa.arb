@@ -115,5 +115,9 @@
   "smsPermissionRequired": "مجوز پیامک مورد نیاز است",
   "toImportSmsMessagesWeNeedPermission": "برای وارد کردن پیام‌های پیامک، به مجوز خواندن پیامک شما نیاز داریم. لطفاً مجوز پیامک را در تنظیمات دستگاه خود فعال کنید.",
   "openSettings": "باز کردن تنظیمات",
-  "tryAgain": "تلاش مجدد"
+
+  "noTransactionsRightNow": "در حال حاضر هیچ تراکنشی ندارید",
+  "startByAddingFirstTransaction": "با افزودن اولین تراکنش خود به صورت دستی یا وارد کردن از پیامک شروع کنید",
+  "addTransactionManually": "افزودن تراکنش دستی",
+  "importFromSms": "وارد کردن از پیامک"
 }

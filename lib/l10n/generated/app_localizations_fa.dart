@@ -353,4 +353,17 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String get openSettings => 'باز کردن تنظیمات';
+
+  @override
+  String get noTransactionsRightNow => 'در حال حاضر هیچ تراکنشی ندارید';
+
+  @override
+  String get startByAddingFirstTransaction =>
+      'با افزودن اولین تراکنش خود به صورت دستی یا وارد کردن از پیامک شروع کنید';
+
+  @override
+  String get addTransactionManually => 'افزودن تراکنش دستی';
+
+  @override
+  String get importFromSms => 'وارد کردن از پیامک';
 }
