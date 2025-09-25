@@ -245,3 +245,22 @@ class NotFoundFailure extends Failure {
   /// - [message]: Optional message describing what was not found
   const NotFoundFailure([super.message]);
 }
+
+/// Failure type for permission-related errors.
+///
+/// This failure is used when the app doesn't have the required permissions
+/// to perform an operation, such as accessing SMS, camera, or location.
+///
+/// Usage Example:
+/// ```dart
+/// if (!await hasSmsPermission()) {
+///   return Left(PermissionFailure('SMS permission not granted'));
+/// }
+/// ```
+class PermissionFailure extends Failure {
+  /// Constructor for permission failure
+  ///
+  /// Parameters:
+  /// - [message]: Optional message describing the permission error
+  const PermissionFailure([super.message]);
+}

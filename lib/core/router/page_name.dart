@@ -32,4 +32,10 @@ class PageName {
 
   /// Splash page route
   static const String splash = '/splash';
+
+  /// SMS Import page route
+  static const String smsImport = '/sms-import';
+
+  /// SMS Messages page route
+  static const String smsMessages = '/sms-messages';
 }

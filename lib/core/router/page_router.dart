@@ -4,6 +4,8 @@ import 'package:money_flow/core/presentation/pages/main_navigation_page.dart';
 import 'package:money_flow/features/dashboard/presentation/pages/dashboard_page.dart';
 import 'package:money_flow/features/add_transaction/presentation/pages/add_transaction_page.dart';
 import 'package:money_flow/features/transactions/presentation/pages/transactions_page.dart';
+import 'package:money_flow/features/sms_import/presentation/pages/sms_import_page.dart';
+import 'package:money_flow/features/sms_import/presentation/pages/sms_messages_page.dart';
 
 /// Global page router for the application.
 /// This class manages all route mappings and page navigation.
@@ -24,6 +26,14 @@ class PageRouter {
     // Transaction routes
     PageName.addTransaction: (context) => const AddTransactionPage(),
     PageName.transactions: (context) => const TransactionsPage(),
+
+    // SMS Import routes
+    PageName.smsImport: (context) => const SmsImportPage(),
+    PageName.smsMessages: (context) {
+      final address =
+          ModalRoute.of(context)?.settings.arguments as String? ?? '';
+      return SmsMessagesPage(address: address);
+    },
 
     // TODO: Add other routes as features are implemented
     // PageName.analytics: (context) => const AnalyticsPage(),

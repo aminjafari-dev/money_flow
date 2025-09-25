@@ -98,11 +98,27 @@ class _DashboardPageState extends State<DashboardPage> {
             ),
           ],
         ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: _onAddTransactionTap,
-          backgroundColor: AppColors.primary,
-          foregroundColor: AppColors.textWhite,
-          child: const Icon(Icons.add),
+        floatingActionButton: Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            // SMS Import FAB
+            FloatingActionButton(
+              onPressed: _onSmsImportTap,
+              backgroundColor: AppColors.success,
+              foregroundColor: AppColors.textWhite,
+              heroTag: "sms_import_fab",
+              child: const Icon(Icons.sms),
+            ),
+            const SizedBox(height: 16),
+            // Add Transaction FAB
+            FloatingActionButton(
+              onPressed: _onAddTransactionTap,
+              backgroundColor: AppColors.primary,
+              foregroundColor: AppColors.textWhite,
+              heroTag: "add_transaction_fab",
+              child: const Icon(Icons.add),
+            ),
+          ],
         ),
       ),
     );
@@ -154,6 +170,12 @@ class _DashboardPageState extends State<DashboardPage> {
         ),
       );
     }
+  }
+
+  /// Handles SMS import floating action button tap.
+  /// This method navigates to the SMS import page.
+  void _onSmsImportTap() {
+    Navigator.pushNamed(context, PageName.smsImport);
   }
 }
 
