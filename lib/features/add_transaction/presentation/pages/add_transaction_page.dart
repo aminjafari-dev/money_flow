@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:money_flow/core/di/locator.dart';
 import 'package:money_flow/core/services/category_service.dart';
-import 'package:money_flow/core/widgets/g_text.dart';
 import 'package:money_flow/features/add_transaction/domain/entities/transaction_entity.dart';
 import 'package:money_flow/features/add_transaction/presentation/bloc/add_transaction_bloc.dart';
 import 'package:money_flow/features/add_transaction/presentation/bloc/add_transaction_event.dart';

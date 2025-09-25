@@ -125,9 +125,12 @@ class SmsMessagesList extends StatelessWidget {
   /// This method creates a card with message information
   /// including content, timestamp, and read status.
   Widget _buildMessageCard(SmsEntity message) {
-    return Card(
-      elevation: 2,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+    return Container(
+      decoration: BoxDecoration(
+        color: AppColors.backgroundLight,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: AppColors.border, width: 1),
+      ),
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -184,9 +187,12 @@ class SmsMessagesList extends StatelessWidget {
   /// Builds the loading state widget.
   /// This method shows a loading indicator while messages are being fetched.
   Widget _buildLoadingState() {
-    return Card(
-      elevation: 2,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+    return Container(
+      decoration: BoxDecoration(
+        color: AppColors.backgroundLight,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: AppColors.border, width: 1),
+      ),
       child: const Padding(
         padding: EdgeInsets.all(32.0),
         child: Center(
@@ -211,9 +217,12 @@ class SmsMessagesList extends StatelessWidget {
     IconData icon,
     VoidCallback onAction,
   ) {
-    return Card(
-      elevation: 2,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+    return Container(
+      decoration: BoxDecoration(
+        color: AppColors.backgroundLight,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: AppColors.border, width: 1),
+      ),
       child: Padding(
         padding: const EdgeInsets.all(32.0),
         child: Column(
@@ -256,9 +265,12 @@ class SmsMessagesList extends StatelessWidget {
   /// This method shows an error message when loading messages fails
   /// and provides a retry button.
   Widget _buildErrorState(String message, VoidCallback onRetry) {
-    return Card(
-      elevation: 2,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+    return Container(
+      decoration: BoxDecoration(
+        color: AppColors.backgroundLight,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: AppColors.border, width: 1),
+      ),
       child: Padding(
         padding: const EdgeInsets.all(32.0),
         child: Column(

@@ -207,9 +207,12 @@ class _SmsConversationsListState extends State<SmsConversationsList> {
     BuildContext context,
     SmsConversationEntity conversation,
   ) {
-    return Card(
-      elevation: 2,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+    return Container(
+      decoration: BoxDecoration(
+        color: AppColors.backgroundLight,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: AppColors.border, width: 1),
+      ),
       child: InkWell(
         onTap: () => _navigateToMessages(context, conversation.address),
         borderRadius: BorderRadius.circular(16),
@@ -302,9 +305,12 @@ class _SmsConversationsListState extends State<SmsConversationsList> {
   /// Builds the loading state widget.
   /// This method shows a loading indicator while conversations are being fetched.
   Widget _buildLoadingState() {
-    return Card(
-      elevation: 2,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+    return Container(
+      decoration: BoxDecoration(
+        color: AppColors.backgroundLight,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: AppColors.border, width: 1),
+      ),
       child: const Padding(
         padding: EdgeInsets.all(32.0),
         child: Center(
@@ -329,9 +335,12 @@ class _SmsConversationsListState extends State<SmsConversationsList> {
     IconData icon,
     VoidCallback onAction,
   ) {
-    return Card(
-      elevation: 2,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+    return Container(
+      decoration: BoxDecoration(
+        color: AppColors.backgroundLight,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: AppColors.border, width: 1),
+      ),
       child: Padding(
         padding: const EdgeInsets.all(32.0),
         child: Column(
@@ -374,9 +383,12 @@ class _SmsConversationsListState extends State<SmsConversationsList> {
   /// This method shows an error message when loading conversations fails
   /// and provides a retry button.
   Widget _buildErrorState(String message, VoidCallback onRetry) {
-    return Card(
-      elevation: 2,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+    return Container(
+      decoration: BoxDecoration(
+        color: AppColors.backgroundLight,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: AppColors.border, width: 1),
+      ),
       child: Padding(
         padding: const EdgeInsets.all(32.0),
         child: Column(
@@ -419,9 +431,12 @@ class _SmsConversationsListState extends State<SmsConversationsList> {
   /// This method shows a loading indicator at the bottom of the list
   /// when there are more conversations to load.
   Widget _buildLoadMoreIndicator() {
-    return Card(
-      elevation: 1,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+    return Container(
+      decoration: BoxDecoration(
+        color: AppColors.backgroundLight,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: AppColors.border, width: 1),
+      ),
       child: Padding(
         padding: const EdgeInsets.all(16),
         child: Row(
