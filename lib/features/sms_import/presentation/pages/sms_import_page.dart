@@ -6,6 +6,9 @@ import 'package:money_flow/features/sms_import/presentation/bloc/sms_import_bloc
 import 'package:money_flow/features/sms_import/presentation/bloc/sms_import_event.dart';
 import 'package:money_flow/features/sms_import/presentation/bloc/sms_import_state.dart';
 import 'package:money_flow/features/sms_import/presentation/widgets/sms_conversations_list.dart';
+import 'package:money_flow/features/sms_import/presentation/widgets/shared/sms_permission_denied_widget.dart';
+import 'package:money_flow/features/sms_import/presentation/widgets/shared/sms_loading_state_widget.dart';
+import 'package:money_flow/features/sms_import/presentation/widgets/shared/sms_error_state_widget.dart';
 
 /// SMS Import page for managing SMS conversations and messages.
 /// This page provides the main interface for the SMS import feature,
@@ -42,7 +45,7 @@ class SmsImportPage extends StatelessWidget {
         getSmsMessagesByAddressUseCase: getIt(),
         checkSmsPermissionUseCase: getIt(),
         requestSmsPermissionUseCase: getIt(),
-      )..add(const SmsImportEvent.checkPermission()),
+      )..add(const SmsImportEvent.initialize()),
       child: const SmsImportView(),
     );
   }
@@ -71,24 +74,8 @@ class _SmsImportViewState extends State<SmsImportView> {
   @override
   void initState() {
     super.initState();
-    // Check permission and load conversations when the view initializes
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _checkPermissionAndLoadData();
-    });
-  }
-
-  /// Checks SMS permission and loads data accordingly.
-  /// This method first checks if SMS permission is granted,
-  /// and if not, it will be handled by the permission widget.
-  /// If permission is granted, it loads the SMS conversations.
-  ///
-  /// Usage Example:
-  /// ```dart
-  /// await _checkPermissionAndLoadData();
-  /// ```
-  Future<void> _checkPermissionAndLoadData() async {
-    // First check permission status
-    context.read<SmsImportBloc>().add(const SmsImportEvent.checkPermission());
+    // The initialization is now handled automatically by the BLoC
+    // when the page is created, so no need for manual initialization
   }
 
   @override
@@ -97,18 +84,12 @@ class _SmsImportViewState extends State<SmsImportView> {
       title: 'SMS Import',
       body: BlocListener<SmsImportBloc, SmsImportState>(
         listener: (context, state) {
-          // Listen for permission state changes and automatically load conversations
-          // when permission is granted
+          // Listen for permission state changes and show error messages
           state.permission.when(
             initial: () {},
             loading: () {},
             completed: (hasPermission) {
-              if (hasPermission) {
-                // Permission granted, load conversations automatically
-                // context.read<SmsImportBloc>().add(
-                //   const SmsImportEvent.loadConversations(),
-                // );
-              }
+              // Permission granted - conversations will be loaded automatically
             },
             error: (message) {
               // Show error message if permission check fails
@@ -119,6 +100,9 @@ class _SmsImportViewState extends State<SmsImportView> {
                 ),
               );
             },
+            denied: () {
+              // Permission denied - handled by the UI
+            },
           );
         },
         child: BlocBuilder<SmsImportBloc, SmsImportState>(
@@ -127,7 +111,7 @@ class _SmsImportViewState extends State<SmsImportView> {
               // Handle pull-to-refresh functionality
               onRefresh: () async {
                 context.read<SmsImportBloc>().add(
-                  const SmsImportEvent.refresh(),
+                  const SmsImportEvent.initialize(),
                 );
               },
               child: SingleChildScrollView(
@@ -136,28 +120,71 @@ class _SmsImportViewState extends State<SmsImportView> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-
-
-                    // SMS conversations list
-                    SmsConversationsList(
-                      conversationsState: state.conversations,
-                      onLoadConversations: () {
-                        context.read<SmsImportBloc>().add(
-                          const SmsImportEvent.loadConversations(),
-                        );
+                    // Handle different permission states
+                    state.permission.when(
+                      initial: () => const SmsLoadingStateWidget(
+                        message: 'Initializing SMS import...',
+                      ),
+                      loading: () => const SmsLoadingStateWidget(
+                        message: 'Checking SMS permission...',
+                      ),
+                      completed: (hasPermission) {
+                        if (hasPermission) {
+                          // Permission granted - show conversations
+                          return SmsConversationsList(
+                            conversationsState: state.conversations,
+                            onLoadConversations: () {
+                              context.read<SmsImportBloc>().add(
+                                const SmsImportEvent.loadConversations(),
+                              );
+                            },
+                            onLoadMoreConversations: () {
+                              context.read<SmsImportBloc>().add(
+                                const SmsImportEvent.loadMoreConversations(),
+                              );
+                            },
+                            onLoadMessages: (address) {
+                              context.read<SmsImportBloc>().add(
+                                SmsImportEvent.loadMessagesByAddress(
+                                  address: address,
+                                ),
+                              );
+                            },
+                          );
+                        } else {
+                          // This shouldn't happen with the new flow, but handle it
+                          return const SmsLoadingStateWidget(
+                            message: 'Requesting SMS permission...',
+                          );
+                        }
                       },
-                      onLoadMoreConversations: () {
-                        context.read<SmsImportBloc>().add(
-                          const SmsImportEvent.loadMoreConversations(),
-                        );
-                      },
-                      onLoadMessages: (address) {
-                        context.read<SmsImportBloc>().add(
-                          SmsImportEvent.loadMessagesByAddress(
-                            address: address,
-                          ),
-                        );
-                      },
+                      error: (message) => SmsErrorStateWidget(
+                        title: 'Permission Error',
+                        message: message,
+                        onRetry: () {
+                          context.read<SmsImportBloc>().add(
+                            const SmsImportEvent.initialize(),
+                          );
+                        },
+                      ),
+                      denied: () => SmsPermissionDeniedWidget(
+                        onRetry: () {
+                          context.read<SmsImportBloc>().add(
+                            const SmsImportEvent.initialize(),
+                          );
+                        },
+                        onOpenSettings: () {
+                          // TODO: Implement opening app settings
+                          // This would typically use a package like app_settings
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text(
+                                'Please enable SMS permission in Settings',
+                              ),
+                            ),
+                          );
+                        },
+                      ),
                     ),
                   ],
                 ),

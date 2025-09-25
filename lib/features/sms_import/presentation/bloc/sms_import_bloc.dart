@@ -84,6 +84,7 @@ class SmsImportBloc extends Bloc<SmsImportEvent, SmsImportState> {
         checkPermission: () => _onCheckPermission(emit),
         requestPermission: () => _onRequestPermission(emit),
         refresh: () => _onRefresh(emit),
+        initialize: () => _onInitialize(emit),
       );
     });
   }
@@ -451,5 +452,133 @@ class SmsImportBloc extends Bloc<SmsImportEvent, SmsImportState> {
     // Refresh conversations and permission status
     await _onLoadConversations(emit);
     await _onCheckPermission(emit);
+  }
+
+  /// Handles the initialize event.
+  /// This method handles the complete SMS import initialization flow:
+  /// 1. Check SMS permission
+  /// 2. If permission granted, load conversations
+  /// 3. If permission denied, request permission
+  /// 4. If permission still denied after request, show permission denied state
+  ///
+  /// Parameters:
+  /// - [emit]: Emitter for state updates
+  ///
+  /// Usage Example:
+  /// ```dart
+  /// await _onInitialize(emit);
+  /// ```
+  Future<void> _onInitialize(Emitter<SmsImportState> emit) async {
+    // Emit loading state for permission
+    if (!emit.isDone) {
+      emit(state.copyWith(permission: const PermissionState.loading()));
+    }
+
+    try {
+      // Step 1: Check current permission status
+      final permissionResult = await _checkSmsPermissionUseCase.call(
+        const NoParams(),
+      );
+
+      await permissionResult.fold(
+        // Handle permission check failure
+        (failure) async {
+          if (!emit.isDone) {
+            emit(
+              state.copyWith(
+                permission: PermissionState.error(
+                  failure.message ?? 'Failed to check SMS permission',
+                ),
+              ),
+            );
+          }
+        },
+        // Handle permission check success
+        (hasPermission) async {
+          if (!emit.isDone) {
+            if (hasPermission) {
+              // Permission granted - load conversations
+              emit(state.copyWith(permission: PermissionState.completed(true)));
+              await _onLoadConversations(emit);
+            } else {
+              // Permission not granted - request permission
+              await _requestPermissionAndHandleResult(emit);
+            }
+          }
+        },
+      );
+    } catch (e) {
+      // Handle unexpected errors
+      if (!emit.isDone) {
+        emit(
+          state.copyWith(
+            permission: PermissionState.error(
+              'Unexpected error: ${e.toString()}',
+            ),
+          ),
+        );
+      }
+    }
+  }
+
+  /// Requests SMS permission and handles the result.
+  /// This method requests permission from the user and either loads conversations
+  /// if granted or shows permission denied state if denied.
+  ///
+  /// Parameters:
+  /// - [emit]: Emitter for state updates
+  ///
+  /// Usage Example:
+  /// ```dart
+  /// await _requestPermissionAndHandleResult(emit);
+  /// ```
+  Future<void> _requestPermissionAndHandleResult(
+    Emitter<SmsImportState> emit,
+  ) async {
+    try {
+      // Request permission from user
+      final requestResult = await _requestSmsPermissionUseCase.call(
+        const NoParams(),
+      );
+
+      await requestResult.fold(
+        // Handle permission request failure
+        (failure) async {
+          if (!emit.isDone) {
+            emit(
+              state.copyWith(
+                permission: PermissionState.error(
+                  failure.message ?? 'Failed to request SMS permission',
+                ),
+              ),
+            );
+          }
+        },
+        // Handle permission request success
+        (granted) async {
+          if (!emit.isDone) {
+            if (granted) {
+              // Permission granted - load conversations
+              emit(state.copyWith(permission: PermissionState.completed(true)));
+              await _onLoadConversations(emit);
+            } else {
+              // Permission denied - show permission denied state
+              emit(state.copyWith(permission: const PermissionState.denied()));
+            }
+          }
+        },
+      );
+    } catch (e) {
+      // Handle unexpected errors
+      if (!emit.isDone) {
+        emit(
+          state.copyWith(
+            permission: PermissionState.error(
+              'Unexpected error: ${e.toString()}',
+            ),
+          ),
+        );
+      }
+    }
   }
 }

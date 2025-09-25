@@ -1518,6 +1518,7 @@ mixin _$PermissionState {
     required TResult Function() loading,
     required TResult Function(bool hasPermission) completed,
     required TResult Function(String message) error,
+    required TResult Function() denied,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -1526,6 +1527,7 @@ mixin _$PermissionState {
     TResult? Function()? loading,
     TResult? Function(bool hasPermission)? completed,
     TResult? Function(String message)? error,
+    TResult? Function()? denied,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -1534,6 +1536,7 @@ mixin _$PermissionState {
     TResult Function()? loading,
     TResult Function(bool hasPermission)? completed,
     TResult Function(String message)? error,
+    TResult Function()? denied,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -1543,6 +1546,7 @@ mixin _$PermissionState {
     required TResult Function(PermissionLoading value) loading,
     required TResult Function(PermissionCompleted value) completed,
     required TResult Function(PermissionError value) error,
+    required TResult Function(PermissionDenied value) denied,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -1551,6 +1555,7 @@ mixin _$PermissionState {
     TResult? Function(PermissionLoading value)? loading,
     TResult? Function(PermissionCompleted value)? completed,
     TResult? Function(PermissionError value)? error,
+    TResult? Function(PermissionDenied value)? denied,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -1559,6 +1564,7 @@ mixin _$PermissionState {
     TResult Function(PermissionLoading value)? loading,
     TResult Function(PermissionCompleted value)? completed,
     TResult Function(PermissionError value)? error,
+    TResult Function(PermissionDenied value)? denied,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -1630,6 +1636,7 @@ class _$PermissionInitialImpl implements PermissionInitial {
     required TResult Function() loading,
     required TResult Function(bool hasPermission) completed,
     required TResult Function(String message) error,
+    required TResult Function() denied,
   }) {
     return initial();
   }
@@ -1641,6 +1648,7 @@ class _$PermissionInitialImpl implements PermissionInitial {
     TResult? Function()? loading,
     TResult? Function(bool hasPermission)? completed,
     TResult? Function(String message)? error,
+    TResult? Function()? denied,
   }) {
     return initial?.call();
   }
@@ -1652,6 +1660,7 @@ class _$PermissionInitialImpl implements PermissionInitial {
     TResult Function()? loading,
     TResult Function(bool hasPermission)? completed,
     TResult Function(String message)? error,
+    TResult Function()? denied,
     required TResult orElse(),
   }) {
     if (initial != null) {
@@ -1667,6 +1676,7 @@ class _$PermissionInitialImpl implements PermissionInitial {
     required TResult Function(PermissionLoading value) loading,
     required TResult Function(PermissionCompleted value) completed,
     required TResult Function(PermissionError value) error,
+    required TResult Function(PermissionDenied value) denied,
   }) {
     return initial(this);
   }
@@ -1678,6 +1688,7 @@ class _$PermissionInitialImpl implements PermissionInitial {
     TResult? Function(PermissionLoading value)? loading,
     TResult? Function(PermissionCompleted value)? completed,
     TResult? Function(PermissionError value)? error,
+    TResult? Function(PermissionDenied value)? denied,
   }) {
     return initial?.call(this);
   }
@@ -1689,6 +1700,7 @@ class _$PermissionInitialImpl implements PermissionInitial {
     TResult Function(PermissionLoading value)? loading,
     TResult Function(PermissionCompleted value)? completed,
     TResult Function(PermissionError value)? error,
+    TResult Function(PermissionDenied value)? denied,
     required TResult orElse(),
   }) {
     if (initial != null) {
@@ -1747,6 +1759,7 @@ class _$PermissionLoadingImpl implements PermissionLoading {
     required TResult Function() loading,
     required TResult Function(bool hasPermission) completed,
     required TResult Function(String message) error,
+    required TResult Function() denied,
   }) {
     return loading();
   }
@@ -1758,6 +1771,7 @@ class _$PermissionLoadingImpl implements PermissionLoading {
     TResult? Function()? loading,
     TResult? Function(bool hasPermission)? completed,
     TResult? Function(String message)? error,
+    TResult? Function()? denied,
   }) {
     return loading?.call();
   }
@@ -1769,6 +1783,7 @@ class _$PermissionLoadingImpl implements PermissionLoading {
     TResult Function()? loading,
     TResult Function(bool hasPermission)? completed,
     TResult Function(String message)? error,
+    TResult Function()? denied,
     required TResult orElse(),
   }) {
     if (loading != null) {
@@ -1784,6 +1799,7 @@ class _$PermissionLoadingImpl implements PermissionLoading {
     required TResult Function(PermissionLoading value) loading,
     required TResult Function(PermissionCompleted value) completed,
     required TResult Function(PermissionError value) error,
+    required TResult Function(PermissionDenied value) denied,
   }) {
     return loading(this);
   }
@@ -1795,6 +1811,7 @@ class _$PermissionLoadingImpl implements PermissionLoading {
     TResult? Function(PermissionLoading value)? loading,
     TResult? Function(PermissionCompleted value)? completed,
     TResult? Function(PermissionError value)? error,
+    TResult? Function(PermissionDenied value)? denied,
   }) {
     return loading?.call(this);
   }
@@ -1806,6 +1823,7 @@ class _$PermissionLoadingImpl implements PermissionLoading {
     TResult Function(PermissionLoading value)? loading,
     TResult Function(PermissionCompleted value)? completed,
     TResult Function(PermissionError value)? error,
+    TResult Function(PermissionDenied value)? denied,
     required TResult orElse(),
   }) {
     if (loading != null) {
@@ -1893,6 +1911,7 @@ class _$PermissionCompletedImpl implements PermissionCompleted {
     required TResult Function() loading,
     required TResult Function(bool hasPermission) completed,
     required TResult Function(String message) error,
+    required TResult Function() denied,
   }) {
     return completed(hasPermission);
   }
@@ -1904,6 +1923,7 @@ class _$PermissionCompletedImpl implements PermissionCompleted {
     TResult? Function()? loading,
     TResult? Function(bool hasPermission)? completed,
     TResult? Function(String message)? error,
+    TResult? Function()? denied,
   }) {
     return completed?.call(hasPermission);
   }
@@ -1915,6 +1935,7 @@ class _$PermissionCompletedImpl implements PermissionCompleted {
     TResult Function()? loading,
     TResult Function(bool hasPermission)? completed,
     TResult Function(String message)? error,
+    TResult Function()? denied,
     required TResult orElse(),
   }) {
     if (completed != null) {
@@ -1930,6 +1951,7 @@ class _$PermissionCompletedImpl implements PermissionCompleted {
     required TResult Function(PermissionLoading value) loading,
     required TResult Function(PermissionCompleted value) completed,
     required TResult Function(PermissionError value) error,
+    required TResult Function(PermissionDenied value) denied,
   }) {
     return completed(this);
   }
@@ -1941,6 +1963,7 @@ class _$PermissionCompletedImpl implements PermissionCompleted {
     TResult? Function(PermissionLoading value)? loading,
     TResult? Function(PermissionCompleted value)? completed,
     TResult? Function(PermissionError value)? error,
+    TResult? Function(PermissionDenied value)? denied,
   }) {
     return completed?.call(this);
   }
@@ -1952,6 +1975,7 @@ class _$PermissionCompletedImpl implements PermissionCompleted {
     TResult Function(PermissionLoading value)? loading,
     TResult Function(PermissionCompleted value)? completed,
     TResult Function(PermissionError value)? error,
+    TResult Function(PermissionDenied value)? denied,
     required TResult orElse(),
   }) {
     if (completed != null) {
@@ -2047,6 +2071,7 @@ class _$PermissionErrorImpl implements PermissionError {
     required TResult Function() loading,
     required TResult Function(bool hasPermission) completed,
     required TResult Function(String message) error,
+    required TResult Function() denied,
   }) {
     return error(message);
   }
@@ -2058,6 +2083,7 @@ class _$PermissionErrorImpl implements PermissionError {
     TResult? Function()? loading,
     TResult? Function(bool hasPermission)? completed,
     TResult? Function(String message)? error,
+    TResult? Function()? denied,
   }) {
     return error?.call(message);
   }
@@ -2069,6 +2095,7 @@ class _$PermissionErrorImpl implements PermissionError {
     TResult Function()? loading,
     TResult Function(bool hasPermission)? completed,
     TResult Function(String message)? error,
+    TResult Function()? denied,
     required TResult orElse(),
   }) {
     if (error != null) {
@@ -2084,6 +2111,7 @@ class _$PermissionErrorImpl implements PermissionError {
     required TResult Function(PermissionLoading value) loading,
     required TResult Function(PermissionCompleted value) completed,
     required TResult Function(PermissionError value) error,
+    required TResult Function(PermissionDenied value) denied,
   }) {
     return error(this);
   }
@@ -2095,6 +2123,7 @@ class _$PermissionErrorImpl implements PermissionError {
     TResult? Function(PermissionLoading value)? loading,
     TResult? Function(PermissionCompleted value)? completed,
     TResult? Function(PermissionError value)? error,
+    TResult? Function(PermissionDenied value)? denied,
   }) {
     return error?.call(this);
   }
@@ -2106,6 +2135,7 @@ class _$PermissionErrorImpl implements PermissionError {
     TResult Function(PermissionLoading value)? loading,
     TResult Function(PermissionCompleted value)? completed,
     TResult Function(PermissionError value)? error,
+    TResult Function(PermissionDenied value)? denied,
     required TResult orElse(),
   }) {
     if (error != null) {
@@ -2125,6 +2155,129 @@ abstract class PermissionError implements PermissionState {
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$PermissionErrorImplCopyWith<_$PermissionErrorImpl> get copyWith =>
       throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$PermissionDeniedImplCopyWith<$Res> {
+  factory _$$PermissionDeniedImplCopyWith(_$PermissionDeniedImpl value,
+          $Res Function(_$PermissionDeniedImpl) then) =
+      __$$PermissionDeniedImplCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class __$$PermissionDeniedImplCopyWithImpl<$Res>
+    extends _$PermissionStateCopyWithImpl<$Res, _$PermissionDeniedImpl>
+    implements _$$PermissionDeniedImplCopyWith<$Res> {
+  __$$PermissionDeniedImplCopyWithImpl(_$PermissionDeniedImpl _value,
+      $Res Function(_$PermissionDeniedImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of PermissionState
+  /// with the given fields replaced by the non-null parameter values.
+}
+
+/// @nodoc
+
+class _$PermissionDeniedImpl implements PermissionDenied {
+  const _$PermissionDeniedImpl();
+
+  @override
+  String toString() {
+    return 'PermissionState.denied()';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType && other is _$PermissionDeniedImpl);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() initial,
+    required TResult Function() loading,
+    required TResult Function(bool hasPermission) completed,
+    required TResult Function(String message) error,
+    required TResult Function() denied,
+  }) {
+    return denied();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? initial,
+    TResult? Function()? loading,
+    TResult? Function(bool hasPermission)? completed,
+    TResult? Function(String message)? error,
+    TResult? Function()? denied,
+  }) {
+    return denied?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? initial,
+    TResult Function()? loading,
+    TResult Function(bool hasPermission)? completed,
+    TResult Function(String message)? error,
+    TResult Function()? denied,
+    required TResult orElse(),
+  }) {
+    if (denied != null) {
+      return denied();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(PermissionInitial value) initial,
+    required TResult Function(PermissionLoading value) loading,
+    required TResult Function(PermissionCompleted value) completed,
+    required TResult Function(PermissionError value) error,
+    required TResult Function(PermissionDenied value) denied,
+  }) {
+    return denied(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(PermissionInitial value)? initial,
+    TResult? Function(PermissionLoading value)? loading,
+    TResult? Function(PermissionCompleted value)? completed,
+    TResult? Function(PermissionError value)? error,
+    TResult? Function(PermissionDenied value)? denied,
+  }) {
+    return denied?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(PermissionInitial value)? initial,
+    TResult Function(PermissionLoading value)? loading,
+    TResult Function(PermissionCompleted value)? completed,
+    TResult Function(PermissionError value)? error,
+    TResult Function(PermissionDenied value)? denied,
+    required TResult orElse(),
+  }) {
+    if (denied != null) {
+      return denied(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class PermissionDenied implements PermissionState {
+  const factory PermissionDenied() = _$PermissionDeniedImpl;
 }
 
 /// @nodoc

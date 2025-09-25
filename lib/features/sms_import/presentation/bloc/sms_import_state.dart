@@ -117,6 +117,11 @@ class PermissionState with _$PermissionState {
   /// Parameters:
   /// - [message]: Error message describing what went wrong
   const factory PermissionState.error(String message) = PermissionError;
+
+  /// Permission denied state when user has explicitly denied SMS permission.
+  /// This state is shown when the user has denied permission and we should
+  /// show a UI to guide them to enable it in settings.
+  const factory PermissionState.denied() = PermissionDenied;
 }
 
 /// Main state combining all SMS import operation states.

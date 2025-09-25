@@ -1,7 +1,9 @@
 import 'dart:io';
 import 'package:dartz/dartz.dart';
+import 'package:flutter/foundation.dart';
 import 'package:money_flow/core/error/failures.dart';
 import 'package:money_flow/features/sms_import/data/datasources/sms_datasource.dart';
+import 'package:money_flow/features/sms_import/data/datasources/sms_isolate_functions.dart';
 import 'package:money_flow/features/sms_import/data/models/sms_model.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:flutter_sms_inbox/flutter_sms_inbox.dart';
@@ -54,57 +56,18 @@ class SmsRealDataSourceImpl implements SmsDataSource {
         count: 10000, // Limit to prevent performance issues
       );
 
-      // Group messages by sender address to create conversations
-      final Map<String, List<SmsMessage>> conversationsMap = {};
-
-      for (final message in messages) {
-        final address = message.address ?? 'Unknown';
-        if (!conversationsMap.containsKey(address)) {
-          conversationsMap[address] = [];
-        }
-        conversationsMap[address]!.add(message);
-      }
-
-      // Convert grouped messages to conversation models
-      final List<SmsConversationModel> conversations = [];
-
-      for (final entry in conversationsMap.entries) {
-        final address = entry.key;
-        final messages = entry.value;
-
-        // Sort messages by date (newest first)
-        messages.sort((a, b) => b.date!.compareTo(a.date!));
-
-        // Get the last message for preview
-        final lastMessage = messages.first;
-
-        // Create conversation model
-        final conversation = SmsConversationModel(
-          address: address,
-          lastMessage: lastMessage.body ?? '',
-          messageCount: messages.length,
-          lastMessageDate:
-              lastMessage.date?.millisecondsSinceEpoch ??
-              DateTime.now().millisecondsSinceEpoch,
-        );
-
-        conversations.add(conversation);
-      }
-
-      // Sort conversations by last message date (newest first)
-      conversations.sort(
-        (a, b) => b.lastMessageDate.compareTo(a.lastMessageDate),
+      // Process messages in a separate isolate to prevent UI blocking
+      final conversations = await compute(
+        processSmsConversations,
+        SmsConversationParams(messages: messages, limit: limit, offset: offset),
       );
 
-      // Apply pagination
-      final int startIndex = offset;
-      final int endIndex = (startIndex + limit).clamp(0, conversations.length);
+      // Check if processing failed (empty list might indicate an error)
+      if (conversations.isEmpty && messages.isNotEmpty) {
+        return const Left(ServerFailure('Failed to process SMS conversations'));
+      }
 
-      // Return paginated results
-      final List<SmsConversationModel> paginatedConversations = conversations
-          .sublist(startIndex, endIndex);
-
-      return Right(paginatedConversations);
+      return Right(conversations);
     } catch (e) {
       return Left(
         ServerFailure('Failed to get SMS conversations: ${e.toString()}'),
@@ -116,11 +79,32 @@ class SmsRealDataSourceImpl implements SmsDataSource {
   Future<Either<Failure, List<SmsModel>>> getSmsMessagesByAddress(
     String address,
   ) async {
-    // Temporarily disabled - focusing on conversations only
-    // TODO: Implement this method when needed
-    return const Left(
-      ServerFailure('SMS messages by address not implemented yet'),
-    );
+    try {
+      // Check if we have SMS permission
+      final hasPermission = await _hasSmsPermission();
+      if (!hasPermission) {
+        return const Left(PermissionFailure('SMS permission not granted'));
+      }
+
+      // Get all SMS messages from the device using flutter_sms_inbox package
+      final SmsQuery query = SmsQuery();
+      final List<SmsMessage> messages = await query.querySms(
+        kinds: [SmsQueryKind.inbox],
+        count: 10000, // Limit to prevent performance issues
+      );
+
+      // Filter messages by address in a separate isolate to prevent UI blocking
+      final filteredMessages = await compute(
+        filterSmsMessagesByAddress,
+        SmsMessageFilterParams(messages: messages, targetAddress: address),
+      );
+
+      return Right(filteredMessages);
+    } catch (e) {
+      return Left(
+        ServerFailure('Failed to get SMS messages by address: ${e.toString()}'),
+      );
+    }
   }
 
   @override

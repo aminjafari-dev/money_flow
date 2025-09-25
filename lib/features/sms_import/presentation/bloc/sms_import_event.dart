@@ -83,4 +83,17 @@ class SmsImportEvent with _$SmsImportEvent {
   /// context.read<SmsImportBloc>().add(const SmsImportEvent.refresh());
   /// ```
   const factory SmsImportEvent.refresh() = Refresh;
+
+  /// Event to initialize SMS import flow.
+  /// This event handles the complete initialization flow:
+  /// 1. Check SMS permission
+  /// 2. If permission granted, load conversations
+  /// 3. If permission denied, request permission
+  /// 4. If permission still denied after request, show permission denied state
+  ///
+  /// Usage Example:
+  /// ```dart
+  /// context.read<SmsImportBloc>().add(const SmsImportEvent.initialize());
+  /// ```
+  const factory SmsImportEvent.initialize() = Initialize;
 }

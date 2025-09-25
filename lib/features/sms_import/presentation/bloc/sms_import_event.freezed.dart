@@ -24,6 +24,7 @@ mixin _$SmsImportEvent {
     required TResult Function() checkPermission,
     required TResult Function() requestPermission,
     required TResult Function() refresh,
+    required TResult Function() initialize,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -34,6 +35,7 @@ mixin _$SmsImportEvent {
     TResult? Function()? checkPermission,
     TResult? Function()? requestPermission,
     TResult? Function()? refresh,
+    TResult? Function()? initialize,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -44,6 +46,7 @@ mixin _$SmsImportEvent {
     TResult Function()? checkPermission,
     TResult Function()? requestPermission,
     TResult Function()? refresh,
+    TResult Function()? initialize,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -57,6 +60,7 @@ mixin _$SmsImportEvent {
     required TResult Function(CheckPermission value) checkPermission,
     required TResult Function(RequestPermission value) requestPermission,
     required TResult Function(Refresh value) refresh,
+    required TResult Function(Initialize value) initialize,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -67,6 +71,7 @@ mixin _$SmsImportEvent {
     TResult? Function(CheckPermission value)? checkPermission,
     TResult? Function(RequestPermission value)? requestPermission,
     TResult? Function(Refresh value)? refresh,
+    TResult? Function(Initialize value)? initialize,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -77,6 +82,7 @@ mixin _$SmsImportEvent {
     TResult Function(CheckPermission value)? checkPermission,
     TResult Function(RequestPermission value)? requestPermission,
     TResult Function(Refresh value)? refresh,
+    TResult Function(Initialize value)? initialize,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -150,6 +156,7 @@ class _$LoadConversationsImpl implements LoadConversations {
     required TResult Function() checkPermission,
     required TResult Function() requestPermission,
     required TResult Function() refresh,
+    required TResult Function() initialize,
   }) {
     return loadConversations();
   }
@@ -163,6 +170,7 @@ class _$LoadConversationsImpl implements LoadConversations {
     TResult? Function()? checkPermission,
     TResult? Function()? requestPermission,
     TResult? Function()? refresh,
+    TResult? Function()? initialize,
   }) {
     return loadConversations?.call();
   }
@@ -176,6 +184,7 @@ class _$LoadConversationsImpl implements LoadConversations {
     TResult Function()? checkPermission,
     TResult Function()? requestPermission,
     TResult Function()? refresh,
+    TResult Function()? initialize,
     required TResult orElse(),
   }) {
     if (loadConversations != null) {
@@ -195,6 +204,7 @@ class _$LoadConversationsImpl implements LoadConversations {
     required TResult Function(CheckPermission value) checkPermission,
     required TResult Function(RequestPermission value) requestPermission,
     required TResult Function(Refresh value) refresh,
+    required TResult Function(Initialize value) initialize,
   }) {
     return loadConversations(this);
   }
@@ -208,6 +218,7 @@ class _$LoadConversationsImpl implements LoadConversations {
     TResult? Function(CheckPermission value)? checkPermission,
     TResult? Function(RequestPermission value)? requestPermission,
     TResult? Function(Refresh value)? refresh,
+    TResult? Function(Initialize value)? initialize,
   }) {
     return loadConversations?.call(this);
   }
@@ -221,6 +232,7 @@ class _$LoadConversationsImpl implements LoadConversations {
     TResult Function(CheckPermission value)? checkPermission,
     TResult Function(RequestPermission value)? requestPermission,
     TResult Function(Refresh value)? refresh,
+    TResult Function(Initialize value)? initialize,
     required TResult orElse(),
   }) {
     if (loadConversations != null) {
@@ -283,6 +295,7 @@ class _$LoadMoreConversationsImpl implements LoadMoreConversations {
     required TResult Function() checkPermission,
     required TResult Function() requestPermission,
     required TResult Function() refresh,
+    required TResult Function() initialize,
   }) {
     return loadMoreConversations();
   }
@@ -296,6 +309,7 @@ class _$LoadMoreConversationsImpl implements LoadMoreConversations {
     TResult? Function()? checkPermission,
     TResult? Function()? requestPermission,
     TResult? Function()? refresh,
+    TResult? Function()? initialize,
   }) {
     return loadMoreConversations?.call();
   }
@@ -309,6 +323,7 @@ class _$LoadMoreConversationsImpl implements LoadMoreConversations {
     TResult Function()? checkPermission,
     TResult Function()? requestPermission,
     TResult Function()? refresh,
+    TResult Function()? initialize,
     required TResult orElse(),
   }) {
     if (loadMoreConversations != null) {
@@ -328,6 +343,7 @@ class _$LoadMoreConversationsImpl implements LoadMoreConversations {
     required TResult Function(CheckPermission value) checkPermission,
     required TResult Function(RequestPermission value) requestPermission,
     required TResult Function(Refresh value) refresh,
+    required TResult Function(Initialize value) initialize,
   }) {
     return loadMoreConversations(this);
   }
@@ -341,6 +357,7 @@ class _$LoadMoreConversationsImpl implements LoadMoreConversations {
     TResult? Function(CheckPermission value)? checkPermission,
     TResult? Function(RequestPermission value)? requestPermission,
     TResult? Function(Refresh value)? refresh,
+    TResult? Function(Initialize value)? initialize,
   }) {
     return loadMoreConversations?.call(this);
   }
@@ -354,6 +371,7 @@ class _$LoadMoreConversationsImpl implements LoadMoreConversations {
     TResult Function(CheckPermission value)? checkPermission,
     TResult Function(RequestPermission value)? requestPermission,
     TResult Function(Refresh value)? refresh,
+    TResult Function(Initialize value)? initialize,
     required TResult orElse(),
   }) {
     if (loadMoreConversations != null) {
@@ -443,6 +461,7 @@ class _$LoadMessagesByAddressImpl implements LoadMessagesByAddress {
     required TResult Function() checkPermission,
     required TResult Function() requestPermission,
     required TResult Function() refresh,
+    required TResult Function() initialize,
   }) {
     return loadMessagesByAddress(address);
   }
@@ -456,6 +475,7 @@ class _$LoadMessagesByAddressImpl implements LoadMessagesByAddress {
     TResult? Function()? checkPermission,
     TResult? Function()? requestPermission,
     TResult? Function()? refresh,
+    TResult? Function()? initialize,
   }) {
     return loadMessagesByAddress?.call(address);
   }
@@ -469,6 +489,7 @@ class _$LoadMessagesByAddressImpl implements LoadMessagesByAddress {
     TResult Function()? checkPermission,
     TResult Function()? requestPermission,
     TResult Function()? refresh,
+    TResult Function()? initialize,
     required TResult orElse(),
   }) {
     if (loadMessagesByAddress != null) {
@@ -488,6 +509,7 @@ class _$LoadMessagesByAddressImpl implements LoadMessagesByAddress {
     required TResult Function(CheckPermission value) checkPermission,
     required TResult Function(RequestPermission value) requestPermission,
     required TResult Function(Refresh value) refresh,
+    required TResult Function(Initialize value) initialize,
   }) {
     return loadMessagesByAddress(this);
   }
@@ -501,6 +523,7 @@ class _$LoadMessagesByAddressImpl implements LoadMessagesByAddress {
     TResult? Function(CheckPermission value)? checkPermission,
     TResult? Function(RequestPermission value)? requestPermission,
     TResult? Function(Refresh value)? refresh,
+    TResult? Function(Initialize value)? initialize,
   }) {
     return loadMessagesByAddress?.call(this);
   }
@@ -514,6 +537,7 @@ class _$LoadMessagesByAddressImpl implements LoadMessagesByAddress {
     TResult Function(CheckPermission value)? checkPermission,
     TResult Function(RequestPermission value)? requestPermission,
     TResult Function(Refresh value)? refresh,
+    TResult Function(Initialize value)? initialize,
     required TResult orElse(),
   }) {
     if (loadMessagesByAddress != null) {
@@ -583,6 +607,7 @@ class _$CheckPermissionImpl implements CheckPermission {
     required TResult Function() checkPermission,
     required TResult Function() requestPermission,
     required TResult Function() refresh,
+    required TResult Function() initialize,
   }) {
     return checkPermission();
   }
@@ -596,6 +621,7 @@ class _$CheckPermissionImpl implements CheckPermission {
     TResult? Function()? checkPermission,
     TResult? Function()? requestPermission,
     TResult? Function()? refresh,
+    TResult? Function()? initialize,
   }) {
     return checkPermission?.call();
   }
@@ -609,6 +635,7 @@ class _$CheckPermissionImpl implements CheckPermission {
     TResult Function()? checkPermission,
     TResult Function()? requestPermission,
     TResult Function()? refresh,
+    TResult Function()? initialize,
     required TResult orElse(),
   }) {
     if (checkPermission != null) {
@@ -628,6 +655,7 @@ class _$CheckPermissionImpl implements CheckPermission {
     required TResult Function(CheckPermission value) checkPermission,
     required TResult Function(RequestPermission value) requestPermission,
     required TResult Function(Refresh value) refresh,
+    required TResult Function(Initialize value) initialize,
   }) {
     return checkPermission(this);
   }
@@ -641,6 +669,7 @@ class _$CheckPermissionImpl implements CheckPermission {
     TResult? Function(CheckPermission value)? checkPermission,
     TResult? Function(RequestPermission value)? requestPermission,
     TResult? Function(Refresh value)? refresh,
+    TResult? Function(Initialize value)? initialize,
   }) {
     return checkPermission?.call(this);
   }
@@ -654,6 +683,7 @@ class _$CheckPermissionImpl implements CheckPermission {
     TResult Function(CheckPermission value)? checkPermission,
     TResult Function(RequestPermission value)? requestPermission,
     TResult Function(Refresh value)? refresh,
+    TResult Function(Initialize value)? initialize,
     required TResult orElse(),
   }) {
     if (checkPermission != null) {
@@ -714,6 +744,7 @@ class _$RequestPermissionImpl implements RequestPermission {
     required TResult Function() checkPermission,
     required TResult Function() requestPermission,
     required TResult Function() refresh,
+    required TResult Function() initialize,
   }) {
     return requestPermission();
   }
@@ -727,6 +758,7 @@ class _$RequestPermissionImpl implements RequestPermission {
     TResult? Function()? checkPermission,
     TResult? Function()? requestPermission,
     TResult? Function()? refresh,
+    TResult? Function()? initialize,
   }) {
     return requestPermission?.call();
   }
@@ -740,6 +772,7 @@ class _$RequestPermissionImpl implements RequestPermission {
     TResult Function()? checkPermission,
     TResult Function()? requestPermission,
     TResult Function()? refresh,
+    TResult Function()? initialize,
     required TResult orElse(),
   }) {
     if (requestPermission != null) {
@@ -759,6 +792,7 @@ class _$RequestPermissionImpl implements RequestPermission {
     required TResult Function(CheckPermission value) checkPermission,
     required TResult Function(RequestPermission value) requestPermission,
     required TResult Function(Refresh value) refresh,
+    required TResult Function(Initialize value) initialize,
   }) {
     return requestPermission(this);
   }
@@ -772,6 +806,7 @@ class _$RequestPermissionImpl implements RequestPermission {
     TResult? Function(CheckPermission value)? checkPermission,
     TResult? Function(RequestPermission value)? requestPermission,
     TResult? Function(Refresh value)? refresh,
+    TResult? Function(Initialize value)? initialize,
   }) {
     return requestPermission?.call(this);
   }
@@ -785,6 +820,7 @@ class _$RequestPermissionImpl implements RequestPermission {
     TResult Function(CheckPermission value)? checkPermission,
     TResult Function(RequestPermission value)? requestPermission,
     TResult Function(Refresh value)? refresh,
+    TResult Function(Initialize value)? initialize,
     required TResult orElse(),
   }) {
     if (requestPermission != null) {
@@ -845,6 +881,7 @@ class _$RefreshImpl implements Refresh {
     required TResult Function() checkPermission,
     required TResult Function() requestPermission,
     required TResult Function() refresh,
+    required TResult Function() initialize,
   }) {
     return refresh();
   }
@@ -858,6 +895,7 @@ class _$RefreshImpl implements Refresh {
     TResult? Function()? checkPermission,
     TResult? Function()? requestPermission,
     TResult? Function()? refresh,
+    TResult? Function()? initialize,
   }) {
     return refresh?.call();
   }
@@ -871,6 +909,7 @@ class _$RefreshImpl implements Refresh {
     TResult Function()? checkPermission,
     TResult Function()? requestPermission,
     TResult Function()? refresh,
+    TResult Function()? initialize,
     required TResult orElse(),
   }) {
     if (refresh != null) {
@@ -890,6 +929,7 @@ class _$RefreshImpl implements Refresh {
     required TResult Function(CheckPermission value) checkPermission,
     required TResult Function(RequestPermission value) requestPermission,
     required TResult Function(Refresh value) refresh,
+    required TResult Function(Initialize value) initialize,
   }) {
     return refresh(this);
   }
@@ -903,6 +943,7 @@ class _$RefreshImpl implements Refresh {
     TResult? Function(CheckPermission value)? checkPermission,
     TResult? Function(RequestPermission value)? requestPermission,
     TResult? Function(Refresh value)? refresh,
+    TResult? Function(Initialize value)? initialize,
   }) {
     return refresh?.call(this);
   }
@@ -916,6 +957,7 @@ class _$RefreshImpl implements Refresh {
     TResult Function(CheckPermission value)? checkPermission,
     TResult Function(RequestPermission value)? requestPermission,
     TResult Function(Refresh value)? refresh,
+    TResult Function(Initialize value)? initialize,
     required TResult orElse(),
   }) {
     if (refresh != null) {
@@ -927,4 +969,141 @@ class _$RefreshImpl implements Refresh {
 
 abstract class Refresh implements SmsImportEvent {
   const factory Refresh() = _$RefreshImpl;
+}
+
+/// @nodoc
+abstract class _$$InitializeImplCopyWith<$Res> {
+  factory _$$InitializeImplCopyWith(
+          _$InitializeImpl value, $Res Function(_$InitializeImpl) then) =
+      __$$InitializeImplCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class __$$InitializeImplCopyWithImpl<$Res>
+    extends _$SmsImportEventCopyWithImpl<$Res, _$InitializeImpl>
+    implements _$$InitializeImplCopyWith<$Res> {
+  __$$InitializeImplCopyWithImpl(
+      _$InitializeImpl _value, $Res Function(_$InitializeImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of SmsImportEvent
+  /// with the given fields replaced by the non-null parameter values.
+}
+
+/// @nodoc
+
+class _$InitializeImpl implements Initialize {
+  const _$InitializeImpl();
+
+  @override
+  String toString() {
+    return 'SmsImportEvent.initialize()';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType && other is _$InitializeImpl);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() loadConversations,
+    required TResult Function() loadMoreConversations,
+    required TResult Function(String address) loadMessagesByAddress,
+    required TResult Function() checkPermission,
+    required TResult Function() requestPermission,
+    required TResult Function() refresh,
+    required TResult Function() initialize,
+  }) {
+    return initialize();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? loadConversations,
+    TResult? Function()? loadMoreConversations,
+    TResult? Function(String address)? loadMessagesByAddress,
+    TResult? Function()? checkPermission,
+    TResult? Function()? requestPermission,
+    TResult? Function()? refresh,
+    TResult? Function()? initialize,
+  }) {
+    return initialize?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? loadConversations,
+    TResult Function()? loadMoreConversations,
+    TResult Function(String address)? loadMessagesByAddress,
+    TResult Function()? checkPermission,
+    TResult Function()? requestPermission,
+    TResult Function()? refresh,
+    TResult Function()? initialize,
+    required TResult orElse(),
+  }) {
+    if (initialize != null) {
+      return initialize();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(LoadConversations value) loadConversations,
+    required TResult Function(LoadMoreConversations value)
+        loadMoreConversations,
+    required TResult Function(LoadMessagesByAddress value)
+        loadMessagesByAddress,
+    required TResult Function(CheckPermission value) checkPermission,
+    required TResult Function(RequestPermission value) requestPermission,
+    required TResult Function(Refresh value) refresh,
+    required TResult Function(Initialize value) initialize,
+  }) {
+    return initialize(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(LoadConversations value)? loadConversations,
+    TResult? Function(LoadMoreConversations value)? loadMoreConversations,
+    TResult? Function(LoadMessagesByAddress value)? loadMessagesByAddress,
+    TResult? Function(CheckPermission value)? checkPermission,
+    TResult? Function(RequestPermission value)? requestPermission,
+    TResult? Function(Refresh value)? refresh,
+    TResult? Function(Initialize value)? initialize,
+  }) {
+    return initialize?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(LoadConversations value)? loadConversations,
+    TResult Function(LoadMoreConversations value)? loadMoreConversations,
+    TResult Function(LoadMessagesByAddress value)? loadMessagesByAddress,
+    TResult Function(CheckPermission value)? checkPermission,
+    TResult Function(RequestPermission value)? requestPermission,
+    TResult Function(Refresh value)? refresh,
+    TResult Function(Initialize value)? initialize,
+    required TResult orElse(),
+  }) {
+    if (initialize != null) {
+      return initialize(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class Initialize implements SmsImportEvent {
+  const factory Initialize() = _$InitializeImpl;
 }
