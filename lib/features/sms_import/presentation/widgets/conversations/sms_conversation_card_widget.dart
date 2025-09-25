@@ -5,6 +5,7 @@ import 'package:money_flow/core/theme/app_fonts.dart';
 import 'package:money_flow/core/widgets/g_gap.dart';
 import 'package:money_flow/core/widgets/g_text.dart';
 import 'package:money_flow/features/sms_import/domain/entities/sms_entity.dart';
+import 'package:money_flow/l10n/generated/app_localizations.dart';
 
 /// Card widget for displaying a single SMS conversation.
 /// This widget shows conversation information including sender address,
@@ -28,6 +29,7 @@ class SmsConversationCardWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return Container(
       decoration: BoxDecoration(
         color: AppColors.backgroundLight,
@@ -84,7 +86,7 @@ class SmsConversationCardWidget extends StatelessWidget {
                     Row(
                       children: [
                         GText(
-                          '${conversation.messageCount} messages',
+                          '${conversation.messageCount} ${l10n.messages}',
                           style: AppFonts.labelSmall,
                           color: AppColors.textSecondary,
                         ),
@@ -100,7 +102,7 @@ class SmsConversationCardWidget extends StatelessWidget {
                         GGap.small(),
 
                         GText(
-                          _formatDate(conversation.lastMessageDate),
+                          _formatDate(conversation.lastMessageDate, l10n),
                           style: AppFonts.labelSmall,
                           color: AppColors.textSecondary,
                         ),
@@ -138,18 +140,21 @@ class SmsConversationCardWidget extends StatelessWidget {
   /// Formats a date for display in the conversation list.
   /// This method formats the date in a user-friendly format
   /// showing relative time (e.g., "2 hours ago", "1 day ago").
-  String _formatDate(DateTime date) {
+  String _formatDate(DateTime date, AppLocalizations l10n) {
     final now = DateTime.now();
     final difference = now.difference(date);
 
     if (difference.inDays > 0) {
-      return '${difference.inDays} day${difference.inDays == 1 ? '' : 's'} ago';
+      final dayText = difference.inDays == 1 ? l10n.day : l10n.days;
+      return '${difference.inDays} $dayText ${l10n.ago}';
     } else if (difference.inHours > 0) {
-      return '${difference.inHours} hour${difference.inHours == 1 ? '' : 's'} ago';
+      final hourText = difference.inHours == 1 ? l10n.hour : l10n.hours;
+      return '${difference.inHours} $hourText ${l10n.ago}';
     } else if (difference.inMinutes > 0) {
-      return '${difference.inMinutes} minute${difference.inMinutes == 1 ? '' : 's'} ago';
+      final minuteText = difference.inMinutes == 1 ? l10n.minute : l10n.minutes;
+      return '${difference.inMinutes} $minuteText ${l10n.ago}';
     } else {
-      return 'Just now';
+      return l10n.justNow;
     }
   }
 }

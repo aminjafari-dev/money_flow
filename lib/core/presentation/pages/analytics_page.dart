@@ -43,9 +43,9 @@ class _AnalyticsPageState extends State<AnalyticsPage> {
           icon: Icon(Icons.date_range, color: AppColors.textSecondary),
           onSelected: _onTimeRangeChanged,
           itemBuilder: (context) => [
-            PopupMenuItem(value: 'weekly', child: Text('Weekly')),
-            PopupMenuItem(value: 'monthly', child: Text('Monthly')),
-            PopupMenuItem(value: 'yearly', child: Text('Yearly')),
+            PopupMenuItem(value: 'weekly', child: GText('Weekly')),
+            PopupMenuItem(value: 'monthly', child: GText('Monthly')),
+            PopupMenuItem(value: 'yearly', child: GText('Yearly')),
           ],
         ),
         // Export button for analytics reports
@@ -314,7 +314,7 @@ class _AnalyticsPageState extends State<AnalyticsPage> {
     // TODO: Refresh analytics data based on new time range
     ScaffoldMessenger.of(
       context,
-    ).showSnackBar(SnackBar(content: Text('Time range changed to $timeRange')));
+    ).showSnackBar(SnackBar(content: GText('Time range changed to $timeRange')));
   }
 
   /// Handles export button tap.
@@ -322,7 +322,7 @@ class _AnalyticsPageState extends State<AnalyticsPage> {
   void _onExportTap() {
     // TODO: Implement analytics export functionality
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Export functionality coming soon!')),
+      const SnackBar(content: GText('Export functionality coming soon!')),
     );
   }
 }

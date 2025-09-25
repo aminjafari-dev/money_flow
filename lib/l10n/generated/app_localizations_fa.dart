@@ -108,7 +108,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get noData => 'هیچ داده‌ای موجود نیست';
 
   @override
-  String get tryAgain => 'دوباره تلاش کنید';
+  String get tryAgain => 'تلاش مجدد';
 
   @override
   String get networkError => 'خطای شبکه. لطفاً اتصال خود را بررسی کنید.';
@@ -234,4 +234,123 @@ class AppLocalizationsFa extends AppLocalizations {
   @override
   String get recentTransactionsWillAppear =>
       'تراکنش‌های اخیر شما اینجا نمایش داده خواهد شد';
+
+  @override
+  String get smsImport => 'وارد کردن پیامک';
+
+  @override
+  String get smsMessages => 'پیام‌های پیامک';
+
+  @override
+  String permissionError(Object message) {
+    return 'خطای مجوز: $message';
+  }
+
+  @override
+  String get pleaseEnableSmsPermissionInSettings =>
+      'لطفاً مجوز پیامک را در تنظیمات فعال کنید';
+
+  @override
+  String get initializingSmsImport => 'در حال راه‌اندازی وارد کردن پیامک...';
+
+  @override
+  String get checkingSmsPermission => 'در حال بررسی مجوز پیامک...';
+
+  @override
+  String get requestingSmsPermission => 'در حال درخواست مجوز پیامک...';
+
+  @override
+  String get loadingSmsConversations => 'در حال بارگذاری مکالمات پیامک...';
+
+  @override
+  String get loadingSmsMessages => 'در حال بارگذاری پیام‌های پیامک...';
+
+  @override
+  String get loadingMoreConversations => 'در حال بارگذاری مکالمات بیشتر...';
+
+  @override
+  String get noConversationsLoaded => 'هیچ مکالمه‌ای بارگذاری نشده';
+
+  @override
+  String get tapRefreshToLoadSmsConversations =>
+      'برای بارگذاری مکالمات پیامک، بروزرسانی را لمس کنید';
+
+  @override
+  String get loadConversations => 'بارگذاری مکالمات';
+
+  @override
+  String get noSmsConversationsFound => 'هیچ مکالمه پیامکی یافت نشد';
+
+  @override
+  String get makeSureYouHaveSmsMessagesOnYourDevice =>
+      'مطمئن شوید که پیام‌های پیامک در دستگاه شما وجود دارد';
+
+  @override
+  String get errorLoadingConversations => 'خطا در بارگذاری مکالمات';
+
+  @override
+  String get noMessagesLoaded => 'هیچ پیامی بارگذاری نشده';
+
+  @override
+  String get tapRefreshToLoadSmsMessages =>
+      'برای بارگذاری پیام‌های پیامک، بروزرسانی را لمس کنید';
+
+  @override
+  String get loadMessages => 'بارگذاری پیام‌ها';
+
+  @override
+  String get noSmsMessagesFound => 'هیچ پیام پیامکی یافت نشد';
+
+  @override
+  String get makeSureYouHaveSmsMessagesFromThisSender =>
+      'مطمئن شوید که پیام‌های پیامک از این فرستنده وجود دارد';
+
+  @override
+  String get errorLoadingMessages => 'خطا در بارگذاری پیام‌ها';
+
+  @override
+  String get messages => 'پیام‌ها';
+
+  @override
+  String get day => 'روز';
+
+  @override
+  String get days => 'روز';
+
+  @override
+  String get hour => 'ساعت';
+
+  @override
+  String get hours => 'ساعت';
+
+  @override
+  String get minute => 'دقیقه';
+
+  @override
+  String get minutes => 'دقیقه';
+
+  @override
+  String get ago => 'پیش';
+
+  @override
+  String get justNow => 'همین الان';
+
+  @override
+  String get yesterday => 'دیروز';
+
+  @override
+  String get read => 'خوانده شده';
+
+  @override
+  String get unread => 'خوانده نشده';
+
+  @override
+  String get smsPermissionRequired => 'مجوز پیامک مورد نیاز است';
+
+  @override
+  String get toImportSmsMessagesWeNeedPermission =>
+      'برای وارد کردن پیام‌های پیامک، به مجوز خواندن پیامک شما نیاز داریم. لطفاً مجوز پیامک را در تنظیمات دستگاه خود فعال کنید.';
+
+  @override
+  String get openSettings => 'باز کردن تنظیمات';
 }

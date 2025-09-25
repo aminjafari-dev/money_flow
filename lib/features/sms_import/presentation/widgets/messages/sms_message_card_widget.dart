@@ -4,6 +4,7 @@ import 'package:money_flow/core/theme/app_fonts.dart';
 import 'package:money_flow/core/widgets/g_gap.dart';
 import 'package:money_flow/core/widgets/g_text.dart';
 import 'package:money_flow/features/sms_import/domain/entities/sms_entity.dart';
+import 'package:money_flow/l10n/generated/app_localizations.dart';
 
 /// Card widget for displaying a single SMS message.
 /// This widget shows message information including content, timestamp, and read status.
@@ -26,6 +27,7 @@ class SmsMessageCardWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return Container(
       decoration: BoxDecoration(
         color: AppColors.backgroundLight,
@@ -43,7 +45,7 @@ class SmsMessageCardWidget extends StatelessWidget {
               children: [
                 // Timestamp
                 GText(
-                  _formatDateTime(message.date),
+                  _formatDateTime(message.date, l10n),
                   style: AppFonts.labelSmall,
                   color: AppColors.textSecondary,
                 ),
@@ -61,7 +63,7 @@ class SmsMessageCardWidget extends StatelessWidget {
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: GText(
-                    message.isRead ? 'Read' : 'Unread',
+                    message.isRead ? l10n.read : l10n.unread,
                     style: AppFonts.labelSmall,
                     color: message.isRead
                         ? AppColors.success
@@ -88,7 +90,7 @@ class SmsMessageCardWidget extends StatelessWidget {
   /// Formats a date and time for display in the messages list.
   /// This method formats the date and time in a user-friendly format
   /// showing both date and time information.
-  String _formatDateTime(DateTime dateTime) {
+  String _formatDateTime(DateTime dateTime, AppLocalizations l10n) {
     final now = DateTime.now();
     final today = DateTime(now.year, now.month, now.day);
     final messageDate = DateTime(dateTime.year, dateTime.month, dateTime.day);
@@ -98,7 +100,7 @@ class SmsMessageCardWidget extends StatelessWidget {
       return '${dateTime.hour.toString().padLeft(2, '0')}:${dateTime.minute.toString().padLeft(2, '0')}';
     } else if (messageDate == today.subtract(const Duration(days: 1))) {
       // Show "Yesterday" for yesterday's messages
-      return 'Yesterday ${dateTime.hour.toString().padLeft(2, '0')}:${dateTime.minute.toString().padLeft(2, '0')}';
+      return '${l10n.yesterday} ${dateTime.hour.toString().padLeft(2, '0')}:${dateTime.minute.toString().padLeft(2, '0')}';
     } else {
       // Show date and time for older messages
       return '${dateTime.day}/${dateTime.month}/${dateTime.year} ${dateTime.hour.toString().padLeft(2, '0')}:${dateTime.minute.toString().padLeft(2, '0')}';

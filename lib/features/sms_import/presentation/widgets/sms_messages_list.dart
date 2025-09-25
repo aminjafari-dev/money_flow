@@ -7,6 +7,7 @@ import 'package:money_flow/features/sms_import/presentation/widgets/messages/sms
 import 'package:money_flow/features/sms_import/presentation/widgets/shared/sms_empty_state_widget.dart';
 import 'package:money_flow/features/sms_import/presentation/widgets/shared/sms_loading_state_widget.dart';
 import 'package:money_flow/features/sms_import/presentation/widgets/shared/sms_error_state_widget.dart';
+import 'package:money_flow/l10n/generated/app_localizations.dart';
 
 /// Widget for displaying SMS messages list.
 /// This widget shows a list of SMS messages from a specific sender address
@@ -52,6 +53,7 @@ class SmsMessagesList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -64,31 +66,31 @@ class SmsMessagesList extends StatelessWidget {
         messagesState.when(
           // Initial state - show empty state
           initial: () => SmsEmptyStateWidget(
-            title: 'No messages loaded',
-            subtitle: 'Tap refresh to load SMS messages',
+            title: l10n.noMessagesLoaded,
+            subtitle: l10n.tapRefreshToLoadSmsMessages,
             icon: Icons.sms,
-            actionText: 'Load Messages',
+            actionText: l10n.loadMessages,
             onAction: onLoadMessages,
           ),
 
           // Loading state - show loading indicator
           loading: () =>
-              const SmsLoadingStateWidget(message: 'Loading SMS messages...'),
+              SmsLoadingStateWidget(message: l10n.loadingSmsMessages),
 
           // Completed state - show messages list
           completed: (messages) => messages.isEmpty
               ? SmsEmptyStateWidget(
-                  title: 'No SMS messages found',
-                  subtitle: 'Make sure you have SMS messages from this sender',
+                  title: l10n.noSmsMessagesFound,
+                  subtitle: l10n.makeSureYouHaveSmsMessagesFromThisSender,
                   icon: Icons.sms_failed,
-                  actionText: 'Load Messages',
+                  actionText: l10n.loadMessages,
                   onAction: onLoadMessages,
                 )
               : _buildMessagesList(messages),
 
           // Error state - show error message
           error: (message) => SmsErrorStateWidget(
-            title: 'Error Loading Messages',
+            title: l10n.errorLoadingMessages,
             message: message,
             onRetry: onLoadMessages,
           ),

@@ -4,6 +4,7 @@ import 'package:money_flow/core/theme/app_fonts.dart';
 import 'package:money_flow/core/widgets/g_button.dart';
 import 'package:money_flow/core/widgets/g_gap.dart';
 import 'package:money_flow/core/widgets/g_text.dart';
+import 'package:money_flow/l10n/generated/app_localizations.dart';
 
 /// Shared error state widget for SMS import feature.
 /// This widget provides a consistent error state UI across all SMS widgets
@@ -42,6 +43,7 @@ class SmsErrorStateWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return Container(
       decoration: BoxDecoration(
         color: AppColors.backgroundLight,
@@ -75,7 +77,7 @@ class SmsErrorStateWidget extends StatelessWidget {
             GGap.medium(),
 
             GButton(
-              text: 'Retry',
+              text: l10n.retry,
               onPressed: onRetry,
               variant: GButtonVariant.outlined,
               icon: Icons.refresh,

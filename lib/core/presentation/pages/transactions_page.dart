@@ -151,7 +151,7 @@ class _TransactionsPageState extends State<TransactionsPage> {
   void _onFilterTap() {
     // TODO: Implement transaction filtering
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Filter functionality coming soon!')),
+      const SnackBar(content: GText('Filter functionality coming soon!')),
     );
   }
 
@@ -160,7 +160,7 @@ class _TransactionsPageState extends State<TransactionsPage> {
   void _onSearchTap() {
     // TODO: Implement transaction search
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Search functionality coming soon!')),
+      const SnackBar(content: GText('Search functionality coming soon!')),
     );
   }
 
@@ -170,7 +170,7 @@ class _TransactionsPageState extends State<TransactionsPage> {
     // TODO: Navigate to add transaction page
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
-        content: Text('Add transaction functionality coming soon!'),
+        content: GText('Add transaction functionality coming soon!'),
       ),
     );
   }

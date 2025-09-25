@@ -9,6 +9,7 @@ import 'package:money_flow/features/sms_import/presentation/widgets/sms_conversa
 import 'package:money_flow/features/sms_import/presentation/widgets/shared/sms_permission_denied_widget.dart';
 import 'package:money_flow/features/sms_import/presentation/widgets/shared/sms_loading_state_widget.dart';
 import 'package:money_flow/features/sms_import/presentation/widgets/shared/sms_error_state_widget.dart';
+import 'package:money_flow/l10n/generated/app_localizations.dart';
 
 /// SMS Import page for managing SMS conversations and messages.
 /// This page provides the main interface for the SMS import feature,
@@ -80,8 +81,9 @@ class _SmsImportViewState extends State<SmsImportView> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return GScaffold(
-      title: 'SMS Import',
+      title: l10n.smsImport,
       body: BlocListener<SmsImportBloc, SmsImportState>(
         listener: (context, state) {
           // Listen for permission state changes and show error messages
@@ -95,7 +97,7 @@ class _SmsImportViewState extends State<SmsImportView> {
               // Show error message if permission check fails
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
-                  content: Text('Permission error: $message'),
+                  content: Text(l10n.permissionError(message)),
                   backgroundColor: Colors.red,
                 ),
               );
@@ -122,11 +124,11 @@ class _SmsImportViewState extends State<SmsImportView> {
                   children: [
                     // Handle different permission states
                     state.permission.when(
-                      initial: () => const SmsLoadingStateWidget(
-                        message: 'Initializing SMS import...',
+                      initial: () => SmsLoadingStateWidget(
+                        message: l10n.initializingSmsImport,
                       ),
-                      loading: () => const SmsLoadingStateWidget(
-                        message: 'Checking SMS permission...',
+                      loading: () => SmsLoadingStateWidget(
+                        message: l10n.checkingSmsPermission,
                       ),
                       completed: (hasPermission) {
                         if (hasPermission) {
@@ -153,13 +155,13 @@ class _SmsImportViewState extends State<SmsImportView> {
                           );
                         } else {
                           // This shouldn't happen with the new flow, but handle it
-                          return const SmsLoadingStateWidget(
-                            message: 'Requesting SMS permission...',
+                          return SmsLoadingStateWidget(
+                            message: l10n.requestingSmsPermission,
                           );
                         }
                       },
                       error: (message) => SmsErrorStateWidget(
-                        title: 'Permission Error',
+                        title: l10n.error,
                         message: message,
                         onRetry: () {
                           context.read<SmsImportBloc>().add(
@@ -177,9 +179,9 @@ class _SmsImportViewState extends State<SmsImportView> {
                           // TODO: Implement opening app settings
                           // This would typically use a package like app_settings
                           ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
+                            SnackBar(
                               content: Text(
-                                'Please enable SMS permission in Settings',
+                                l10n.pleaseEnableSmsPermissionInSettings,
                               ),
                             ),
                           );

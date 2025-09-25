@@ -4,6 +4,7 @@ import 'package:money_flow/core/theme/app_fonts.dart';
 import 'package:money_flow/core/widgets/g_button.dart';
 import 'package:money_flow/core/widgets/g_gap.dart';
 import 'package:money_flow/core/widgets/g_text.dart';
+import 'package:money_flow/l10n/generated/app_localizations.dart';
 
 /// Widget displayed when SMS permission is denied.
 /// This widget provides a user-friendly interface to guide users
@@ -36,6 +37,7 @@ class SmsPermissionDeniedWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return Container(
       decoration: BoxDecoration(
         color: AppColors.backgroundLight,
@@ -66,7 +68,7 @@ class SmsPermissionDeniedWidget extends StatelessWidget {
 
             // Title
             GText(
-              'SMS Permission Required',
+              l10n.smsPermissionRequired,
               style: AppFonts.headingMedium,
               color: AppColors.textPrimary,
               textAlign: TextAlign.center,
@@ -76,7 +78,7 @@ class SmsPermissionDeniedWidget extends StatelessWidget {
 
             // Description
             GText(
-              'To import SMS messages, we need permission to read your SMS. Please enable SMS permission in your device settings.',
+              l10n.toImportSmsMessagesWeNeedPermission,
               style: AppFonts.bodyMedium,
               color: AppColors.textSecondary,
               textAlign: TextAlign.center,
@@ -89,7 +91,7 @@ class SmsPermissionDeniedWidget extends StatelessWidget {
               children: [
                 // Open Settings button
                 GButton(
-                  text: 'Open Settings',
+                  text: l10n.openSettings,
                   onPressed: onOpenSettings,
                   variant: GButtonVariant.filled,
                   isFullWidth: true,
@@ -99,7 +101,7 @@ class SmsPermissionDeniedWidget extends StatelessWidget {
 
                 // Retry button
                 GButton(
-                  text: 'Try Again',
+                  text: l10n.tryAgain,
                   onPressed: onRetry,
                   variant: GButtonVariant.outlined,
                   isFullWidth: true,

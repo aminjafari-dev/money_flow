@@ -7,6 +7,7 @@ import 'package:money_flow/features/sms_import/presentation/widgets/conversation
 import 'package:money_flow/features/sms_import/presentation/widgets/shared/sms_empty_state_widget.dart';
 import 'package:money_flow/features/sms_import/presentation/widgets/shared/sms_loading_state_widget.dart';
 import 'package:money_flow/features/sms_import/presentation/widgets/shared/sms_error_state_widget.dart';
+import 'package:money_flow/l10n/generated/app_localizations.dart';
 
 /// Widget for displaying SMS conversations list.
 /// This widget shows a list of SMS conversations grouped by sender address
@@ -113,34 +114,32 @@ class _SmsConversationsListState extends State<SmsConversationsList> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-
-
         // Conversations content
         widget.conversationsState.when(
           // Initial state - show empty state
           initial: () => SmsEmptyStateWidget(
-            title: 'No conversations loaded',
-            subtitle: 'Tap refresh to load SMS conversations',
+            title: l10n.noConversationsLoaded,
+            subtitle: l10n.tapRefreshToLoadSmsConversations,
             icon: Icons.sms,
-            actionText: 'Load Conversations',
+            actionText: l10n.loadConversations,
             onAction: widget.onLoadConversations,
           ),
 
           // Loading state - show loading indicator
-          loading: () => const SmsLoadingStateWidget(
-            message: 'Loading SMS conversations...',
-          ),
+          loading: () =>
+              SmsLoadingStateWidget(message: l10n.loadingSmsConversations),
 
           // Completed state - show conversations list
           completed: (conversations, hasMore) => conversations.isEmpty
               ? SmsEmptyStateWidget(
-                  title: 'No SMS conversations found',
-                  subtitle: 'Make sure you have SMS messages on your device',
+                  title: l10n.noSmsConversationsFound,
+                  subtitle: l10n.makeSureYouHaveSmsMessagesOnYourDevice,
                   icon: Icons.sms_failed,
-                  actionText: 'Load Conversations',
+                  actionText: l10n.loadConversations,
                   onAction: widget.onLoadConversations,
                 )
               : _buildConversationsList(context, conversations, hasMore),
@@ -151,7 +150,7 @@ class _SmsConversationsListState extends State<SmsConversationsList> {
 
           // Error state - show error message
           error: (message) => SmsErrorStateWidget(
-            title: 'Error Loading Conversations',
+            title: l10n.errorLoadingConversations,
             message: message,
             onRetry: widget.onLoadConversations,
           ),

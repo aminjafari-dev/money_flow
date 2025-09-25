@@ -108,7 +108,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get noData => 'No data available';
 
   @override
-  String get tryAgain => 'Try again';
+  String get tryAgain => 'Try Again';
 
   @override
   String get networkError => 'Network error. Please check your connection.';
@@ -234,4 +234,122 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get recentTransactionsWillAppear =>
       'Your recent transactions will appear here';
+
+  @override
+  String get smsImport => 'SMS Import';
+
+  @override
+  String get smsMessages => 'SMS Messages';
+
+  @override
+  String permissionError(Object message) {
+    return 'Permission error: $message';
+  }
+
+  @override
+  String get pleaseEnableSmsPermissionInSettings =>
+      'Please enable SMS permission in Settings';
+
+  @override
+  String get initializingSmsImport => 'Initializing SMS import...';
+
+  @override
+  String get checkingSmsPermission => 'Checking SMS permission...';
+
+  @override
+  String get requestingSmsPermission => 'Requesting SMS permission...';
+
+  @override
+  String get loadingSmsConversations => 'Loading SMS conversations...';
+
+  @override
+  String get loadingSmsMessages => 'Loading SMS messages...';
+
+  @override
+  String get loadingMoreConversations => 'Loading more conversations...';
+
+  @override
+  String get noConversationsLoaded => 'No conversations loaded';
+
+  @override
+  String get tapRefreshToLoadSmsConversations =>
+      'Tap refresh to load SMS conversations';
+
+  @override
+  String get loadConversations => 'Load Conversations';
+
+  @override
+  String get noSmsConversationsFound => 'No SMS conversations found';
+
+  @override
+  String get makeSureYouHaveSmsMessagesOnYourDevice =>
+      'Make sure you have SMS messages on your device';
+
+  @override
+  String get errorLoadingConversations => 'Error Loading Conversations';
+
+  @override
+  String get noMessagesLoaded => 'No messages loaded';
+
+  @override
+  String get tapRefreshToLoadSmsMessages => 'Tap refresh to load SMS messages';
+
+  @override
+  String get loadMessages => 'Load Messages';
+
+  @override
+  String get noSmsMessagesFound => 'No SMS messages found';
+
+  @override
+  String get makeSureYouHaveSmsMessagesFromThisSender =>
+      'Make sure you have SMS messages from this sender';
+
+  @override
+  String get errorLoadingMessages => 'Error Loading Messages';
+
+  @override
+  String get messages => 'messages';
+
+  @override
+  String get day => 'day';
+
+  @override
+  String get days => 'days';
+
+  @override
+  String get hour => 'hour';
+
+  @override
+  String get hours => 'hours';
+
+  @override
+  String get minute => 'minute';
+
+  @override
+  String get minutes => 'minutes';
+
+  @override
+  String get ago => 'ago';
+
+  @override
+  String get justNow => 'Just now';
+
+  @override
+  String get yesterday => 'Yesterday';
+
+  @override
+  String get read => 'Read';
+
+  @override
+  String get unread => 'Unread';
+
+  @override
+  String get smsPermissionRequired => 'SMS Permission Required';
+
+  @override
+  String get toImportSmsMessagesWeNeedPermission =>
+      'To import SMS messages, we need permission to read your SMS. Please enable SMS permission in your device settings.';
+
+  @override
+  String get openSettings => 'Open Settings';
 }

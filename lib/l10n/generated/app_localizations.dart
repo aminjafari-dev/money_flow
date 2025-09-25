@@ -299,7 +299,7 @@ abstract class AppLocalizations {
   /// No description provided for @tryAgain.
   ///
   /// In en, this message translates to:
-  /// **'Try again'**
+  /// **'Try Again'**
   String get tryAgain;
 
   /// No description provided for @networkError.
@@ -547,6 +547,228 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Your recent transactions will appear here'**
   String get recentTransactionsWillAppear;
+
+  /// No description provided for @smsImport.
+  ///
+  /// In en, this message translates to:
+  /// **'SMS Import'**
+  String get smsImport;
+
+  /// No description provided for @smsMessages.
+  ///
+  /// In en, this message translates to:
+  /// **'SMS Messages'**
+  String get smsMessages;
+
+  /// No description provided for @permissionError.
+  ///
+  /// In en, this message translates to:
+  /// **'Permission error: {message}'**
+  String permissionError(Object message);
+
+  /// No description provided for @pleaseEnableSmsPermissionInSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enable SMS permission in Settings'**
+  String get pleaseEnableSmsPermissionInSettings;
+
+  /// No description provided for @initializingSmsImport.
+  ///
+  /// In en, this message translates to:
+  /// **'Initializing SMS import...'**
+  String get initializingSmsImport;
+
+  /// No description provided for @checkingSmsPermission.
+  ///
+  /// In en, this message translates to:
+  /// **'Checking SMS permission...'**
+  String get checkingSmsPermission;
+
+  /// No description provided for @requestingSmsPermission.
+  ///
+  /// In en, this message translates to:
+  /// **'Requesting SMS permission...'**
+  String get requestingSmsPermission;
+
+  /// No description provided for @loadingSmsConversations.
+  ///
+  /// In en, this message translates to:
+  /// **'Loading SMS conversations...'**
+  String get loadingSmsConversations;
+
+  /// No description provided for @loadingSmsMessages.
+  ///
+  /// In en, this message translates to:
+  /// **'Loading SMS messages...'**
+  String get loadingSmsMessages;
+
+  /// No description provided for @loadingMoreConversations.
+  ///
+  /// In en, this message translates to:
+  /// **'Loading more conversations...'**
+  String get loadingMoreConversations;
+
+  /// No description provided for @noConversationsLoaded.
+  ///
+  /// In en, this message translates to:
+  /// **'No conversations loaded'**
+  String get noConversationsLoaded;
+
+  /// No description provided for @tapRefreshToLoadSmsConversations.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap refresh to load SMS conversations'**
+  String get tapRefreshToLoadSmsConversations;
+
+  /// No description provided for @loadConversations.
+  ///
+  /// In en, this message translates to:
+  /// **'Load Conversations'**
+  String get loadConversations;
+
+  /// No description provided for @noSmsConversationsFound.
+  ///
+  /// In en, this message translates to:
+  /// **'No SMS conversations found'**
+  String get noSmsConversationsFound;
+
+  /// No description provided for @makeSureYouHaveSmsMessagesOnYourDevice.
+  ///
+  /// In en, this message translates to:
+  /// **'Make sure you have SMS messages on your device'**
+  String get makeSureYouHaveSmsMessagesOnYourDevice;
+
+  /// No description provided for @errorLoadingConversations.
+  ///
+  /// In en, this message translates to:
+  /// **'Error Loading Conversations'**
+  String get errorLoadingConversations;
+
+  /// No description provided for @noMessagesLoaded.
+  ///
+  /// In en, this message translates to:
+  /// **'No messages loaded'**
+  String get noMessagesLoaded;
+
+  /// No description provided for @tapRefreshToLoadSmsMessages.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap refresh to load SMS messages'**
+  String get tapRefreshToLoadSmsMessages;
+
+  /// No description provided for @loadMessages.
+  ///
+  /// In en, this message translates to:
+  /// **'Load Messages'**
+  String get loadMessages;
+
+  /// No description provided for @noSmsMessagesFound.
+  ///
+  /// In en, this message translates to:
+  /// **'No SMS messages found'**
+  String get noSmsMessagesFound;
+
+  /// No description provided for @makeSureYouHaveSmsMessagesFromThisSender.
+  ///
+  /// In en, this message translates to:
+  /// **'Make sure you have SMS messages from this sender'**
+  String get makeSureYouHaveSmsMessagesFromThisSender;
+
+  /// No description provided for @errorLoadingMessages.
+  ///
+  /// In en, this message translates to:
+  /// **'Error Loading Messages'**
+  String get errorLoadingMessages;
+
+  /// No description provided for @messages.
+  ///
+  /// In en, this message translates to:
+  /// **'messages'**
+  String get messages;
+
+  /// No description provided for @day.
+  ///
+  /// In en, this message translates to:
+  /// **'day'**
+  String get day;
+
+  /// No description provided for @days.
+  ///
+  /// In en, this message translates to:
+  /// **'days'**
+  String get days;
+
+  /// No description provided for @hour.
+  ///
+  /// In en, this message translates to:
+  /// **'hour'**
+  String get hour;
+
+  /// No description provided for @hours.
+  ///
+  /// In en, this message translates to:
+  /// **'hours'**
+  String get hours;
+
+  /// No description provided for @minute.
+  ///
+  /// In en, this message translates to:
+  /// **'minute'**
+  String get minute;
+
+  /// No description provided for @minutes.
+  ///
+  /// In en, this message translates to:
+  /// **'minutes'**
+  String get minutes;
+
+  /// No description provided for @ago.
+  ///
+  /// In en, this message translates to:
+  /// **'ago'**
+  String get ago;
+
+  /// No description provided for @justNow.
+  ///
+  /// In en, this message translates to:
+  /// **'Just now'**
+  String get justNow;
+
+  /// No description provided for @yesterday.
+  ///
+  /// In en, this message translates to:
+  /// **'Yesterday'**
+  String get yesterday;
+
+  /// No description provided for @read.
+  ///
+  /// In en, this message translates to:
+  /// **'Read'**
+  String get read;
+
+  /// No description provided for @unread.
+  ///
+  /// In en, this message translates to:
+  /// **'Unread'**
+  String get unread;
+
+  /// No description provided for @smsPermissionRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'SMS Permission Required'**
+  String get smsPermissionRequired;
+
+  /// No description provided for @toImportSmsMessagesWeNeedPermission.
+  ///
+  /// In en, this message translates to:
+  /// **'To import SMS messages, we need permission to read your SMS. Please enable SMS permission in your device settings.'**
+  String get toImportSmsMessagesWeNeedPermission;
+
+  /// No description provided for @openSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Open Settings'**
+  String get openSettings;
 }
 
 class _AppLocalizationsDelegate

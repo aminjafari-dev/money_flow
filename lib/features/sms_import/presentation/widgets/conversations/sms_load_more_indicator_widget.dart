@@ -3,6 +3,7 @@ import 'package:money_flow/core/theme/app_colors.dart';
 import 'package:money_flow/core/theme/app_fonts.dart';
 import 'package:money_flow/core/widgets/g_gap.dart';
 import 'package:money_flow/core/widgets/g_text.dart';
+import 'package:money_flow/l10n/generated/app_localizations.dart';
 
 /// Widget for displaying a load more indicator in the conversations list.
 /// This widget shows a loading indicator at the bottom of the list
@@ -18,6 +19,7 @@ class SmsLoadMoreIndicatorWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return Container(
       decoration: BoxDecoration(
         color: AppColors.backgroundLight,
@@ -39,7 +41,7 @@ class SmsLoadMoreIndicatorWidget extends StatelessWidget {
             ),
             GGap.medium(),
             GText(
-              'Loading more conversations...',
+              l10n.loadingMoreConversations,
               style: AppFonts.bodyMedium,
               color: AppColors.textSecondary,
             ),

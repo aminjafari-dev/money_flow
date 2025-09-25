@@ -28,7 +28,7 @@ class TransactionsPage extends StatelessWidget {
               initial: () => const SizedBox(),
               loading: () => const Center(child: CircularProgressIndicator()),
               completed: (data) => _buildTransactionsList(data),
-              error: (message) => Center(child: Text('Error: $message')),
+              error: (message) => Center(child: GText('Error: $message')),
             );
           },
         ),
@@ -38,7 +38,7 @@ class TransactionsPage extends StatelessWidget {
 
   Widget _buildTransactionsList(data) {
     if (data.transactions.isEmpty) {
-      return const Center(child: Text('No transactions found'));
+      return const Center(child: GText('No transactions found'));
     }
 
     return ListView.builder(

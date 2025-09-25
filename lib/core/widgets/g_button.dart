@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:money_flow/core/theme/app_colors.dart';
 import 'package:money_flow/core/theme/app_fonts.dart';
 
+import 'g_text.dart';
+
 /// GButton widget provides consistent button styling throughout the app.
 /// This widget follows the design system approach with predefined variants.
 ///
@@ -130,12 +132,12 @@ class GButton extends StatelessWidget {
         children: [
           Icon(icon, size: _getIconSize()),
           const SizedBox(width: 8),
-          Text(text),
+          GText(text),
         ],
       );
     }
 
-    return Text(text);
+    return GText(text);
   }
 
   /// Gets the appropriate padding based on button size.

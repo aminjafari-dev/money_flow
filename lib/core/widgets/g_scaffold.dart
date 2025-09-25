@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:money_flow/core/theme/app_colors.dart';
 
+import 'g_text.dart';
+
 /// Global Scaffold widget for consistent app-wide styling and behavior.
 /// This widget provides a standardized scaffold with common configurations.
 ///
@@ -124,7 +126,7 @@ class GScaffold extends StatelessWidget {
       appBar: showAppBar && title != null
           ? AppBar(
               // Set title with consistent styling
-              title: Text(
+              title: GText(
                 title!,
                 style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                   fontWeight: FontWeight.w600,
