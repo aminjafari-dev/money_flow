@@ -173,9 +173,9 @@ class _DashboardPageState extends State<DashboardPage> {
   }
 
   /// Handles SMS import floating action button tap.
-  /// This method navigates to the SMS import page.
+  /// This method navigates to the bank selection page first.
   void _onSmsImportTap() {
-    Navigator.pushNamed(context, PageName.smsImport);
+    Navigator.pushNamed(context, PageName.bankSelection);
   }
 }
 

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:money_flow/core/di/locator.dart';
 import 'package:money_flow/core/widgets/g_scaffold.dart';
+import 'package:money_flow/features/sms_import/domain/entities/bank_entity.dart';
 import 'package:money_flow/features/sms_import/presentation/bloc/sms_import_bloc.dart';
 import 'package:money_flow/features/sms_import/presentation/bloc/sms_import_event.dart';
 import 'package:money_flow/features/sms_import/presentation/bloc/sms_import_state.dart';
@@ -29,13 +30,20 @@ import 'package:money_flow/l10n/generated/app_localizations.dart';
 /// );
 /// ```
 class SmsImportPage extends StatelessWidget {
+  /// Optional bank entity to filter conversations for a specific bank
+  final BankEntity? selectedBank;
+
   /// Creates a new instance of SmsImportPage.
+  ///
+  /// Parameters:
+  /// - [selectedBank]: Optional bank entity to filter conversations
   ///
   /// Usage Example:
   /// ```dart
   /// const SmsImportPage()
+  /// SmsImportPage(selectedBank: bankEntity)
   /// ```
-  const SmsImportPage({super.key});
+  const SmsImportPage({super.key, this.selectedBank});
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +55,7 @@ class SmsImportPage extends StatelessWidget {
         checkSmsPermissionUseCase: getIt(),
         requestSmsPermissionUseCase: getIt(),
       )..add(const SmsImportEvent.initialize()),
-      child: const SmsImportView(),
+      child: SmsImportView(selectedBank: selectedBank),
     );
   }
 }
@@ -64,8 +72,14 @@ class SmsImportPage extends StatelessWidget {
 /// const SmsImportView()
 /// ```
 class SmsImportView extends StatefulWidget {
+  /// Optional bank entity to filter conversations for a specific bank
+  final BankEntity? selectedBank;
+
   /// Creates a new instance of SmsImportView.
-  const SmsImportView({super.key});
+  ///
+  /// Parameters:
+  /// - [selectedBank]: Optional bank entity to filter conversations
+  const SmsImportView({super.key, this.selectedBank});
 
   @override
   State<SmsImportView> createState() => _SmsImportViewState();
@@ -82,8 +96,12 @@ class _SmsImportViewState extends State<SmsImportView> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
+    final title = widget.selectedBank != null
+        ? '${widget.selectedBank!.name} - ${l10n.smsImport}'
+        : l10n.smsImport;
+
     return GScaffold(
-      title: l10n.smsImport,
+      title: title,
       body: BlocListener<SmsImportBloc, SmsImportState>(
         listener: (context, state) {
           // Listen for permission state changes and show error messages

@@ -4,6 +4,9 @@ import 'package:money_flow/core/presentation/pages/main_navigation_page.dart';
 import 'package:money_flow/features/dashboard/presentation/pages/dashboard_page.dart';
 import 'package:money_flow/features/add_transaction/presentation/pages/add_transaction_page.dart';
 import 'package:money_flow/features/transactions/presentation/pages/transactions_page.dart';
+import 'package:money_flow/features/sms_import/domain/entities/bank_entity.dart';
+import 'package:money_flow/features/sms_import/presentation/pages/bank_selection_page.dart';
+import 'package:money_flow/features/sms_import/presentation/pages/sms_conversations_for_bank_page.dart';
 import 'package:money_flow/features/sms_import/presentation/pages/sms_import_page.dart';
 import 'package:money_flow/features/sms_import/presentation/pages/sms_messages_page.dart';
 
@@ -27,8 +30,18 @@ class PageRouter {
     PageName.addTransaction: (context) => const AddTransactionPage(),
     PageName.transactions: (context) => const TransactionsPage(),
 
+    // Bank Selection route
+    PageName.bankSelection: (context) => const BankSelectionPage(),
+
+    // SMS Conversations for Bank Selection route
+    PageName.smsConversationsForBank: (context) =>
+        const SmsConversationsForBankPage(),
+
     // SMS Import routes
-    PageName.smsImport: (context) => const SmsImportPage(),
+    PageName.smsImport: (context) {
+      final bank = ModalRoute.of(context)?.settings.arguments as BankEntity?;
+      return SmsImportPage(selectedBank: bank);
+    },
     PageName.smsMessages: (context) {
       final address =
           ModalRoute.of(context)?.settings.arguments as String? ?? '';

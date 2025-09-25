@@ -33,9 +33,15 @@ class PageName {
   /// Splash page route
   static const String splash = '/splash';
 
+  /// Bank Selection page route
+  static const String bankSelection = '/bank-selection';
+
   /// SMS Import page route
   static const String smsImport = '/sms-import';
 
   /// SMS Messages page route
   static const String smsMessages = '/sms-messages';
+
+  /// SMS Conversations for Bank Selection page route
+  static const String smsConversationsForBank = '/sms-conversations-for-bank';
 }
