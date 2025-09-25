@@ -9,7 +9,6 @@ import 'package:money_flow/core/router/page_name.dart';
 import 'package:money_flow/core/theme/app_theme.dart';
 import 'package:money_flow/core/services/localization_service.dart';
 import 'package:money_flow/l10n/generated/app_localizations.dart';
-import 'package:money_flow/shared/models/bank/bank_model.dart';
 import 'package:money_flow/shared/models/category/category_models.dart';
 
 /// Main entry point of the Money Flow application.

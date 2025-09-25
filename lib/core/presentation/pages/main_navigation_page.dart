@@ -4,8 +4,6 @@ import 'package:money_flow/core/widgets/widgets.dart';
 import 'package:money_flow/l10n/generated/app_localizations.dart';
 import 'package:money_flow/features/dashboard/presentation/pages/dashboard_page.dart';
 import 'package:money_flow/features/transactions/presentation/pages/transactions_page.dart';
-import 'package:money_flow/core/presentation/pages/analytics_page.dart';
-import 'package:money_flow/core/presentation/pages/settings_page.dart';
 
 /// Main navigation page with bottom navigation bar.
 /// This page serves as the root container for all main app features.
@@ -69,10 +67,10 @@ class _MainNavigationPageState extends State<MainNavigationPage> {
           const TransactionsPage(),
 
           // Analytics Tab - Charts and insights
-          const AnalyticsPage(),
+          const SizedBox(),
 
           // Settings Tab - App configuration and preferences
-          const SettingsPage(),
+          const SizedBox(),
         ],
       ),
       bottomNavigationBar: _buildBottomNavigationBar(l10n),

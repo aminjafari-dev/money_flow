@@ -108,7 +108,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get noData => 'هیچ داده‌ای موجود نیست';
 
   @override
-  String get tryAgain => 'تلاش مجدد';
+  String get tryAgain => 'دوباره تلاش کنید';
 
   @override
   String get networkError => 'خطای شبکه. لطفاً اتصال خود را بررسی کنید.';

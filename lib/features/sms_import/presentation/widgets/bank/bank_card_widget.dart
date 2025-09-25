@@ -44,6 +44,9 @@ class BankCardWidget extends StatelessWidget {
     return Card(
       elevation: 2,
       margin: EdgeInsets.zero,
+      // Set explicit white background color to match the UI design
+      color: AppColors.background,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       child: InkWell(
         onTap: onTap,
         borderRadius: BorderRadius.circular(12),
@@ -77,6 +80,7 @@ class BankCardWidget extends StatelessWidget {
                       bank.name,
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(
                         fontWeight: FontWeight.w600,
+                        color: AppColors.textPrimary,
                       ),
                     ),
                     GGap.small(),
@@ -95,7 +99,9 @@ class BankCardWidget extends StatelessWidget {
                 width: 8,
                 height: 8,
                 decoration: BoxDecoration(
-                  color: bank.isActive ? Colors.green : Colors.grey,
+                  color: bank.isActive
+                      ? AppColors.success
+                      : AppColors.textLight,
                   shape: BoxShape.circle,
                 ),
               ),
@@ -105,7 +111,7 @@ class BankCardWidget extends StatelessWidget {
               // Delete button
               IconButton(
                 onPressed: onDelete,
-                icon: const Icon(Icons.delete_outline, color: Colors.red),
+                icon: const Icon(Icons.delete_outline, color: AppColors.danger),
                 constraints: const BoxConstraints(minWidth: 32, minHeight: 32),
                 padding: EdgeInsets.zero,
               ),
