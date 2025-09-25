@@ -57,10 +57,6 @@ class SmsMessagesList extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // Messages header
-        SmsMessagesHeaderWidget(onRefresh: onLoadMessages),
-
-        GGap.medium(),
 
         // Messages content
         messagesState.when(

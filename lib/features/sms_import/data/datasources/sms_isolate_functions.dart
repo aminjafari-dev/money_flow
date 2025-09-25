@@ -4,6 +4,9 @@ import 'package:money_flow/features/sms_import/data/models/sms_model.dart';
 /// Isolate functions for SMS data processing to prevent UI blocking.
 /// These functions handle heavy computational tasks in separate isolates
 /// to maintain smooth UI performance during SMS operations.
+///
+/// All SMS query operations and data processing are moved to isolates
+/// to prevent UI freezing when loading large amounts of SMS data.
 
 /// Parameters for SMS conversation processing in isolate.
 class SmsConversationParams {
