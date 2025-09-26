@@ -4,6 +4,7 @@ import 'package:money_flow/features/add_transaction/data/datasources/local/trans
 import 'package:money_flow/features/add_transaction/data/repositories/transaction_repository_impl.dart';
 import 'package:money_flow/features/add_transaction/domain/repositories/transaction_repository.dart';
 import 'package:money_flow/features/add_transaction/domain/usecases/add_transaction_usecase.dart';
+import 'package:money_flow/features/add_transaction/domain/usecases/delete_transaction_usecase.dart';
 import 'package:money_flow/features/add_transaction/presentation/bloc/add_transaction_bloc.dart';
 
 /// Sets up all dependencies for the transactions feature.
@@ -46,6 +47,11 @@ Future<void> setupTransactionLocator(GetIt getIt) async {
   // Add transaction use case
   getIt.registerLazySingleton<AddTransactionUseCase>(
     () => AddTransactionUseCase(repository: getIt<TransactionRepository>()),
+  );
+
+  // Delete transaction use case
+  getIt.registerLazySingleton<DeleteTransactionUseCase>(
+    () => DeleteTransactionUseCase(repository: getIt<TransactionRepository>()),
   );
 
   // BLoC

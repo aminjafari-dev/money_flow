@@ -51,6 +51,20 @@ abstract class SmsCategoryTrackingRepository {
     SmsCategoryTrackingEntity tracking,
   );
 
+  /// Gets the tracking entity for a specific SMS and category combination.
+  ///
+  /// Parameters:
+  /// - [smsId]: The SMS message ID
+  /// - [category]: The category name
+  ///
+  /// Returns:
+  /// - [Right]: The tracking entity or null if not found
+  /// - [Left]: Failure if operation fails
+  Future<Either<Failure, SmsCategoryTrackingEntity?>> getSmsCategoryTracking(
+    String smsId,
+    String category,
+  );
+
   /// Removes an SMS message from a specific category.
   ///
   /// Parameters:

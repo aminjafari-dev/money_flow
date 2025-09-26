@@ -205,6 +205,7 @@ Future<void> setupSmsImportLocator(GetIt getIt) async {
     () => ToggleSmsCategoryUseCase(
       trackingRepository: getIt<SmsCategoryTrackingRepository>(),
       addSmsToCategoryUseCase: getIt<AddSmsToCategoryUseCase>(),
+      deleteTransactionUseCase: getIt(),
     ),
   );
 }

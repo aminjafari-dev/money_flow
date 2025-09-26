@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:money_flow/core/error/failures.dart';
 import 'package:money_flow/features/add_transaction/domain/entities/transaction_entity.dart';
+import 'package:money_flow/features/add_transaction/domain/usecases/delete_transaction_usecase.dart';
 import 'package:money_flow/features/sms_import/domain/entities/sms_entity.dart';
 import 'package:money_flow/features/sms_import/domain/repositories/sms_category_tracking_repository.dart';
 import 'package:money_flow/features/sms_import/domain/usecases/add_sms_to_category_usecase.dart';
@@ -33,16 +34,22 @@ class ToggleSmsCategoryUseCase {
   /// Use case for adding SMS to category
   final AddSmsToCategoryUseCase _addSmsToCategoryUseCase;
 
+  /// Use case for deleting transactions
+  final DeleteTransactionUseCase _deleteTransactionUseCase;
+
   /// Creates a new instance of ToggleSmsCategoryUseCase.
   ///
   /// Parameters:
   /// - [trackingRepository]: Repository for tracking SMS category assignments
   /// - [addSmsToCategoryUseCase]: Use case for adding SMS to category
+  /// - [deleteTransactionUseCase]: Use case for deleting transactions
   const ToggleSmsCategoryUseCase({
     required SmsCategoryTrackingRepository trackingRepository,
     required AddSmsToCategoryUseCase addSmsToCategoryUseCase,
+    required DeleteTransactionUseCase deleteTransactionUseCase,
   }) : _trackingRepository = trackingRepository,
-       _addSmsToCategoryUseCase = addSmsToCategoryUseCase;
+       _addSmsToCategoryUseCase = addSmsToCategoryUseCase,
+       _deleteTransactionUseCase = deleteTransactionUseCase;
 
   /// Executes the use case to toggle SMS category selection.
   /// This method implements single-selection behavior where only one category
@@ -81,6 +88,35 @@ class ToggleSmsCategoryUseCase {
 
       // If already added to this category, remove it (toggle off)
       if (isAlreadyAdded) {
+        // Get the tracking entity to access the transaction ID
+        final trackingResult = await _trackingRepository.getSmsCategoryTracking(
+          params.sms.id,
+          params.category,
+        );
+
+        if (trackingResult.isLeft()) {
+          return Left(trackingResult.fold((l) => l, (r) => throw Exception()));
+        }
+
+        final tracking = trackingResult.fold(
+          (l) => throw Exception(),
+          (r) => r,
+        );
+
+        // Delete the associated transaction if it exists
+        if (tracking?.transactionId != null) {
+          final deleteTransactionResult = await _deleteTransactionUseCase.call(
+            tracking!.transactionId!,
+          );
+
+          if (deleteTransactionResult.isLeft()) {
+            return Left(
+              deleteTransactionResult.fold((l) => l, (r) => throw Exception()),
+            );
+          }
+        }
+
+        // Remove from tracking
         final removeResult = await _trackingRepository.removeSmsFromCategory(
           params.sms.id,
           params.category,
@@ -115,6 +151,35 @@ class ToggleSmsCategoryUseCase {
 
       // Remove SMS from all current categories (single selection)
       for (final category in currentCategories) {
+        // Get the tracking entity to access the transaction ID
+        final trackingResult = await _trackingRepository.getSmsCategoryTracking(
+          params.sms.id,
+          category,
+        );
+
+        if (trackingResult.isLeft()) {
+          return Left(trackingResult.fold((l) => l, (r) => throw Exception()));
+        }
+
+        final tracking = trackingResult.fold(
+          (l) => throw Exception(),
+          (r) => r,
+        );
+
+        // Delete the associated transaction if it exists
+        if (tracking?.transactionId != null) {
+          final deleteTransactionResult = await _deleteTransactionUseCase.call(
+            tracking!.transactionId!,
+          );
+
+          if (deleteTransactionResult.isLeft()) {
+            return Left(
+              deleteTransactionResult.fold((l) => l, (r) => throw Exception()),
+            );
+          }
+        }
+
+        // Remove from tracking
         final removeResult = await _trackingRepository.removeSmsFromCategory(
           params.sms.id,
           category,

@@ -118,6 +118,48 @@ class SmsCategoryTrackingRepositoryImpl
     }
   }
 
+  /// Gets the tracking entity for a specific SMS and category combination.
+  ///
+  /// Parameters:
+  /// - [smsId]: The SMS message ID
+  /// - [category]: The category name
+  ///
+  /// Returns:
+  /// - [Right]: The tracking entity or null if not found
+  /// - [Left]: Failure if operation fails
+  @override
+  Future<Either<Failure, SmsCategoryTrackingEntity?>> getSmsCategoryTracking(
+    String smsId,
+    String category,
+  ) async {
+    try {
+      await _ensureBoxInitialized();
+
+      // Create a composite key for the SMS and category combination
+      final key = '${smsId}_$category';
+      final tracking = _box.get(key);
+
+      if (tracking == null) {
+        return const Right(null);
+      }
+
+      // Convert model to entity
+      final entity = SmsCategoryTrackingEntity(
+        smsId: tracking.smsId,
+        category: tracking.category,
+        mainCategory: tracking.mainCategory,
+        addedAt: tracking.addedAt,
+        transactionId: tracking.transactionId,
+      );
+
+      return Right(entity);
+    } catch (e) {
+      return Left(
+        CacheFailure('Failed to get SMS category tracking: ${e.toString()}'),
+      );
+    }
+  }
+
   /// Removes an SMS message from a specific category.
   ///
   /// Parameters:
